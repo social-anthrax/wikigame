@@ -10,6 +10,7 @@ class nodemap():
         #this makes an assumption that these are bidiredctional
         self.edges[origin_node].append(destination_node)
         self.edges[destination_node].append(origin_node)
+        #needs commenting.
 
 nodes = nodemap()
 
@@ -60,7 +61,8 @@ def dijsktra(nodes, initial, final_destination):
             if next_noodle not in shortest_paths:
                 shortest_paths[next_noodle] = (current_noodle, weight)
             else:
-                
+                #todo:// actually finish this perhaps?
+                    
 
 
 
