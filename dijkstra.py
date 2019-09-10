@@ -8,8 +8,14 @@ class noodlemap():
 
     def add_edge(self, origin_noodle, destination_noodle):
         #this makes an assumption that these are bidiredctional
+<<<<<<< HEAD
         self.edges[origin_noodle].append(destination_noodle)
         self.edges[destination_noodle].append(origin_noodle)
+=======
+        self.edges[origin_node].append(destination_node)
+        self.edges[destination_node].append(origin_node)
+        #needs commenting.
+>>>>>>> 664ea4dda000372b00c1dae2ae869696ee7e6ec2
 
 noodles = noodlemap()
 
