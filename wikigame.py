@@ -67,6 +67,12 @@ def dijsktra(graph, initial, end):
                     shortest_paths[next_node] = (current_node, weight)
         
         next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
+        
+        # for node in shortest_paths:
+        #     if node not in visited:
+        #         next_destinations = node
+        
+        
         if not next_destinations:
             return "Route Not Possible"
         # next node is the destination with the lowest weight
