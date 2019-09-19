@@ -1,3 +1,5 @@
+
+
 #this is the class that will be used to save each webpage in a noodle map
 from collections import defaultdict
 
@@ -8,39 +10,58 @@ class noodlemap():
 
     def add_edge(self, origin_noodle, destination_noodle):
         #this makes an assumption that these are bidiredctional
-<<<<<<< HEAD
         self.edges[origin_noodle].append(destination_noodle)
         self.edges[destination_noodle].append(origin_noodle)
-=======
-        self.edges[origin_node].append(destination_node)
-        self.edges[destination_node].append(origin_node)
         #needs commenting.
->>>>>>> 664ea4dda000372b00c1dae2ae869696ee7e6ec2
-
 noodles = noodlemap()
 
-#this is a test map
 
-edges = [
-    ('X', 'A'),
-    ('X', 'B'),
-    ('X', 'C'),
-    ('X', 'E'),
-    ('A', 'B'),
-    ('A', 'D'),
-    ('B', 'D'),
-    ('B', 'H'),
-    ('C', 'L'),
-    ('D', 'F'),
-    ('F', 'H'),
-    ('G', 'H'),
-    ('G', 'Y'),
-    ('I', 'J'),
-    ('I', 'K'),
-    ('I', 'L'),
-    ('J', 'L'),
-    ('K', 'Y'),
-]
+lines = open('map.csv', 'r').readlines()
+
+#this currently stores a test map
+#as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+
+cols_count = 2
+rows_count = len(lines)
+Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
+
+
+i_d1= 0 #index of dimension 1
+i_d2 = 0 # index of dimension 2
+for x in lines:
+    i_d2 = 0
+    for y in x.strip().split(', '):
+        Matrix[i_d1][i_d2] = y
+        i_d2 += 1
+    i_d1 += 1 
+
+print(Matrix)
+
+
+
+# edges = [
+#     ('X', 'A'),
+#     ('X', 'B'),
+#     ('X', 'C'),
+#     ('X', 'E'),
+#     ('A', 'B'),
+#     ('A', 'D'),
+#     ('B', 'D'),
+#     ('B', 'H'),
+#     ('C', 'L'),
+#     ('D', 'F'),
+#     ('F', 'H'),
+#     ('G', 'H'),
+#     ('G', 'Y'),
+#     ('I', 'J'),
+#     ('I', 'K'),
+#     ('I', 'L'),
+#     ('J', 'L'),
+#     ('K', 'Y'),
+# ]
+
+print(Matrix)
+# print(edges)
 
 #this adds the edges is into the form that has been defined in the class noodlemap
 #
