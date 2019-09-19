@@ -17,9 +17,10 @@ noodles = noodlemap()
 
 
 lines = open('map.csv', 'r').readlines()
-
-#this currently stores a test map
-#as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+'''
+this currently stores a test map
+as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+'''
 
 cols_count = 2
 rows_count = len(lines)
@@ -38,7 +39,7 @@ for x in lines:
 print(Matrix)
 
 
-# old dictionary system to create nodes.
+# old dictionary system that holds the test nodes.
 # edges = [
 #     ('X', 'A'),
 #     ('X', 'B'),
@@ -60,13 +61,21 @@ print(Matrix)
 #     ('K', 'Y'),
 # ]
 
-print(Matrix)
+# for edge in edges:
+#     noodles.add_edge(*edge)
+
+#simply testing
+print(Matrix) 
 # print(edges)
 
 #this adds the edges is into the form that has been defined in the class noodlemap
 #
-for edge in edges:
-    noodles.add_edge(*edge)
+
+#TODO: MAKE THIS WORK
+
+for x in range(0, cols_count):
+    noodles.add_edge(Matrix[x][0], Matrix[x][1])
+
 
 print(noodles)
 
@@ -95,4 +104,4 @@ def dijsktra(noodles, initial, final_destination):
         # for noodle in shortest_paths:
         #     if noodle not in visited:
         #         next_noodle = noodle
-        #todo: make this work
+        #TODO: make this work
