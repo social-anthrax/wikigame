@@ -38,7 +38,7 @@ for x in lines:
 print(Matrix)
 
 
-
+# old dictionary system to create nodes.
 # edges = [
 #     ('X', 'A'),
 #     ('X', 'B'),
