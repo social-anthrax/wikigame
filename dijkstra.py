@@ -77,7 +77,7 @@ for x in range(0, cols_count):
     noodles.add_edge(Matrix[x][0], Matrix[x][1])
 
 
-print(noodles)
+print(noodles.edges)
 
 def dijsktra(noodles, initial, final_destination):
     #shortest_paths is a dictionary of noodles

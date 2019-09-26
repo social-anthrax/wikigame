@@ -70,7 +70,7 @@ def dijsktra(graph, initial, end):
         
         for node in shortest_paths:
             if node not in visited:
-                next_destinations = node
+                next_destinations[shortest_paths[node]] = (initial)
         
         
         if not next_destinations:
