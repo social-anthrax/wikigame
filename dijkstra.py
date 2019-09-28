@@ -21,11 +21,9 @@ lines = open('map.csv', 'r').readlines()
 this currently stores a test map
 as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
 '''
-
 cols_count = 2
 rows_count = len(lines)
 Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
-
 
 i_d1= 0 #index of dimension 1
 i_d2 = 0 # index of dimension 2
@@ -36,7 +34,7 @@ for x in lines:
         i_d2 += 1
     i_d1 += 1 
 
-print(Matrix)
+# print(Matrix)
 
 
 # old dictionary system that holds the test nodes.
@@ -101,7 +99,9 @@ def dijsktra(noodles, initial, final_destination):
                     shortest_paths[next_noodle] = (current_noodle,weight)
 
         next_noodle = {noodle: shortest_paths[noodle] for noodle in shortest_paths if noodle not in visited}  
-        # for noodle in shortest_paths:
-        #     if noodle not in visited:
-        #         next_noodle = noodle
+        
+        next_noodle = defaultdict(list) #initialises an empty dictionary
+        for noodle in shortest_paths:
+            if noodle not in visited:
+                next_noodle[noodle] = shortest_paths[noodle]
         #TODO: make this work

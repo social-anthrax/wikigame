@@ -66,11 +66,11 @@ def dijsktra(graph, initial, end):
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, weight)
         
-        next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
-        
+        # next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
+        next_destinations = defaultdict(list) 
         for node in shortest_paths:
             if node not in visited:
-                next_destinations[shortest_paths[node]] = (initial)
+                next_destinations[node] = shortest_paths[node]
         
         
         if not next_destinations:
