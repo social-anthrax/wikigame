@@ -4,15 +4,18 @@
 from collections import defaultdict
 
 class noodlemap():
+#region declaring
     def __init__(self):
         self.edges = defaultdict(list)
         #this is a dictionary of all possible NEXT noodles.
-
+#endregion
+#region setters
     def add_edge(self, origin_noodle, destination_noodle):
         #this makes an assumption that these are bidiredctional
         self.edges[origin_noodle].append(destination_noodle)
         self.edges[destination_noodle].append(origin_noodle)
         #needs commenting.
+    
 noodles = noodlemap()
 
 
@@ -98,10 +101,23 @@ def dijsktra(noodles, initial, final_destination):
                 if current_shortest_weight > weight:
                     shortest_paths[next_noodle] = (current_noodle,weight)
 
-        next_noodle = {noodle: shortest_paths[noodle] for noodle in shortest_paths if noodle not in visited}  
         
         next_noodle = defaultdict(list) #initialises an empty dictionary
         for noodle in shortest_paths:
             if noodle not in visited:
                 next_noodle[noodle] = shortest_paths[noodle]
-        #TODO: make this work
+        
+        if not next_noodle: #if the next possible nodes is empty
+            return "No route can be found from %s to %s" % (initial, final_destination)
+        
+        #this part goes back through the destinations on shortest_paths 
+
+        path = [] #initialises an list/array
+        while current_noodle is not None:
+            path.append(current_noodle)
+            next_noodle =  shortest_paths[current_noodle][0]
+            current_noodle = next_noodle
+        #itterates through the path list with a step of -1, aka backwards
+        path = path[::-1]
+        return path
+
