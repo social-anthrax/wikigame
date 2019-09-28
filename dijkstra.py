@@ -1,6 +1,5 @@
 
 
-#this is the class that will be used to save each webpage in a noodle map
 from collections import defaultdict
 
 class noodlemap():
@@ -15,7 +14,8 @@ class noodlemap():
         self.edges[origin_noodle].append(destination_noodle)
         self.edges[destination_noodle].append(origin_noodle)
         #needs commenting.
-    
+#endregion
+
 noodles = noodlemap()
 
 
