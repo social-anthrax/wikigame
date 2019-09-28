@@ -4,7 +4,8 @@ class noodlemap():
     #region declaring
         def __init__(self):
             self.edges = defaultdict(list)
-            self.Matrix = [[]]
+            self.Matrix = [[0 for x in range(0,1)]
+                           for x in range(0,1)]
 
             #this is a dictionary of all possible NEXT noodles.
     #endregion
@@ -28,12 +29,12 @@ class noodlemap():
             i_d2 = 0 # index of dimension 2
             for x in lines:
                 i_d2 = 0
-                for y in x.strip().split(', '):
+                for y in x.strip().split(' , '):
                     self.Matrix[i_d1][i_d2] = y
                     i_d2 += 1
                 i_d1 += 1 
             
-            for x in range(0, cols_count):
+            for x in range(0, rows_count):
                 self.add_edge(self.Matrix[x][0], self.Matrix[x][1])
     #endregion
     #region getters
@@ -67,8 +68,9 @@ class noodlemap():
                 if not next_noodle: #if the next possible nodes is empty
                     return "No route can be found from %s to %s" % (initial, final_destination)
                 
-                #this part goes back through the destinations on shortest_paths 
+                current_noodle = min(next_noodle, key=lambda k: next_noodle[k][1])
 
+                #this part goes back through the destinations on shortest_paths 
                 path = [] #initialises an list/array
                 while current_noodle is not None:
                     path.append(current_noodle)
@@ -81,33 +83,32 @@ class noodlemap():
     #endregion
 
 
+# noodles = noodlemap()
+# noodles.load('map.csv')
+# print(noodles.dijsktra('X','Y'))
 
 
 
-noodles = noodlemap()
-noodles.load('map.csv')
-print(noodles.dijsktra('X', 'Y'))
 
+lines = open('map.csv', 'r').readlines()
+'''
+this currently stores a test map
+as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+'''
+cols_count = 2
+rows_count = len(lines)
+Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
 
-# lines = open('map.csv', 'r').readlines()
-# '''
-# this currently stores a test map
-# as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
-# '''
-# cols_count = 2
-# rows_count = len(lines)
-# Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
+i_d1= 0 #index of dimension 1
+i_d2 = 0 # index of dimension 2
+for x in lines:
+    i_d2 = 0
+    for y in x.strip().split(' , '):
+        Matrix[i_d1][i_d2] = y
+        i_d2 += 1
+    i_d1 += 1 
 
-# i_d1= 0 #index of dimension 1
-# i_d2 = 0 # index of dimension 2
-# for x in lines:
-#     i_d2 = 0
-#     for y in x.strip().split(', '):
-#         Matrix[i_d1][i_d2] = y
-#         i_d2 += 1
-#     i_d1 += 1 
-
-# print(Matrix)
+print(Matrix)
 
 
 # old dictionary system that holds the test nodes.
@@ -132,9 +133,6 @@ print(noodles.dijsktra('X', 'Y'))
 #     ('K', 'Y'),
 # ]
 
-# for edge in edges:
-#     noodles.add_edge(*edge)
-
 '''simply testing
 # print(Matrix) 
 # print(edges)
@@ -142,12 +140,12 @@ print(noodles.dijsktra('X', 'Y'))
 #this adds the edges is into the form that has been defined in the class noodlemap
 
 
+noodles = noodlemap()
+for x in range(0, rows_count):
+     noodles.add_edge(Matrix[x][0], Matrix[x][1])
 
-# for x in range(0, cols_count):
-#     noodles.add_edge(Matrix[x][0], Matrix[x][1])
 
-
-# print(noodles.edges)
+print(noodles.edges)
 
 def dijsktra(noodles, initial, final_destination):
     #shortest_paths is a dictionary of noodles
@@ -178,7 +176,7 @@ def dijsktra(noodles, initial, final_destination):
         
         if not next_noodle: #if the next possible nodes is empty
             return "No route can be found from %s to %s" % (initial, final_destination)
-        
+        current_noodle = min(next_noodle, key=lambda k: next_noodle[k][1])
         #this part goes back through the destinations on shortest_paths 
 
         path = [] #initialises an list/array
@@ -190,3 +188,5 @@ def dijsktra(noodles, initial, final_destination):
         path = path[::-1]
         return path
 
+
+print(dijsktra(noodles,'X','Y'))
