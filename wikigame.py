@@ -22,28 +22,29 @@ class Graph():
 graph = Graph()
 
 edges = [
-    ('X', 'A', 7),
-    ('X', 'B', 2),
-    ('X', 'C', 3),
-    ('X', 'E', 4),
-    ('A', 'B', 3),
-    ('A', 'D', 4),
-    ('B', 'D', 4),
-    ('B', 'H', 5),
-    ('C', 'L', 2),
+    ('X', 'A', 1),
+    ('X', 'B', 1),
+    ('X', 'C', 1),
+    ('X', 'E', 1),
+    ('A', 'B', 1),
+    ('A', 'D', 1),
+    ('B', 'D', 1),
+    ('B', 'H', 1),
+    ('C', 'L', 1),
     ('D', 'F', 1),
-    ('F', 'H', 3),
-    ('G', 'H', 2),
-    ('G', 'Y', 2),
-    ('I', 'J', 6),
-    ('I', 'K', 4),
-    ('I', 'L', 4),
+    ('F', 'H', 1),
+    ('G', 'H', 1),
+    ('G', 'Y', 1),
+    ('I', 'J', 1),
+    ('I', 'K', 1),
+    ('I', 'L', 1),
     ('J', 'L', 1),
-    ('K', 'Y', 5),
+    ('K', 'Y', 1),
 ]
 
 for edge in edges:
     graph.add_edge(*edge)
+
 
 def dijsktra(graph, initial, end):
     # shortest paths is a dict of nodes
@@ -66,7 +67,7 @@ def dijsktra(graph, initial, end):
                 if current_shortest_weight > weight:
                     shortest_paths[next_node] = (current_node, weight)
         
-        # next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited}
+    
         next_destinations = defaultdict(list) 
         for node in shortest_paths:
             if node not in visited:
