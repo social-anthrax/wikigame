@@ -1,23 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="AH project" company="" webLink="https://github.com/social-anthrax/wikigame" view-date="2019-10-13" view-index="0" gantt-divider-location="300" resource-divider-location="300" version="2.0">
+<?xml version="1.0" encoding="UTF-8"?><project name="AH project" company="" webLink="https://github.com/social-anthrax/wikigame" view-date="2019-10-08" view-index="0" gantt-divider-location="681" resource-divider-location="300" version="2.8.10" locale="en_GB">
     <description/>
-    <view zooming-state="default:0" id="gantt-chart"/>
+    <view zooming-state="default:0" id="gantt-chart">
+        <field id="tpd3" name="Name" width="309" order="0"/>
+        <field id="tpd4" name="Begin date" width="184" order="1"/>
+        <field id="tpd5" name="End date" width="184" order="2"/>
+    </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="54" order="0"/>
-        <field id="1" name="Default role" width="45" order="1"/>
+        <field id="0" name="Name" width="152" order="0"/>
+        <field id="1" name="Default role" width="144" order="1"/>
     </view>
     <!-- -->
     <calendars>
         <day-types>
             <day-type id="0"/>
             <day-type id="1"/>
-            <calendar id="1" name="default">
-                <default-week sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
-                <overriden-day-types/>
-                <days/>
-            </calendar>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="false"/>
+            <overriden-day-types/>
+            <days/>
         </day-types>
     </calendars>
-    <tasks color="#8cb6ce">
+    <tasks>
         <taskproperties>
             <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
             <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
@@ -30,27 +33,28 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="5" name="analysis" color="#8cb6ce" meeting="false" start="2019-10-09" duration="6" complete="0" thirdDate="2019-09-23" thirdDate-constraint="0" priority="2" expand="true">
+        <task id="5" name="analysis" color="#8cb6ce" meeting="false" start="2019-10-08" duration="11" complete="0" thirdDate="2019-09-23" thirdDate-constraint="0" priority="2" expand="true">
             <depend id="1" type="2" difference="0" hardness="Strong"/>
             <depend id="28" type="2" difference="0" hardness="Strong"/>
-            <task id="8" name="Create end user questionare" color="#8cb6ce" meeting="false" start="2019-10-09" duration="4" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" priority="1" expand="true">
+            <task id="8" name="Create end user questionare" color="#8cb6ce" meeting="false" start="2019-10-09" duration="4" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true">
                 <depend id="10" type="2" difference="0" hardness="Strong"/>
                 <depend id="14" type="2" difference="0" hardness="Strong"/>
                 <depend id="32" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="10" name="create end user requirements" color="#8cb6ce" meeting="false" start="2019-10-15" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" priority="1" expand="true"/>
-            <task id="14" name="Functional requirements" color="#8cb6ce" meeting="false" start="2019-10-15" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" priority="1" expand="true"/>
-            <task id="32" name="UML" color="#8cb6ce" meeting="false" start="2019-10-15" duration="1" complete="0" priority="1" expand="true"/>
+            <task id="10" name="create end user requirements" color="#8cb6ce" meeting="false" start="2019-10-15" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true"/>
+            <task id="14" name="Functional requirements" color="#8cb6ce" meeting="false" start="2019-10-15" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true"/>
+            <task id="32" name="UML" color="#8cb6ce" meeting="false" start="2019-10-15" duration="6" complete="0" thirdDate="2019-10-15" thirdDate-constraint="0" expand="true"/>
+            <task id="41" name="create scope boundaries and constraints" color="#8cb6ce" meeting="false" start="2019-10-08" duration="1" complete="0" thirdDate="2019-10-08" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="28" name="Design" color="#8cb6ce" meeting="false" start="2019-10-17" duration="65" complete="0" thirdDate="2019-10-21" thirdDate-constraint="0" priority="2" expand="true"/>
-        <task id="1" name="Impementation" color="#8cb6ce" meeting="false" start="2019-10-22" duration="31" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="2" expand="true">
-            <task id="0" name="Create dikijstras algorithm" color="#8cb6ce" meeting="false" start="2019-10-22" duration="4" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="1" expand="true">
+        <task id="28" name="Design" color="#8cb6ce" meeting="false" start="2019-10-23" duration="65" complete="0" thirdDate="2019-10-21" thirdDate-constraint="0" priority="2" expand="true"/>
+        <task id="1" name="Impementation" color="#8cb6ce" meeting="false" start="2019-10-23" duration="39" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="2" expand="true">
+            <task id="0" name="Create dikijstras algorithm" color="#8cb6ce" meeting="false" start="2019-10-23" duration="4" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" expand="true">
                 <depend id="21" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="21" name="create crawler" color="#8cb6ce" meeting="false" start="2019-10-28" duration="20" complete="0" thirdDate="2019-11-04" thirdDate-constraint="0" priority="2" expand="true">
+            <task id="21" name="create crawler" color="#8cb6ce" meeting="false" start="2019-10-29" duration="20" complete="0" thirdDate="2019-11-04" thirdDate-constraint="0" priority="2" expand="true">
                 <depend id="27" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="27" name="SQL reader amd writer" color="#8cb6ce" meeting="false" start="2019-11-25" duration="15" complete="0" thirdDate="2019-12-23" thirdDate-constraint="0" priority="1" expand="true">
+            <task id="27" name="SQL reader amd writer" color="#8cb6ce" meeting="false" start="2019-11-26" duration="15" complete="0" thirdDate="2019-12-23" thirdDate-constraint="0" expand="true">
                 <notes><![CDATA[Create the sql to save data into the database.]]></notes>
             </task>
         </task>
@@ -58,7 +62,6 @@
     <resources/>
     <allocations/>
     <vacations/>
-    <taskdisplaycolumns/>
     <previous/>
     <roles roleset-name="Default"/>
 </project>
