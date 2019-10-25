@@ -12,9 +12,8 @@ class noodlemap():
     #region setters
         def add_edge(self, origin_noodle, destination_noodle):
             #this makes an assumption that these are bidiredctional
-            #TODO: check if making it non bidirectional is possible
+            #TODO: this makes sure that the paths are not bidirectional
             self.edges[origin_noodle].append(destination_noodle)
-            self.edges[destination_noodle].append(origin_noodle)
         
         def load(self,filename):    
             lines = open(filename, 'r').readlines()
@@ -49,16 +48,14 @@ class noodlemap():
             while  current_noodle != final_destination:
                 visited.add(current_noodle) #adds the current node to make sure we do not go back to it by accident
                 destinations = noodles.edges[current_noodle]
-                weight_to_current_noodle = shortest_paths[current_noodle][1]
 
                 for next_noodles in destinations:
-                    weight = 2
-                    if next_noodles not in shortest_paths:
-                        shortest_paths[next_noodles] = (current_noodle, weight)
+                    if next_noodles not in shortest_paths: #checks if node has been passed yet
+                        shortest_paths[next_noodles] = (current_noodle, 1)
                     else:
                         current_shortest_weight = shortest_paths[next_noodles][1]
-                        if current_shortest_weight > weight:
-                            shortest_paths[next_noodles] = (current_noodle,weight)
+                        if current_shortest_weight > 1:
+                            shortest_paths[next_noodles] = (current_noodle,1)
 
                 
                 possible_noodle = defaultdict(list) #initialises an empty dictionary
@@ -85,4 +82,4 @@ class noodlemap():
 
 noodles = noodlemap()
 noodles.load('map.csv')
-print(noodles.dijsktra('X','Y'))
+print(noodles.dijsktra('yeet','Y'))
