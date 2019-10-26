@@ -78,10 +78,9 @@ class noodlemap():
             path = path[::-1]
             return path
         
-        def showMap(self):
+        def returnMap(self):
             unsortedlist = list(self.edges) #creates an "array" of the keys of the edges property.
-
-            
+           
             for startvalue in range(1, len(unsortedlist)):
                 print((unsortedlist[0])[0])
                 sorted = False
@@ -94,16 +93,19 @@ class noodlemap():
                             unsortedlist[currentValue - 1]=tempLower
                             unsortedlist[currentValue]=tempHigher
                             break
-                        elif len(unsortedlist[currentValue]) < len(unsortedlist[currentValue - 1]) and ord(((unsortedlist[currentValue])[letter]).lower()) == ord(((unsortedlist[currentValue-1])[letter]).lower()):
+
+                        elif len(unsortedlist[currentValue]) < len(unsortedlist[currentValue - 1]) and ord(((unsortedlist[currentValue])[letter]).lower()) == ord(((unsortedlist[currentValue-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
                             tempLower = unsortedlist[currentValue]
                             tempHigher = unsortedlist[currentValue - 1]
                             unsortedlist[currentValue - 1]=tempLower
                             unsortedlist[currentValue]=tempHigher
             
-            print(unsortedlist)
+            sortedList = defaultdict(list)
+            for key in unsortedlist:
+                sortedList[key] = self.edges[key]
+            return sortedList
 
-                
-                
+
         #endregion
 
 
@@ -111,6 +113,7 @@ class noodlemap():
 noodles = noodlemap()
 noodles.load('map.csv')
 print(noodles.dijsktra('yeet','Y'))
-noodles.showMap()
+print(noodles.returnMap())
+
 
 
