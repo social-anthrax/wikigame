@@ -85,26 +85,25 @@ class noodlemap():
             for startvalue in range(1, len(unsortedlist)):
                 print((unsortedlist[0])[0])
                 sorted = False
-                while not sorted:
-                    for currentValue in range(startvalue, 0, -1):
-                        for letter in range(0 ,min(len(unsortedlist[currentValue]), len(unsortedlist[currentValue - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
-                            if ord(((unsortedlist[currentValue])[letter]).lower()) < ord(((unsortedlist[currentValue-1])[letter]).lower()):
-                                tempLower = unsortedlist[currentValue]
-                                tempHigher = unsortedlist[currentValue - 1]
-                                print(
-                                    (unsortedlist[currentValue])[0].lower())
-                                print(
-                                    (unsortedlist[currentValue - 1])[0].lower())
-                                unsortedlist[currentValue - 1]=tempLower
-                                unsortedlist[currentValue]=tempHigher
-                            else:
-                                break
-                            
-                            sorted = True
+                
+                for currentValue in range(startvalue, 0, -1):
+                    for letter in range(0 ,min(len(unsortedlist[currentValue]), len(unsortedlist[currentValue - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+                        if ord(((unsortedlist[currentValue])[letter]).lower()) < ord(((unsortedlist[currentValue-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
+                            tempLower = unsortedlist[currentValue]
+                            tempHigher = unsortedlist[currentValue - 1]
+                            unsortedlist[currentValue - 1]=tempLower
+                            unsortedlist[currentValue]=tempHigher
+                            break
+                        elif len(unsortedlist[currentValue]) < len(unsortedlist[currentValue - 1]) and ord(((unsortedlist[currentValue])[letter]).lower()) == ord(((unsortedlist[currentValue-1])[letter]).lower()):
+                            tempLower = unsortedlist[currentValue]
+                            tempHigher = unsortedlist[currentValue - 1]
+                            unsortedlist[currentValue - 1]=tempLower
+                            unsortedlist[currentValue]=tempHigher
+            
             print(unsortedlist)
 
                 
-                #TODO: make sure to make shorter stings come first.
+                
         #endregion
 
 
