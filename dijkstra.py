@@ -28,8 +28,9 @@ class noodlemap():
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
             for x in lines:
+                x = x.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
                 i_d2 = 0
-                for y in x.strip().split(' , '):
+                for y in x.strip().split(','): #splits up the two arguments and removes any new line characters.
                     self.Matrix[i_d1][i_d2] = y
                     i_d2 += 1
                 i_d1 += 1 
@@ -76,6 +77,34 @@ class noodlemap():
             #itterates through the path list with a step of -1, aka backwards
             path = path[::-1]
             return path
+        
+        def showMap(self):
+            unsortedlist = list(self.edges) #creates an "array" of the keys of the edges property.
+
+            
+            for startvalue in range(1, len(unsortedlist)):
+                print((unsortedlist[0])[0])
+                sorted = False
+                while not sorted:
+                    for currentValue in range(startvalue, 0, -1):
+                        for letter in range(0 ,min(len(unsortedlist[currentValue]), len(unsortedlist[currentValue - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+                            if ord(((unsortedlist[currentValue])[letter]).lower()) < ord(((unsortedlist[currentValue-1])[letter]).lower()):
+                                tempLower = unsortedlist[currentValue]
+                                tempHigher = unsortedlist[currentValue - 1]
+                                print(
+                                    (unsortedlist[currentValue])[0].lower())
+                                print(
+                                    (unsortedlist[currentValue - 1])[0].lower())
+                                unsortedlist[currentValue - 1]=tempLower
+                                unsortedlist[currentValue]=tempHigher
+                            else:
+                                break
+                            
+                            sorted = True
+            print(unsortedlist)
+
+                
+                #TODO: make sure to make shorter stings come first.
         #endregion
 
 
@@ -83,3 +112,6 @@ class noodlemap():
 noodles = noodlemap()
 noodles.load('map.csv')
 print(noodles.dijsktra('yeet','Y'))
+noodles.showMap()
+
+
