@@ -4,8 +4,8 @@ class noodlemap():
     #region declaration
         def __init__(self):
             self.edges = defaultdict(list)
-            self.Matrix = [[0 for x in range(0,1)]
-                           for x in range(0,1)]
+            self.__Matrix = [[0 for x in range(0,1)]
+                           for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a single _
 
             #this is a dictionary of all possible NEXT noodles.
     #endregion
@@ -107,12 +107,56 @@ class noodlemap():
 
         #endregion
 
+class ui():
+    #region setters
+    def __init__(self, section):
+        self.sectionName = section
+        self._contents = ""
+        self._prompt = ""
+        self._commands = defaultdict(list)
+
+    # the kwargs is used to get a dictionary of functions that can be called by typing in the key. Instructions on how to do so were found here: https://stackoverflow.com/questions/9205081/is-there-a-way-to-store-a-function-in-a-list-or-dictionary-so-that-when-the-inde
+    # use of kwargs was helped by https://www.digitalocean.com/community/tutorials/how-to-use-args-and-kwargs-in-python-3
+    def setContents(self, contents):
+        self.contents = contents
+        
+
+    def setCommands(self, prompt, **kwargs):
+        self.prompt = prompt
+        for key, value in kwargs.items():
+            self._commands[key] = value
+
+    #endregion
+
+    #region getters
+    def showUi(self, getCommands=True):
+        print(self.contents)
+        if getCommands == True:
+            userInput = input(self.prompt + "   ")
+            if userInput in self._commands:
+                self._commands[userInput]()
+            else:
+                print("Please select a valid option.")
+
+#the proceedures bellow simplify the proccesses
+def pathfinder():
+    start = input(
+        "Please input The webpage you wish the path to begin with. \n").lower()
+    end = input("Please input the webpage you wish the path to terminate at. \n").lower()
+    noodles.load('map.csv')
+    print(noodles.dijsktra(start,end)) 
+def sort():
+    noodles.load('map.csv')
+    print(noodles.returnMap())
+def help():
+    print("no")
 
 
 noodles = noodlemap()
-noodles.load('map.csv')
-print(noodles.dijsktra('abc','Y'))
-print(noodles.returnMap())
+mainMenu = ui("MainMenu") #instanciates UI object
+mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n sort. Url link finder.')
+mainMenu.setCommands('Pick option', pathfinder=pathfinder,  sort=sort, help=help)
+mainMenu.showUi()
 
 
 
