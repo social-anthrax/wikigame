@@ -82,7 +82,6 @@ class noodlemap():
             unsortedlist = list(self.edges) #creates an "array" of the keys of the edges property.
            
             for startvalue in range(1, len(unsortedlist)):
-                print((unsortedlist[0])[0])
                 sorted = False
                 
                 for currentValue in range(startvalue, 0, -1):
@@ -112,7 +111,7 @@ class noodlemap():
 
 noodles = noodlemap()
 noodles.load('map.csv')
-print(noodles.dijsktra('yeet','Y'))
+print(noodles.dijsktra('abc','Y'))
 print(noodles.returnMap())
 
 
