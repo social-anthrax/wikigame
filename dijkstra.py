@@ -122,7 +122,7 @@ class ui():
         
 
     def setCommands(self, prompt, **kwargs):
-        self.prompt = prompt
+        self._prompt = prompt
         for key, value in kwargs.items():
             self._commands[key] = value
 
