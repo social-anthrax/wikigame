@@ -82,7 +82,6 @@ class noodlemap():
             unsortedlist = list(self.edges) #creates an "array" of the keys of the edges property.
            
             for startvalue in range(1, len(unsortedlist)):
-                sorted = False
                 
                 for currentValue in range(startvalue, 0, -1):
                     for letter in range(0 ,min(len(unsortedlist[currentValue]), len(unsortedlist[currentValue - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
@@ -132,7 +131,7 @@ class ui():
     def showUi(self, getCommands=True):
         print(self.contents)
         if getCommands == True:
-            userInput = input(self.prompt + "   ")
+            userInput = input(self._prompt + "   ")
             if userInput in self._commands:
                 self._commands[userInput]()
             else:
