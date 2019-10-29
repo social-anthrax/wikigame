@@ -20,6 +20,25 @@ class ScraperWithLimit(scrapy.Spider):
             yield {'quote': quote.extract()}
 
 
+class ScraperWithDuplicateRequests(scrapy.Spider):
+    name = "ScraperWithDuplicateRequests"
+    start_urls = [
+        'https://en.wikipedia.org/wiki/Web_scraping',
+    ]
+
+    custom_settings = {
+        'DEPTH_LIMIT': 2
+    }
+
+    def parse(self, response):
+        for next_page in response.css('div.mw-parser-output > p > a::attr(href)').extract_first():
+            if next_page is not None:
+                next_page = response.urljoin(next_page)
+                yield scrapy.Request(next_page, callback=self.parse, dont_filter=False)
+
+        for quote in response.css('div.mw-parser-output > p'):
+            yield {'quote': quote.extract()}
+
 process = CrawlerProcess()
-process.crawl(ScraperWithLimit)
+process.crawl(ScraperWithDuplicateRequests)
 process.start()
