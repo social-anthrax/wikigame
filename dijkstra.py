@@ -11,7 +11,9 @@ class noodlemap():
     #endregion
     #region setters
         def __add_edge(self, origin_noodle, destination_noodle):
+
             #adds new nodes witht the nodes they lead to. The path is assumed to be in one direction.           
+
             self.edges[origin_noodle].append(destination_noodle)
         
         def load(self,filename):    
@@ -35,7 +37,9 @@ class noodlemap():
                 i_d1 += 1 
             
             for x in range(0, rows_count):
+
                 self.__add_edge(self.__Matrix[x][0], self.__Matrix[x][1])
+
     #endregion
     #region getters
         def dijsktra(self, initial, final_destination):
