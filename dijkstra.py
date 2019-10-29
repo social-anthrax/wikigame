@@ -10,7 +10,7 @@ class noodlemap():
             #this is a dictionary of all possible NEXT noodles.
     #endregion
     #region setters
-        def add_edge(self, origin_noodle, destination_noodle):
+        def __add_edge(self, origin_noodle, destination_noodle):
             #this makes an assumption that these are bidiredctional
             #TODO: this makes sure that the paths are not bidirectional
             self.edges[origin_noodle].append(destination_noodle)
@@ -36,7 +36,7 @@ class noodlemap():
                 i_d1 += 1 
             
             for x in range(0, rows_count):
-                self.add_edge(self.Matrix[x][0], self.Matrix[x][1])
+                self.__add_edge(self.Matrix[x][0], self.Matrix[x][1])
     #endregion
     #region getters
         def dijsktra(self, initial, final_destination):
@@ -140,8 +140,8 @@ class ui():
 #the proceedures bellow simplify the proccesses
 def pathfinder():
     start = input(
-        "Please input The webpage you wish the path to begin with. \n").lower()
-    end = input("Please input the webpage you wish the path to terminate at. \n").lower()
+        "Please input The webpage you wish the path to begin with. \n")
+    end = input("Please input the webpage you wish the path to terminate at. \n")
     noodles.load('map.csv')
     print(noodles.dijsktra(start,end)) 
 def sort():
