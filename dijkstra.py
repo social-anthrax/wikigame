@@ -10,9 +10,8 @@ class noodlemap():
             #this is a dictionary of all possible NEXT noodles.
     #endregion
     #region setters
-        def add_edge(self, origin_noodle, destination_noodle):
-            #this makes an assumption that these are bidiredctional
-            #TODO: this makes sure that the paths are not bidirectional
+        def __add_edge(self, origin_noodle, destination_noodle):
+            #adds new nodes witht the nodes they lead to. The path is assumed to be in one direction.           
             self.edges[origin_noodle].append(destination_noodle)
         
         def load(self,filename):    
@@ -23,7 +22,7 @@ class noodlemap():
             '''
             cols_count = 2
             rows_count = len(lines)
-            self.Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
+            self.__Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
 
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
@@ -31,12 +30,12 @@ class noodlemap():
                 x = x.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
                 i_d2 = 0
                 for y in x.strip().split(','): #splits up the two arguments and removes any new line characters.
-                    self.Matrix[i_d1][i_d2] = y
+                    self.__Matrix[i_d1][i_d2] = y
                     i_d2 += 1
                 i_d1 += 1 
             
             for x in range(0, rows_count):
-                self.add_edge(self.Matrix[x][0], self.Matrix[x][1])
+                self.__add_edge(self.__Matrix[x][0], self.__Matrix[x][1])
     #endregion
     #region getters
         def dijsktra(self, initial, final_destination):
@@ -117,7 +116,7 @@ class ui():
     # the kwargs is used to get a dictionary of functions that can be called by typing in the key. Instructions on how to do so were found here: https://stackoverflow.com/questions/9205081/is-there-a-way-to-store-a-function-in-a-list-or-dictionary-so-that-when-the-inde
     # use of kwargs was helped by https://www.digitalocean.com/community/tutorials/how-to-use-args-and-kwargs-in-python-3
     def setContents(self, contents):
-        self.contents = contents
+        self._contents = contents
         
 
     def setCommands(self, prompt, **kwargs):
@@ -129,7 +128,7 @@ class ui():
 
     #region getters
     def showUi(self, getCommands=True):
-        print(self.contents)
+        print(self._contents)
         if getCommands == True:
             userInput = input(self._prompt + "   ")
             if userInput in self._commands:
@@ -140,8 +139,8 @@ class ui():
 #the proceedures bellow simplify the proccesses
 def pathfinder():
     start = input(
-        "Please input The webpage you wish the path to begin with. \n").lower()
-    end = input("Please input the webpage you wish the path to terminate at. \n").lower()
+        "Please input The webpage you wish the path to begin with. \n")
+    end = input("Please input the webpage you wish the path to terminate at. \n")
     noodles.load('map.csv')
     print(noodles.dijsktra(start,end)) 
 def sort():
