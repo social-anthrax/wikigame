@@ -24,9 +24,10 @@ class ScraperWithLimit(scrapy.Spider):
 
     def parse(self, response):
         for next_page in response.css('a::attr(href)'):
+            file.write(str(next_page) + '\n')
             yield response.follow(next_page, self.parse)
 
-        file.write(response.url + "\n")
+        # file.write(response.url + "\n")
         
 
 class ScraperWithDuplicateRequests(scrapy.Spider):
