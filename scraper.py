@@ -1,12 +1,14 @@
 import scrapy
 import json
 from scrapy.crawler import CrawlerProcess
+from collections import defaultdict
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
 
 class ScraperWithLimit(scrapy.Spider):
+    
     name = "ScraperWithLimit"
     start_urls = [
         # 'https://en.wikipedia.org/wiki/Web_scraping',
@@ -24,7 +26,9 @@ class ScraperWithLimit(scrapy.Spider):
 
     def parse(self, response):
         for next_page in response.css('a::attr(href)'):
-            file.write(str(next_page) + '\n')
+            # 56 is the first character at which the actual url starts and the -3 cuts off the last 3 characters of the string: eg <Selector xpath='descendant-or-self::a/@href' data='http://www.mysqa.org.uk/'> becomes http://www.mysqa.org.uk/
+            dictOfUrl[response.url].append(str(next_page))
+            # file.write(str(next_page)[55:-1] + '\n')
             yield response.follow(next_page, self.parse)
 
         # file.write(response.url + "\n")
@@ -57,11 +61,18 @@ class ScraperWithDuplicateRequests(scrapy.Spider):
             yield {'quote': quote}
         
         
-file = open('yeet.txt', 'a')
+dictOfUrl = defaultdict(list)
 process = CrawlerProcess()
 process.crawl(ScraperWithLimit)
 process.start()
 
 process.stop()
+
+file = open('yeet.txt', 'a')
+for x,y in dictOfUrl.items():
+    file.write(x+", {" )
+    for item in y:
+        file.write(item[50:-1].replace('//', '') + ", ")
+    file.write("}\n")
 file.close()
 
