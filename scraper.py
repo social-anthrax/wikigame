@@ -72,7 +72,15 @@ file = open('yeet.txt', 'a')
 for x,y in dictOfUrl.items():
     file.write(x+", {" )
     for item in y:
-        file.write(item[50:-1].replace('//', '') + ", ")
+        item = item[52:-1]
+        if item[0] == "/" or "http" in item:
+            print("true " + item)
+            if "http" not in item:
+                file.write(item.replace('//', '') + ", ")
+            else:
+                file.write(item + ", ")
+        else:
+            print("false " + item)
     file.write("}\n")
 file.close()
 
