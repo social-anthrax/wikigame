@@ -97,7 +97,7 @@ class noodlemap():
 
                         elif len(unsortedlist[currentValue]) < len(unsortedlist[currentValue - 1]) and ord(((unsortedlist[currentValue])[letter]).lower()) == ord(((unsortedlist[currentValue-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
                             tempLower = unsortedlist[currentValue]
-                            tempHigher = unsortedlist[currentValue - 1]
+                            tempHigher = unsortedlist[currentValue - 1] #remove one of these as this is unnecessary
                             unsortedlist[currentValue - 1]=tempLower
                             unsortedlist[currentValue]=tempHigher
             
