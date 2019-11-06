@@ -3,7 +3,7 @@ from collections import defaultdict
 class noodlemap():
     #region declaration
         def __init__(self):
-            self.edges = defaultdict(list)
+            self.__edges = defaultdict(list)
             self.__Matrix = [[0 for x in range(0,1)]
                            for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a single _
 
@@ -14,7 +14,7 @@ class noodlemap():
 
             #adds new nodes witht the nodes they lead to. The path is assumed to be in one direction.           
 
-            self.edges[origin_noodle].append(destination_noodle)
+            self.__edges[origin_noodle].append(destination_noodle)
         
         def load(self,filename):    
             lines = open(filename, 'r').readlines()
@@ -51,7 +51,7 @@ class noodlemap():
 
             while  current_noodle != final_destination:
                 visited.add(current_noodle) #adds the current node to make sure we do not go back to it by accident
-                destinations = noodles.edges[current_noodle]
+                destinations = noodles.__edges[current_noodle]
 
                 for next_noodles in destinations:
                     if next_noodles not in shortest_paths: #checks if node has been passed yet
@@ -82,7 +82,7 @@ class noodlemap():
             return path
         
         def returnMap(self):
-            unsortedlist = list(self.edges) #creates an "array" of the keys of the edges property.
+            unsortedlist = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
            
             for startvalue in range(1, len(unsortedlist)):
                 
@@ -103,7 +103,7 @@ class noodlemap():
             
             sortedList = defaultdict(list)
             for key in unsortedlist:
-                sortedList[key] = self.edges[key]
+                sortedList[key] = self.__edges[key]
             return sortedList
 
 
@@ -113,30 +113,30 @@ class ui():
     #region setters
     def __init__(self, section):
         self.sectionName = section
-        self._contents = ""
-        self._prompt = ""
-        self._commands = defaultdict(list)
+        self.__contents = ""
+        self.__prompt = ""
+        self.__commands = defaultdict(list)
 
     # the kwargs is used to get a dictionary of functions that can be called by typing in the key. Instructions on how to do so were found here: https://stackoverflow.com/questions/9205081/is-there-a-way-to-store-a-function-in-a-list-or-dictionary-so-that-when-the-inde
     # use of kwargs was helped by https://www.digitalocean.com/community/tutorials/how-to-use-args-and-kwargs-in-python-3
-    def setContents(self, contents):
-        self._contents = contents
+    def setContents(self, contentsText):
+        self.__contents = contentsText
         
 
     def setCommands(self, prompt, **kwargs):
-        self._prompt = prompt
+        self.__prompt = prompt
         for key, value in kwargs.items():
-            self._commands[key] = value
+            self.__commands[key] = value
 
     #endregion
 
     #region getters
-    def showUi(self, getCommands=True):
-        print(self._contents)
-        if getCommands == True:
-            userInput = input(self._prompt + "   ")
-            if userInput in self._commands:
-                self._commands[userInput]()
+    def showUi(self, acceptCommands=True):
+        print(self.__contents)
+        if acceptCommands == True:
+            userInput = input(self.__prompt + "   ")
+            if userInput in self.__commands:
+                self.__commands[userInput]()
             else:
                 print("Please select a valid option.")
 
