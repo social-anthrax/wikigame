@@ -2,22 +2,19 @@ import scrapy
 import json
 from scrapy.crawler import CrawlerProcess
 from collections import defaultdict
-
-import scrapy
-from scrapy.crawler import CrawlerProcess
-
+website= input("Please input the website you wish to scrape")
 
 class ScraperWithLimit(scrapy.Spider):
-    
+
     name = "ScraperWithLimit"
     start_urls = [
         # 'https://en.wikipedia.org/wiki/Web_scraping',
         # 'https://en.wikipedia.org/wiki/Pok%C3%A9mon',
-        # 'https://www.george-heriots.com/',
-        'https://www.sqa.org.uk/sqa/70972.html',
+        website,
+        # 'https://www.sqa.org.uk/sqa/70972.html',
     ]
 
-    allowed_domains = ['www.sqa.org.uk']
+    allowed_domains = [website]
 
     custom_settings = {
         'DEPTH_LIMIT': 1,
@@ -32,55 +29,27 @@ class ScraperWithLimit(scrapy.Spider):
             yield response.follow(next_page, self.parse)
 
         # file.write(response.url + "\n")
-        
 
-class ScraperWithDuplicateRequests(scrapy.Spider):
+
+if __name__ == "__main__":
     
+    dictOfUrl = defaultdict(list)
+    # website = "www.george-heriots.com"
+    process = CrawlerProcess()
+    process.crawl(ScraperWithLimit)
+    process.start()
 
-    name = "ScraperWithDuplicateRequests"
-    start_urls = [
-        'https://en.wikipedia.org/wiki/Web_scraping',
-    ]
-    
-    custom_settings = {
-        'DEPTH_PRIORITY': 1,
-        'DEPTH_LIMIT': 2
-    }
+    process.stop()
 
-    def parse(self, response):
-        
-        for next_page in response.css('p > a::attr(href)').extract_first():
-            if next_page is not None:
-                next_page = response.urljoin(next_page)
-               
-                yield scrapy.Request(next_page, callback=self.parse, dont_filter=True)
-        
-        for quote in response.css('div.mw-parser-output > p'):
-            quote = quote.extract()
-            
-            yield {'quote': quote}
-        
-        
-dictOfUrl = defaultdict(list)
-process = CrawlerProcess()
-process.crawl(ScraperWithLimit)
-process.start()
-
-process.stop()
-
-file = open('yeet.txt', 'a')
-for x,y in dictOfUrl.items():
-    file.write(x+", {" )
-    for item in y:
-        item = item[52:-1]
-        if item[0] == "/" or "http" in item:
-            print("true " + item)
-            if "http" not in item:
-                file.write(item.replace('//', '') + ", ")
-            else:
-                file.write(item + ", ")
-        else:
-            print("false " + item)
-    file.write("}\n")
-file.close()
-
+    file = open('yeet.txt', 'a')
+    for x, y in dictOfUrl.items():
+        file.write(x+", {")
+        for item in y:
+            item = item[52:-1]
+            if item[0] == "/" or "http" in item:
+                if "http" not in item:
+                    file.write(item.replace('//', '') + ", ")
+                else:
+                    file.write(item + ", ")
+            file.write("}\n")
+    file.close()
