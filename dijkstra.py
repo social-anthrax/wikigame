@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+# import scraper.py
 class noodlemap():
     #region declaration
         def __init__(self):
@@ -141,6 +141,10 @@ class ui():
                 print("Please select a valid option.")
 
 #the proceedures bellow simplify the proccesses
+def scrape():
+    import subprocess
+    subprocess.Popen("scraper.py", shell=True)
+
 def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
