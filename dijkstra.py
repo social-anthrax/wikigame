@@ -4,8 +4,8 @@ class noodlemap():
     #region declaration
         def __init__(self):
             self.__edges = defaultdict(list)
-            self.__Matrix = [[0 for x in range(0,1)]
-                           for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a single _
+            self.__Matrix = [[0 for y in range(0,1)]
+                           for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable. Also the inner loop is actually the y value of an array[x][y] as the variable name suggests.
 
             #this is a dictionary of all possible NEXT noodles.
     #endregion
