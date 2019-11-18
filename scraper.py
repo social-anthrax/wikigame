@@ -8,10 +8,11 @@ class ScraperWithLimit(scrapy.Spider):
 
     name = "ScraperWithLimit"
     start_urls = [
+        #these are all test case websites with known outputs
         # 'https://en.wikipedia.org/wiki/Web_scraping',
         # 'https://en.wikipedia.org/wiki/Pok%C3%A9mon',
-        website,
         # 'https://www.sqa.org.uk/sqa/70972.html',
+        website,
     ]
 
     allowed_domains = [website]
