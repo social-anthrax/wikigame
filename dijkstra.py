@@ -5,7 +5,7 @@ class noodlemap():
         def __init__(self):
             self.__edges = defaultdict(list)
             self.__Matrix = [[0 for y in range(0,1)]
-                           for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable. Also the inner loop is actually the y value of an array[x][y] as the variable name suggests.
+                           for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable.
 
             #this is a dictionary of all possible NEXT noodles.
     #endregion
@@ -18,27 +18,26 @@ class noodlemap():
         
         def load(self,filename):    
             lines = open(filename, 'r').readlines()
-            '''
-            this currently stores a test map
-            as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
-            '''
+            
+            #as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+            
             cols_count = 2
             rows_count = len(lines)
-            self.__Matrix = [[0 for x in range(cols_count)] for x in range(rows_count)]
+            self.__Matrix = [[0 for x in range(cols_count)] for y in range(rows_count)]
 
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
-            for x in lines:
-                x = x.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
+            for singleLine in lines:
+                singleLine = singleLine.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
                 i_d2 = 0
-                for y in x.strip().split(','): #splits up the two arguments and removes any new line characters.
+                for y in singleLine.strip().split(','): #splits up the two arguments and removes any new line characters.
                     self.__Matrix[i_d1][i_d2] = y
                     i_d2 += 1
                 i_d1 += 1 
             
             for x in range(0, rows_count):
 
-                self.__add_edge(self.__Matrix[x][0], self.__Matrix[x][1])
+                self.__add_edge(self.__Matrix[x][0], self.__Matrix[x][1]) #adds to the dictionary of edges
 
     #endregion
     #region getters
