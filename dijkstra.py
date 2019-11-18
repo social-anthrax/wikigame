@@ -35,9 +35,9 @@ class noodlemap():
                     i_d2 += 1
                 i_d1 += 1 
             
-            for x in range(0, rows_count):
+            for index in range(0, rows_count):
 
-                self.__add_edge(self.__Matrix[x][0], self.__Matrix[x][1]) #adds to the dictionary of edges
+                self.__add_edge(self.__Matrix[index][0], self.__Matrix[index][1]) #adds to the dictionary of edges
 
     #endregion
     #region getters
