@@ -6,8 +6,8 @@ def cls(): #allows the clearing of the terminal so that things can be displayed 
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
 
 
-# now, to clear the screen
-cls()
+# now, to clear the screen all you need to type is: cls()
+
 # import scraper.py
 class noodlemap():
     #region declaration
@@ -134,19 +134,23 @@ class ui():
     def setCommands(self, prompt, **kwargs):
         self.__prompt = prompt
         for key, value in kwargs.items():
-            self.__commands[key] = value
+            self.__commands[key.lower()] = value
 
     #endregion
 
     #region getters
     def showUi(self, acceptCommands=True):
+        cls()
         print(self.__contents)
         if acceptCommands == True:
             userInput = input(self.__prompt + "   ")
-            if userInput in self.__commands:
-                self.__commands[userInput]()
+            if userInput.lower() in self.__commands:
+                self.__commands[userInput.lower()]()
             else:
                 print("Please select a valid option.")
+                input()
+                self.showUi()
+
 
 #the proceedures bellow simplify the proccesses
 def scrape():
@@ -161,15 +165,17 @@ def pathfinder():
     print(noodles.dijsktra(start,end)) 
 def sort():
     noodles.load('map.csv')
-    print(noodles.returnMap())
+    for x, y in noodles.returnMap().items():
+        print("%s: %s" % (x, y))
+        
 def help():
     print("no")
 
 
 noodles = noodlemap()
 mainMenu = ui("MainMenu") #instanciates UI object
-mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n sort. Url link finder.')
-mainMenu.setCommands('Pick option', pathfinder=pathfinder,  sort=sort, help=help)
+mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
+mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help)
 mainMenu.showUi()
 
 
