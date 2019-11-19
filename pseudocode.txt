@@ -38,6 +38,6 @@ CLASS ui()
                     ME.showUI()
                 END IF
             END IF
-        END METHOD
+        END METHOD 
     END REGION
 END CLASS
