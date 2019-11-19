@@ -148,7 +148,7 @@ class ui():
                 self.__commands[userInput.lower()]()
             else:
                 print("Please select a valid option.")
-                input()
+                input() #waits for user to press enter to continue
                 self.showUi()
 
 
@@ -167,6 +167,11 @@ def sort():
     noodles.load('map.csv')
     for x, y in noodles.returnMap().items():
         print("%s: %s" % (x, y))
+
+def quit():
+    print("Exiting")
+    input()
+    sys.exit()  # quits program
         
 def help():
     print("no")
@@ -193,13 +198,6 @@ try: #this try catch statement tries to get arguments passed in command line. If
 except IndexError: #catches index error caused by non existent sys.argv
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instanciates UI object
-    mainMenu.setContents(
-        'Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
-    mainMenu.setCommands(
-        'Pick option', pathfinder=pathfinder,  returnMap=sort, help=help)
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
+    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
     mainMenu.showUi()
-
-
-
-
-
