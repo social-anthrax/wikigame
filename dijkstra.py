@@ -25,7 +25,7 @@ class noodlemap():
 
             self.__edges[origin_noodle].append(destination_noodle)
         
-        def load(self,filename):    
+        def load(self,filename):    #currently used for loading a .csv instead of a database for testing purposes.
             lines = open(filename, 'r').readlines()
             
             #as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
@@ -50,7 +50,7 @@ class noodlemap():
 
     #endregion
     #region getters
-        def dijsktra(self, initial, final_destination):
+        def dijkstra(self, initial, final_destination):
             #shortest_paths is a dictionary of noodles
             # where the value is a tuple of previos noodle, and 1
             shortest_paths = {initial: (None, 0)}
@@ -162,7 +162,7 @@ def pathfinder():
         "Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
     noodles.load('map.csv')
-    print(noodles.dijsktra(start,end)) 
+    print(noodles.dijkstra(start,end)) 
 def sort():
     noodles.load('map.csv')
     for x, y in noodles.returnMap().items():
@@ -174,20 +174,23 @@ def help():
 
 noodles = noodlemap()
 try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
-    if sys.argv[1].lower() == "pathfinder":
+    if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
         noodles.load("map.csv")
         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
         #     scrape(sys.argv[3])
             print("this will scrape")
-            print(noodles.dijsktra(sys.argv[3], sys.argv[4]))
+            print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
         else:
-            print(noodles.dijsktra(sys.argv[2], sys.argv[3]))
+            print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
     elif sys.argv[1].lower() == "returnmap":
         if sys.argv[2].lower() == "-r":
             print("this will scrape")
         sort()
-    else: print("Command not recognised")
-except IndexError: #catches index error caused by non existent 
+    else: 
+        print("Command not recognised")
+        sys.exit() #quits program
+
+except IndexError: #catches index error caused by non existent sys.argv
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instanciates UI object
     mainMenu.setContents(
