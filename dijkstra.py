@@ -1,4 +1,13 @@
 from collections import defaultdict
+import os
+
+
+def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
+    os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
+
+
+# now, to clear the screen
+cls()
 # import scraper.py
 class noodlemap():
     #region declaration
