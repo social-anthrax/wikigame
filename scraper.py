@@ -1,8 +1,14 @@
 import scrapy
 import json
 from scrapy.crawler import CrawlerProcess
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 from collections import defaultdict
-website= input("Please input the website you wish to scrape")
+
+
+website= input("Please input the website you wish to scrape: ")
+domain = website.replace("https://", "").replace("http://", "").split("/", 1)[0]
+
 
 class ScraperWithLimit(scrapy.Spider):
 
@@ -15,7 +21,7 @@ class ScraperWithLimit(scrapy.Spider):
         website,
     ]
 
-    allowed_domains = [website]
+    allowed_domains = [domain]
 
     custom_settings = {
         'DEPTH_LIMIT': 1,
@@ -32,25 +38,58 @@ class ScraperWithLimit(scrapy.Spider):
         # file.write(response.url + "\n")
 
 
-if __name__ == "__main__":
+# class MySpider(CrawlSpider):
+#     name = 'example.com'
+#     allowed_domains = ['www.sqa.org.uk']
+#     start_urls = ['https://www.sqa.org.uk/sqa/70972.html']
+#     custom_settings = {
+#         'DEPTH_LIMIT': 1,
+#         'DEPTH_PRIORITY': -1,
+#         'LOG_FILE': "test.txt",
+#         'LOG_LEVEL': "INFO"
+#     }
+#     rules = (
+#         # Extract links matching 'category.php' (but not matching 'subsection.php')
+#         # and follow links from them (since no callback means follow=True by default).
+#         # Rule(LinkExtractor(allow=(), deny=())),
+
+#         # Extract links matching 'item.php' and parse them with the spider's method parse_item
+#         Rule(LinkExtractor(allow=()), callback='parse_item'),
+#     )
+
+#     def parse_item(self, response):
+#         self.logger.info('Hi, this is an item page! %s', response.url)
+#         item = scrapy.Item()
+#         item['name'] = response.xpath('//td[@id="item_name"]/text()').get()
+#         item['description'] = response.xpath(
+#             '//td[@id="item_description"]/text()').get()
+#         item['link_text'] = response.meta['link_text']
+#         return item
+
+
+
+
+
+
+# if __name__ == "__main__":
     
-    dictOfUrl = defaultdict(list)
-    # website = "www.george-heriots.com"
-    process = CrawlerProcess()
-    process.crawl(ScraperWithLimit)
-    process.start()
+dictOfUrl = defaultdict(list)
+# website = "www.george-heriots.com"
+process = CrawlerProcess()
+process.crawl(ScraperWithLimit)
+process.start()
 
-    process.stop()
+process.stop()
 
-    file = open('yeet.txt', 'a')
-    for x, y in dictOfUrl.items():
-        file.write(x+", {")
-        for item in y:
-            item = item[52:-1]
-            if item[0] == "/" or "http" in item:
-                if "http" not in item:
-                    file.write(item.replace('//', '') + ", ")
-                else:
-                    file.write(item + ", ")
-            file.write("}\n")
-    file.close()
+file = open('yeet.txt', 'w')
+for x, y in dictOfUrl.items():
+    file.write(x+", {")
+    for item in y:
+        item = item[52:-1]
+        if item[0] == "/" or "http" in item:
+            if "http" not in item:
+                file.write(item.replace('//', '') + ", ")
+            else:
+                file.write(item + ", ")
+        file.write("}\n")
+file.close()
