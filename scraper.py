@@ -11,12 +11,7 @@ domain = "www.sqa.org.uk"
 dictOfUrl = defaultdict(list)
 
 
-# def runScrape(page = ""): #like runescape but not
 
-# if page == "":
-#     website = input("Please input the website you wish to scrape: ")
-# else:
-#     website = page
 
 
 
@@ -46,25 +41,29 @@ class ScraperWithLimit(scrapy.Spider):
 
         # file.write(response.url + "\n")
 
+def runScrape(page = ""): #like runescape but not
+    if page == "":
+        website = input("Please input the website you wish to scrape: ")
+    else:
+        website = page
 
+    ScraperWithLimit.allowed_domains = [website.replace("https://", "").replace("http://", "").split("/", 1)[0]] #trims away anything making it a url, making it into a domain
+    ScraperWithLimit.start_urls = [website]
+    process = CrawlerProcess()
+    process.crawl(ScraperWithLimit)
+    process.start()
+    process.stop()
 
-ScraperWithLimit.allowed_domains = [website.replace("https://", "").replace("http://", "").split("/", 1)[0]] #trims away anything making it a url, making it into a domain
-ScraperWithLimit.start_urls = [website]
-process = CrawlerProcess()
-process.crawl(ScraperWithLimit)
-process.start()
-process.stop()
-
-file = open('yeet.txt', 'w')
-for x, y in dictOfUrl.items():
-    file.write(x+", {")
-    for item in y:
-        # item = item[52:-1]
-        if item != "" and item != "/":
-            if item[0] == "/" or "http" in item:
-                if "http" not in item:
-                    file.write(item.replace('//', '') + ", ")
-                else:
-                    file.write(item + ", ")
-    file.write("}\n")
-file.close()
+    file = open('yeet.txt', 'w')
+    for x, y in dictOfUrl.items():
+        file.write(x+", {")
+        for item in y:
+            # item = item[52:-1]
+            if item != "" and item != "/":
+                if item[0] == "/" or "http" in item:
+                    if "http" not in item:
+                        file.write(item.replace('//', '') + ", ")
+                    else:
+                        file.write(item + ", ")
+        file.write("}\n")
+    file.close()
