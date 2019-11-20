@@ -1,6 +1,9 @@
 from collections import defaultdict
 import os
 import sys
+import importlib
+import scraper
+importlib.reload(scraper)
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
@@ -154,12 +157,12 @@ class ui():
 
 #the proceedures bellow simplify the proccesses
 def scrape():
-    import subprocess
-    subprocess.Popen("scraper.py", shell=True)
+    scraper.runScrape()
 def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
+    scraper.runScrape(start)
     noodles.load('map.csv')
     print(noodles.dijkstra(start,end)) 
 def sort():
@@ -179,14 +182,14 @@ try: #this try catch statement tries to get arguments passed in command line. If
     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
         noodles.load("map.csv")
         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
-        #     scrape(sys.argv[3])
-            print("this will scrape")
+            scraper.runScrape(sys.argv[3])
+            
             print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
         else:
             print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
     elif sys.argv[1].lower() == "returnmap":
         if sys.argv[2].lower() == "-r":
-            print("this will scrape")
+            scraper.runScrape(sys.argv[3])
         sort()
     else: 
         print("Command not recognised")
