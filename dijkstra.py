@@ -156,7 +156,6 @@ class ui():
 def scrape():
     import subprocess
     subprocess.Popen("scraper.py", shell=True)
-
 def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
@@ -167,12 +166,10 @@ def sort():
     noodles.load('map.csv')
     for x, y in noodles.returnMap().items():
         print("%s: %s" % (x, y))
-
 def quit():
     print("Exiting")
     input()
-    sys.exit()  # quits program
-        
+    sys.exit()  # quits program      
 def help():
     print("no")
 
