@@ -7,9 +7,13 @@ CLASS noodlemap()
     END METHOD
 
     PRIVATE METHOD addEdge(origin_noodle, destination_noodle)
-        ADD destination_noodle TO edges[origin_noodle]
-        //TODO: FINISH THIS 
-    END METHODME
+        APPEND destination_noodle TO edges[origin_noodle]
+        
+    END METHOD
+
+    PRIVATE METHOD
+    //todo: this
+    END METHOD
 END CLASS
 
 
