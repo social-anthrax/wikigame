@@ -3,7 +3,7 @@ import os
 import sys
 import importlib
 import scraper
-importlib.reload(scraper)
+importlib.reLoad(scraper)
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
@@ -28,7 +28,7 @@ class noodlemap():
 
             self.__edges[origin_noodle].append(destination_noodle)
         
-        def load(self,filename):    #currently used for loading a .csv instead of a database for testing purposes.
+        def loadCSV(self,filename):    #currently used for loading a .csv instead of a database for testing purposes.
             lines = open(filename, 'r').readlines()
             
             #as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
@@ -161,10 +161,10 @@ def pathfinder():
         "Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
     scraper.runScrape(start)
-    noodles.load('map.csv')
+    noodles.loadCSV('map.csv')
     print(noodles.dijkstra(start,end)) 
 def sort():
-    noodles.load('map.csv')
+    noodles.loadCSV('map.csv')
     for x, y in noodles.returnMap().items():
         print("%s: %s" % (x, y))
 def quit():
@@ -178,7 +178,7 @@ def help():
 noodles = noodlemap()
 try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
-        noodles.load("map.csv")
+        noodles.loadCSV("map.csv")
         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
             scraper.runScrape(sys.argv[3])
             
