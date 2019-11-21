@@ -9,7 +9,9 @@ from scrapy.crawler import CrawlerProcess
 website = "https://www.sqa.org.uk/sqa/70972.html"
 domain = "www.sqa.org.uk"
 dictOfUrl = defaultdict(list)
-
+if __name__ == "__main__": #checks if its being run as a module or as a standalone
+    print("Script must be run as module")
+    exit()
 
 class ScraperWithLimit(scrapy.Spider):
     name = "ScraperWithLimit"
@@ -18,7 +20,6 @@ class ScraperWithLimit(scrapy.Spider):
         # 'https://en.wikipedia.org/wiki/Web_scraping',
         # 'https://en.wikipedia.org/wiki/Pok%C3%A9mon',
         # 'https://www.sqa.org.uk/sqa/70972.html',
-        # website,
     ]
 
     allowed_domains = [domain]

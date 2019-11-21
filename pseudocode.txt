@@ -1,5 +1,18 @@
 https://www.sqa.org.uk/sqa/files_ccc/Reference-language-for-Computing-Science-Sep2016.pdf
 
+CLASS noodlemap()
+    PUBLIC METHOD noodlemap() #constructor method
+        INITIALISE PRIVATE DICTIONARY edges 
+        INITIALISE PRIVATE ARRAY OF ARRAY OF STRING matrix INITIALLY []
+    END METHOD
+
+    PRIVATE METHOD addEdge(origin_noodle, destination_noodle)
+        ADD destination_noodle TO edges[origin_noodle]
+        //TODO: FINISH THIS 
+    END METHODME
+END CLASS
+
+
 CLASS ui()
     INITIALISE PUBLIC STRING sectionName
     INITIALISE PRIVATE STRING contents

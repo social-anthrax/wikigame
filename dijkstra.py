@@ -16,13 +16,13 @@ class noodlemap():
     #region declaration
         def __init__(self):
             self.__edges = defaultdict(list)
-            self.__Matrix = [[0 for y in range(0,1)]
+            self.__Matrix = [["" for y in range(0,1)]
                            for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable.
 
             #this is a dictionary of all possible NEXT noodles.
     #endregion
     #region setters
-        def __add_edge(self, origin_noodle, destination_noodle):
+        def __addEdge(self, origin_noodle, destination_noodle):
 
             #adds new nodes witht the nodes they lead to. The path is assumed to be in one direction.           
 
@@ -35,7 +35,7 @@ class noodlemap():
             
             cols_count = 2
             rows_count = len(lines)
-            self.__Matrix = [[0 for x in range(cols_count)] for y in range(rows_count)]
+            self.__Matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
 
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
@@ -49,7 +49,7 @@ class noodlemap():
             
             for index in range(0, rows_count):
 
-                self.__add_edge(self.__Matrix[index][0], self.__Matrix[index][1]) #adds to the dictionary of edges
+                self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #adds to the dictionary of edges
 
     #endregion
     #region getters
@@ -93,29 +93,27 @@ class noodlemap():
             return path
         
         def returnMap(self):
-            unsortedlist = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
+            unsorted_list = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
            
-            for startvalue in range(1, len(unsortedlist)):
+            for start_value in range(1, len(unsorted_list)): #a standard insertion sort
                 
-                for currentValue in range(startvalue, 0, -1):
-                    for letter in range(0 ,min(len(unsortedlist[currentValue]), len(unsortedlist[currentValue - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
-                        if ord(((unsortedlist[currentValue])[letter]).lower()) < ord(((unsortedlist[currentValue-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
-                            tempLower = unsortedlist[currentValue]
-                            tempHigher = unsortedlist[currentValue - 1]
-                            unsortedlist[currentValue - 1]=tempLower
-                            unsortedlist[currentValue]=tempHigher
+                for current_value in range(start_value, 0, -1):
+                    for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+                        if ord(((unsorted_list[current_value])[letter]).lower()) < ord(((unsorted_list[current_value-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
+                            temp_lower = unsorted_list[current_value]
+                            unsorted_list[current_value]= unsorted_list[current_value-1]
+                            unsorted_list[current_value - 1]=temp_lower
                             break
 
-                        elif len(unsortedlist[currentValue]) < len(unsortedlist[currentValue - 1]) and ord(((unsortedlist[currentValue])[letter]).lower()) == ord(((unsortedlist[currentValue-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
-                            tempLower = unsortedlist[currentValue]
-                            tempHigher = unsortedlist[currentValue - 1] #remove one of these as this is unnecessary
-                            unsortedlist[currentValue - 1]=tempLower
-                            unsortedlist[currentValue]=tempHigher
+                        elif len(unsorted_list[current_value]) < len(unsorted_list[current_value - 1]) and ord(((unsorted_list[current_value])[letter]).lower()) == ord(((unsorted_list[current_value-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
+                            temp_lower = unsorted_list[current_value]
+                            unsorted_list[current_value] = unsorted_list[current_value-1]
+                            unsorted_list[current_value - 1] = temp_lower
             
-            sortedList = defaultdict(list)
-            for key in unsortedlist:
-                sortedList[key] = self.__edges[key]
-            return sortedList
+            sorted_list = defaultdict(list)
+            for key in unsorted_list:
+                sorted_list[key] = self.__edges[key]
+            return sorted_list
 
 
         #endregion
