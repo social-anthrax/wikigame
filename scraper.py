@@ -11,10 +11,6 @@ domain = "www.sqa.org.uk"
 dictOfUrl = defaultdict(list)
 
 
-
-
-
-
 class ScraperWithLimit(scrapy.Spider):
     name = "ScraperWithLimit"
     start_urls = [
