@@ -11,7 +11,9 @@ CLASS noodlemap()
         
     END METHOD
 
-    PRIVATE METHOD
+    PRIVATE METHOD loadCSV(filename)
+    INITIALISE PRIVATE ARRAY OF STRING 
+
     //todo: this
     END METHOD
 END CLASS
@@ -24,18 +26,18 @@ CLASS ui()
     INITIALISE PRIVATE DICTIONARY commands
 
     METHOD ui(section) #this is the constructor
-        ME.sectionName = section
+        SET ME.sectionName = section
     END METHOD
 
     REGION getters
         METHOD setContents(contentsText)
-            ME.contents = contentsText
+            SET ME.contents = contentsText
         END METHOD
 
         METHOD setCommands(prompt, kwargs AS DICTIONARY) #kwargs is a dictionary of all parameters passed after the first
             ME.prompt = prompt
             FOR EACH key, value IN kwargs
-                ME.commands[key.PREDEFINEDFUNCTION.lower()] = value
+                SET ME.commands[key.PREDEFINEDFUNCTION.lower()] = value
             END FOR
         END METHOD
     END REGION
