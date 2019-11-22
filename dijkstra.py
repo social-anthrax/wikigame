@@ -3,7 +3,7 @@ import os
 import sys
 import importlib
 import scraper
-importlib.reLoad(scraper)
+importlib.reload(scraper)
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
@@ -160,10 +160,14 @@ def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
-    scraper.runScrape(start)
+    if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
+        scraper.runScrape(start)
     noodles.loadCSV('map.csv')
     print(noodles.dijkstra(start,end)) 
 def sort():
+    if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
+        start = input("Please enter the start page to begin scraping. \n")
+        scraper.runScrape(start)
     noodles.loadCSV('map.csv')
     for x, y in noodles.returnMap().items():
         print("%s: %s" % (x, y))
