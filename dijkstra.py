@@ -4,6 +4,7 @@ import sys
 import importlib
 import scraper
 importlib.reload(scraper)
+sys.setrecursionlimit(15000)
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
@@ -18,7 +19,7 @@ class noodlemap():
             self.__edges = defaultdict(list)
             self.__Matrix = [["" for y in range(0,1)]
                            for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable.
-
+            
             #this is a dictionary of all possible NEXT noodles.
     #endregion
     #region setters
@@ -92,30 +93,94 @@ class noodlemap():
             path = path[::-1]
             return path
         
-        def returnMap(self):
+        def returnMap(self, sort=True):
             unsorted_list = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
-           
-            for start_value in range(1, len(unsorted_list)): #a standard insertion sort
+            if sort == True:
+                return self.MergeSort(unsorted_list)
+                # this is a insertion sort as proof of understanding of advanced higher concepts
+            #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
+                    
+            #         for current_value in range(start_value, 0, -1):
+            #             for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+            #                 if ord(((unsorted_list[current_value])[letter]).lower()) < ord(((unsorted_list[current_value-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
+            #                     temp_lower = unsorted_list[current_value]
+            #                     unsorted_list[current_value]= unsorted_list[current_value-1]
+            #                     unsorted_list[current_value - 1]=temp_lower
+            #                     break
+
+            #                 elif len(unsorted_list[current_value]) < len(unsorted_list[current_value - 1]) and ord(((unsorted_list[current_value])[letter]).lower()) == ord(((unsorted_list[current_value-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
+            #                     temp_lower = unsorted_list[current_value]
+            #                     unsorted_list[current_value] = unsorted_list[current_value-1]
+            #                     unsorted_list[current_value - 1] = temp_lower
                 
-                for current_value in range(start_value, 0, -1):
-                    for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
-                        if ord(((unsorted_list[current_value])[letter]).lower()) < ord(((unsorted_list[current_value-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
-                            temp_lower = unsorted_list[current_value]
-                            unsorted_list[current_value]= unsorted_list[current_value-1]
-                            unsorted_list[current_value - 1]=temp_lower
-                            break
-
-                        elif len(unsorted_list[current_value]) < len(unsorted_list[current_value - 1]) and ord(((unsorted_list[current_value])[letter]).lower()) == ord(((unsorted_list[current_value-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
-                            temp_lower = unsorted_list[current_value]
-                            unsorted_list[current_value] = unsorted_list[current_value-1]
-                            unsorted_list[current_value - 1] = temp_lower
+            #     sorted_list = defaultdict(list)
+            #     for key in unsorted_list:
+            #         sorted_list[key] = self.__edges[key]
+            # return sorted_list
+        #region mergeSort
+        def MergeSort(self, array):  # this is the python code of the psuedocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
+            if len(array) <= 1:
+                return array
             
+            #Recursive case. First, divide the list into equal-sized sublists
+            #consisting of the first half and second half of the list.
+            #This assumes lists start at index 0.
+            left = []
+            right = []
+            counter = 0
+            for value in array:
+                if counter < len(array)//2:
+                    left.append(value)
+                else:
+                    right.append(value)
+                counter += 1
+            #now recursively sort both sublists
+            left = self.MergeSort(left)
+            right = self.MergeSort(right)
+
             sorted_list = defaultdict(list)
-            for key in unsorted_list:
+            #now merge both sorted sublists
+            for key in self.merge(left, right):
                 sorted_list[key] = self.__edges[key]
-            return sorted_list
+                return sorted_list
+            
+        def merge(self, left,right):
+            result = []
+            # result.append("test")
 
+            while len(left) != 0 and len(right) != 0:
+                # finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+                # for letter in range(0, min(left, right)):
+                letter = 0
+                    # if the letters are the same then the next letter is selected so that they are still alphabetical.
+                if ord(left[0][letter].lower()) <= ord(right[0][letter].lower()):
+                    # print(left.pop(0))
+                    result.append(left.pop(0))
+                    # break
+                    
 
+                #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
+                # elif len(left) < len(right) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
+                #     result.append(left[0])
+                #     left = left[1:]
+                #     break
+                
+                else:
+                    result.append(right.pop(0))
+                    # break
+
+            #Either left or right may have elements left; consume them.
+            #(Only one of the following loops will actually be entered.)
+            while len(left) != 0:
+                result.append(left.pop(0)) #append the first value in the left array and remove the value at index 0
+            
+            while len(right) != 0:
+                # append the first value in the right array
+                result.append(right.pop(0))
+            
+            return result
+        #endregion
+        
         #endregion
 
 class ui():
@@ -165,10 +230,11 @@ def pathfinder():
     noodles.loadCSV('map.csv')
     print(noodles.dijkstra(start,end)) 
 def sort():
-    if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
-        start = input("Please enter the start page to begin scraping. \n")
-        scraper.runScrape(start)
+    # if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
+    #     start = input("Please enter the start page to begin scraping. \n")
+    #     scraper.runScrape(start)
     noodles.loadCSV('map.csv')
+    
     for x, y in noodles.returnMap().items():
         print("%s: %s" % (x, y))
 def quit():
@@ -180,26 +246,26 @@ def help():
 
 
 noodles = noodlemap()
-try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
-    if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
-        noodles.loadCSV("map.csv")
-        if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
-            scraper.runScrape(sys.argv[3])
+# try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
+#     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
+#         noodles.loadCSV("map.csv")
+#         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
+#             scraper.runScrape(sys.argv[3])
             
-            print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
-        else:
-            print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
-    elif sys.argv[1].lower() == "returnmap":
-        if sys.argv[2].lower() == "-r":
-            scraper.runScrape(sys.argv[3])
-        sort()
-    else: 
-        print("Command not recognised")
-        sys.exit() #quits program
-
-except IndexError: #catches index error caused by non existent sys.argv
-    noodles = noodlemap()
-    mainMenu = ui("MainMenu")  # instanciates UI object
-    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
-    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
-    mainMenu.showUi()
+#             print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
+#         else:
+#             print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
+#     elif sys.argv[1].lower() == "returnmap":
+#         if sys.argv[2].lower() == "-r":
+#             scraper.runScrape(sys.argv[3])
+#         sort()
+#     else: 
+#         print("Command not recognised")
+#         sys.exit() #quits program
+# except IndexError: #catches index error caused by non existent sys.argv
+noodles = noodlemap()
+# mainMenu = ui("MainMenu")  # instanciates UI object
+# mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
+# mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
+# mainMenu.showUi()
+sort()
