@@ -239,21 +239,32 @@ def pathfinder():
     noodles.loadCSV('map.csv')
     print(noodles.dijkstra(start,end)) 
 def sort():
-    # if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
-    #     start = input("Please enter the start page to begin scraping. \n")
-    #     scraper.runScrape(start)
-    noodles.loadCSV('map.csv')
-    write_to_file = input("Do you wish to write output to file? (y/n)   ")
+    if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
+        start = input("Please enter the start page to begin scraping. \n")
+        scraper.runScrape(start)
+    noodles.loadCSV('map.csv') #loads csv file into the noodle object using the loadCSV method
+    write_to_file = input("Do you wish to write output to file? (y/n) \n")
 
-    if write_to_file.lower() == "true":
-        writeFileName = input("Please input the name of the file you wish to write output to")
+    if write_to_file.lower() == "y":
+        writeFileName = input("Please input the name of the file you wish to write output to \n")
         openedFile = open(writeFileName, "w")
-        if writeFileName[-4:] == ".csv":
-            for x, y in noodles.returnMap().items():
-                print("%s: %s" % (x, y))
+        if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
+            #loops throught the dictionary printing the key followed by a comma and then appends the values stored at that key
+            for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined proceedure
+                openedFile.write(key)
+                for value in array:
+                    openedFile.write(", " + value)
+                openedFile.write("\n")
+                print("%s: %s" % (key, array))
+        else:
+            for key, array in noodles.returnMap().items():
+                openedFile.write("%s: %s \n" % (key, array))
+                print("%s: %s" % (key, array))
+    else:
+        for key, array in noodles.returnMap().items():
+            print("%s: %s" % (key, array))
     
-    for x, y in noodles.returnMap().items():
-        print("%s: %s" % (x, y))
+    
 def quit():
     print("Exiting")
     input()
