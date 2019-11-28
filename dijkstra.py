@@ -96,7 +96,11 @@ class noodlemap():
         def returnMap(self, sort=True):
             unsorted_list = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
             if sort == True:
-                return self.MergeSort(unsorted_list)
+                sorted_list = defaultdict(list)
+                for key in self.MergeSort(unsorted_list): #populates dictionary with values using now sorted keys
+                    sorted_list[key] = self.__edges[key]
+                return sorted_list
+            #region insertSort
                 # this is a insertion sort as proof of understanding of advanced higher concepts
             #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
                     
@@ -117,6 +121,8 @@ class noodlemap():
             #     for key in unsorted_list:
             #         sorted_list[key] = self.__edges[key]
             # return sorted_list
+            #endregion
+
         #region mergeSort
         def MergeSort(self, array):  # this is the python code of the psuedocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
             if len(array) <= 1:
@@ -139,10 +145,10 @@ class noodlemap():
             right = self.MergeSort(right)
 
             sorted_list = defaultdict(list)
+
             #now merge both sorted sublists
-            for key in self.merge(left, right):
-                sorted_list[key] = self.__edges[key]
-                return sorted_list
+            return self.merge(left,right)
+            
             
         def merge(self, left,right):
             result = []
@@ -150,32 +156,35 @@ class noodlemap():
 
             while len(left) != 0 and len(right) != 0:
                 # finds the lowest length of the two urls and loops for that amount so to not go over the limit.
-                # for letter in range(0, min(left, right)):
-                letter = 0
-                    # if the letters are the same then the next letter is selected so that they are still alphabetical.
-                if ord(left[0][letter].lower()) <= ord(right[0][letter].lower()):
-                    # print(left.pop(0))
-                    result.append(left.pop(0))
-                    # break
+                for letter in range(0, min(len(left[0]), len(right[0]))):
+                    
+                        # if the letters are the same then the next letter is selected so that they are still alphabetical.
+                    if ord(left[0][letter].lower()) < ord(right[0][letter].lower()): #ord gets the ascii value for the code.
+                        result.append(left.pop(0))
+                        break
+                        
+                    elif ord(left[0][letter].lower()) > ord(right[0][letter].lower()):
+                        result.append(right.pop(0))
+                        break
+
+                    #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
+                    elif len(left[0]) < len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
+                        result.append(left.pop(0))
+                        break
+                    
+                    elif len(left[0]) > len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
+                        result.append(right.pop(0))
+                        break
                     
 
-                #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
-                # elif len(left) < len(right) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
-                #     result.append(left[0])
-                #     left = left[1:]
-                #     break
-                
-                else:
-                    result.append(right.pop(0))
-                    # break
-
+                        
             #Either left or right may have elements left; consume them.
             #(Only one of the following loops will actually be entered.)
             while len(left) != 0:
                 result.append(left.pop(0)) #append the first value in the left array and remove the value at index 0
             
             while len(right) != 0:
-                # append the first value in the right array
+                # append the first value in the right array and remove it
                 result.append(right.pop(0))
             
             return result
@@ -234,6 +243,14 @@ def sort():
     #     start = input("Please enter the start page to begin scraping. \n")
     #     scraper.runScrape(start)
     noodles.loadCSV('map.csv')
+    write_to_file = input("Do you wish to write output to file? (y/n)   ")
+
+    if write_to_file.lower() == "true":
+        writeFileName = input("Please input the name of the file you wish to write output to")
+        openedFile = open(writeFileName, "w")
+        if writeFileName[-4:] == ".csv":
+            for x, y in noodles.returnMap().items():
+                print("%s: %s" % (x, y))
     
     for x, y in noodles.returnMap().items():
         print("%s: %s" % (x, y))
@@ -242,30 +259,31 @@ def quit():
     input()
     sys.exit()  # quits program      
 def help():
+    #TODO please for the love of god do this
     print("no")
 
 
 noodles = noodlemap()
-# try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
-#     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
-#         noodles.loadCSV("map.csv")
-#         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
-#             scraper.runScrape(sys.argv[3])
+try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
+    if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
+        noodles.loadCSV("map.csv")
+        if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
+            scraper.runScrape(sys.argv[3])
             
-#             print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
-#         else:
-#             print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
-#     elif sys.argv[1].lower() == "returnmap":
-#         if sys.argv[2].lower() == "-r":
-#             scraper.runScrape(sys.argv[3])
-#         sort()
-#     else: 
-#         print("Command not recognised")
-#         sys.exit() #quits program
-# except IndexError: #catches index error caused by non existent sys.argv
-noodles = noodlemap()
-# mainMenu = ui("MainMenu")  # instanciates UI object
-# mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
-# mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
-# mainMenu.showUi()
-sort()
+            print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
+        else:
+            print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
+    elif sys.argv[1].lower() == "returnmap":
+        if sys.argv[2].lower() == "-r":
+            scraper.runScrape(sys.argv[3])
+        sort()
+    else: 
+        print("Command not recognised")
+        sys.exit() #quits program
+except IndexError: #catches index error caused by non existent sys.argv
+    noodles = noodlemap()
+    mainMenu = ui("MainMenu")  # instanciates UI object
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
+    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
+    mainMenu.showUi()
+
