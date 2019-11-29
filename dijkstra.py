@@ -30,7 +30,7 @@ class noodlemap():
     #region setters
         def __addEdge(self, origin_noodle, destination_noodle):
 
-            #adds new nodes witht the nodes they lead to. The path is assumed to be in one direction.           
+            #adds new nodes with the nodes they lead to. The path is assumed to be in one direction.           
 
             self.__edges[origin_noodle].append(destination_noodle)
         
@@ -61,10 +61,10 @@ class noodlemap():
     #region getters
         def dijkstra(self, initial, final_destination):
             #shortest_paths is a dictionary of noodles
-            # where the value is a tuple of previos noodle, and 1
+            #where the value is a tuple of previous noodle, and 1
             shortest_paths = {initial: (None, 0)}
             current_noodle = initial
-            visited = set() #using a set to make sure i havent visited the node already
+            visited = set() #using a set to make sure node has not been visited already.
 
             while  current_noodle != final_destination:
                 visited.add(current_noodle) #adds the current node to make sure we do not go back to it by accident
@@ -94,7 +94,7 @@ class noodlemap():
                 path.append(current_noodle)
                 next_noodles =  shortest_paths[current_noodle][0]
                 current_noodle = next_noodles
-            #itterates through the path list with a step of -1, aka backwards
+            #iterates through the path list with a step of -1, aka backwards
             path = path[::-1]
             return path
         
@@ -110,7 +110,7 @@ class noodlemap():
             #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
                     
             #         for current_value in range(start_value, 0, -1):
-            #             for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+            #             for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
             #                 if ord(((unsorted_list[current_value])[letter]).lower()) < ord(((unsorted_list[current_value-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
             #                     temp_lower = unsorted_list[current_value]
             #                     unsorted_list[current_value]= unsorted_list[current_value-1]
@@ -129,11 +129,11 @@ class noodlemap():
             #endregion
 
         #region mergeSort
-        def MergeSort(self, array):  # this is the python implementation of the psuedocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
+        def MergeSort(self, array):  # this is the python implementation of the pseudocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
             if len(array) <= 1:
                 return array
             
-            #Recursive case. First, divide the list into equal-sized sublists
+            #Recursive case. First, divide the list into equal-sized sub lists
             #consisting of the first half and second half of the list.
             #This assumes lists start at index 0.
             left = []
@@ -145,13 +145,13 @@ class noodlemap():
                 else:
                     right.append(value)
                 counter += 1
-            #now recursively sort both sublists
+            #now recursively sort both sub lists
             left = self.MergeSort(left)
             right = self.MergeSort(right)
 
             sorted_list = defaultdict(list)
 
-            #now merge both sorted sublists
+            #now merge both sorted sub lists
             return self.merge(left,right)
             
             
@@ -160,7 +160,7 @@ class noodlemap():
             # result.append("test")
 
             while len(left) != 0 and len(right) != 0:
-                # finds the lowest length of the two urls and loops for that amount so to not go over the limit.
+                # finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
                 for letter in range(0, min(len(left[0]), len(right[0]))):
                     
                         # if the letters are the same then the next letter is selected so that they are still alphabetical.
@@ -232,7 +232,7 @@ class ui():
                 self.showUi()
 
 
-#the proceedures bellow simplify the proccesses
+#the procedures bellow simplify the processes
 def scrape():
     scraper.runScrape()
 def pathfinder():
@@ -254,8 +254,8 @@ def sort():
         writeFileName = input("Please input the name of the file you wish to write output to \n")
         openedFile = open(writeFileName, "w")
         if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
-            #loops throught the dictionary printing the key followed by a comma and then appends the values stored at that key
-            for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined proceedure
+            #loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
+            for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
                 openedFile.write(key)
                 for value in array:
                     openedFile.write(", " + value)
@@ -298,8 +298,8 @@ try: #this try catch statement tries to get arguments passed in command line. If
         sys.exit() #quits program
 except IndexError: #catches index error caused by non existent sys.argv
     noodles = noodlemap()
-    mainMenu = ui("MainMenu")  # instanciates UI object
-    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two urls \n ReturnMap: View all found links.')
+    mainMenu = ui("MainMenu")  # instantiates UI object
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
     mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
     mainMenu.showUi()
 
