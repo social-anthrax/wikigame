@@ -2,19 +2,25 @@
 
 #120942514
 
-
+#region imports and set up
 from collections import defaultdict
 import os
 import sys
 import importlib
 import scraper
+import mysql.connector
 importlib.reload(scraper)
 sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
 
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="root"
+)
+#endregion
+
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
-
-
 # now, to clear the screen all you need to type is: cls()
 
 # import scraper.py
@@ -233,6 +239,7 @@ class ui():
 
 
 #the procedures bellow simplify the processes
+#region simplification
 def scrape():
     scraper.runScrape()
 def pathfinder():
@@ -243,6 +250,7 @@ def pathfinder():
         scraper.runScrape(start)
     noodles.loadCSV('map.csv')
     print(noodles.dijkstra(start,end)) 
+
 def sort():
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
         start = input("Please enter the start page to begin scraping. \n")
@@ -269,15 +277,15 @@ def sort():
         for key, array in noodles.returnMap().items():
             print("%s: %s" % (key, array))
     
-    
 def quit():
     print("Exiting")
     input()
     sys.exit()  # quits program      
+
 def help():
     #TODO please for the love of god do this
     print("no")
-
+#endregion
 
 noodles = noodlemap()
 try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
