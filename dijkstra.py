@@ -9,7 +9,7 @@ import sys
 import importlib
 import scraper
 importlib.reload(scraper)
-sys.setrecursionlimit(15000)
+sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
@@ -37,7 +37,7 @@ class noodlemap():
         def loadCSV(self,filename):    #currently used for loading a .csv instead of a database for testing purposes.
             lines = open(filename, 'r').readlines()
             
-            #as in python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+            #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
             
             cols_count = 2
             rows_count = len(lines)
@@ -56,8 +56,8 @@ class noodlemap():
             for index in range(0, rows_count):
 
                 self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #adds to the dictionary of edges
-
     #endregion
+
     #region getters
         def dijkstra(self, initial, final_destination):
             #shortest_paths is a dictionary of noodles
@@ -129,7 +129,7 @@ class noodlemap():
             #endregion
 
         #region mergeSort
-        def MergeSort(self, array):  # this is the python code of the psuedocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
+        def MergeSort(self, array):  # this is the python implementation of the psuedocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
             if len(array) <= 1:
                 return array
             
@@ -164,7 +164,7 @@ class noodlemap():
                 for letter in range(0, min(len(left[0]), len(right[0]))):
                     
                         # if the letters are the same then the next letter is selected so that they are still alphabetical.
-                    if ord(left[0][letter].lower()) < ord(right[0][letter].lower()): #ord gets the ascii value for the code.
+                    if ord(left[0][letter].lower()) < ord(right[0][letter].lower()): #ord gets the ascii value of the letter.
                         result.append(left.pop(0))
                         break
                         
