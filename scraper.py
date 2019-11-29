@@ -71,7 +71,9 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     mydb = mysql.connector.connect(
         host="localhost",
         user="test",
-        passwd="test"
+        password="test",
+        database='websites',
+        auth_plugin='mysql_native_password'
     )
     mycursor = mydb.cursor()
     #endregion
