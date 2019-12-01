@@ -12,11 +12,8 @@ import mysql.connector
 importlib.reload(scraper)
 sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="root"
-)
+
+
 #endregion
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
@@ -47,21 +44,56 @@ class noodlemap():
             
             cols_count = 2
             rows_count = len(lines)
-            self.__Matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
+            self.__Matrix = [["" for x in range(rows_count)] for y in range(cols_count)]
 
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
             for singleLine in lines:
                 singleLine = singleLine.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
-                i_d2 = 0
+                i_d1 = 0
                 for y in singleLine.strip().split(','): #splits up the two arguments and removes any new line characters.
                     self.__Matrix[i_d1][i_d2] = y
-                    i_d2 += 1
-                i_d1 += 1 
+                    i_d1 += 1
+                i_d2 += 1 
             
             for index in range(0, rows_count):
 
-                self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #adds to the dictionary of edges
+                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][1]) #adds to the dictionary of edges
+    
+        def loadDatabase(self, tableName):
+            mydb = mysql.connector.connect( #connects to database
+                host="localhost",
+                user="test",
+                password="test",
+                database='websites',
+                auth_plugin='mysql_native_password'
+            )
+            mycursor = mydb.cursor()
+
+            mycursor.execute(
+                "SELECT IF EXISTS OriginalURL, Hyperlink FROM `%s`" % tableName)
+
+            #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+            cols_count = 2
+            rows_count = len(mycursor.fetchall())
+            self.__Matrix = [
+                ["" for x in range(rows_count)] for y in range(cols_count)]
+
+            i_d1 = 0  # index of dimension 1
+            i_d2 = 0  # index of dimension 2
+            for row in mycursor.fetchall():
+                i_d1 = 0
+                # splits up the two arguments and removes any new line characters.
+                for value in row:
+                    self.__Matrix[i_d1][i_d2] = value
+                    i_d1 += 1
+                i_d2 += 1
+
+            for index in range(0, rows_count):
+                # adds to the dictionary of edges
+                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][1])
+
+    
     #endregion
 
     #region getters
@@ -248,16 +280,23 @@ def pathfinder():
     end = input("Please input the webpage you wish the path to terminate at. \n")
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
         scraper.runScrape(start)
-    noodles.loadCSV('map.csv')
+    domain = start.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0]
+    
+    noodles.loadCSV(start)
     print(noodles.dijkstra(start,end)) 
 
 def sort():
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
         start = input("Please enter the start page to begin scraping. \n")
         scraper.runScrape(start)
-    noodles.loadCSV('map.csv') #loads csv file into the noodle object using the loadCSV method
-    write_to_file = input("Do you wish to write output to file? (y/n) \n")
 
+    domain = start.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0]
+    noodles.loadCSV(domain) #loads csv file into the noodle object using the loadCSV method
+
+    write_to_file = input("Do you wish to write output to file? (y/n) \n")
+    cls() #clears screen
     if write_to_file.lower() == "y":
         writeFileName = input("Please input the name of the file you wish to write output to \n")
         openedFile = open(writeFileName, "w")

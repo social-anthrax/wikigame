@@ -76,6 +76,11 @@ def runScrape(page="", jumps = 0):  # like runescape but not
         auth_plugin='mysql_native_password'
     )
     mycursor = mydb.cursor()
+    # drops the table if it already exists
+    mycursor.execute("DROP TABLE IF EXISTS `%s`;" % domain)
+    mycursor.execute( #creates a table with the name of the domain being scraped.
+        "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)" % domain)
+    
     #endregion
 
     for originURL, hyperlinks  in dictOfUrl.items():
@@ -85,11 +90,11 @@ def runScrape(page="", jumps = 0):  # like runescape but not
 
                     if "http" not in item:
                         mycursor.execute(
-                            "INSERT INTO %s (OriginURL, Hyperlink) VALUES (%s, %s);" % domain, originURL, item.replace('//', ''))
+                            "INSERT INTO `%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`);" % (domain, originURL, item.replace('//', '')))  # mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'https://www.sqa.org.uk/sqa/70972.html' in 'field list'
                         
                     else:
                         mycursor.execute(
-                            "INSERT INTO %s (OriginURL, Hyperlink) VALUES (%s, %s);" % domain, originURL, domain+item)  # appends the domain name to relative paths
+                            "INSERT INTO `%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`);" % (domain, originURL, (domain+item)))  # appends the domain name to relative paths
         
     mycursor.close()
     mydb.close()
