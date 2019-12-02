@@ -69,9 +69,8 @@ class noodlemap():
                 auth_plugin='mysql_native_password'
             )
             mycursor = mydb.cursor()
-
-            mycursor.execute(
-                "SELECT IF EXISTS OriginalURL, Hyperlink FROM `%s`" % tableName)
+            query = "SELECT IF EXISTS OriginalURL, Hyperlink FROM `%s`"
+            mycursor.execute(query, tableName) #execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
 
             #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
             cols_count = 2
