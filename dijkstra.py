@@ -93,7 +93,8 @@ class noodlemap():
                 # adds to the dictionary of edges
                 self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][1])
 
-    
+            mycursor.close()
+            mydb.close()
     #endregion
 
     #region getters
@@ -186,8 +187,6 @@ class noodlemap():
             #now recursively sort both sub lists
             left = self.MergeSort(left)
             right = self.MergeSort(right)
-
-            sorted_list = defaultdict(list)
 
             #now merge both sorted sub lists
             return self.merge(left,right)
@@ -283,7 +282,7 @@ def pathfinder():
     domain = start.replace(
         "https://", "").replace("http://", "").split("/", 1)[0]
     
-    noodles.loadCSV(start)
+    noodles.loadDatabase(domain)
     print(noodles.dijkstra(start,end)) 
 
 def sort():
@@ -293,7 +292,7 @@ def sort():
 
     domain = start.replace(
         "https://", "").replace("http://", "").split("/", 1)[0]
-    noodles.loadCSV(domain) #loads csv file into the noodle object using the loadCSV method
+    noodles.loadDatabase(domain) #loads database contents into the noodle object using the loadDatabase method
 
     write_to_file = input("Do you wish to write output to file? (y/n) \n")
     cls() #clears screen
@@ -329,7 +328,9 @@ def help():
 noodles = noodlemap()
 try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
-        noodles.loadCSV("map.csv")
+        domain = sys.argv[3].replace(
+            "https://", "").replace("http://", "").split("/", 1)[0]
+        noodles.loadDatabase(domain)
         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
             scraper.runScrape(sys.argv[3])
             
@@ -343,6 +344,7 @@ try: #this try catch statement tries to get arguments passed in command line. If
     else: 
         print("Command not recognised")
         sys.exit() #quits program
+    
 except IndexError: #catches index error caused by non existent sys.argv
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instantiates UI object
