@@ -80,27 +80,33 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     # drops the table if it already exists
     
     mycursor.execute("DROP TABLE IF EXISTS `%s`;" % domain)
-    time.sleep(1) #sleeps the thread as the delation actually overlaps with the creation
+    time.sleep(.5) #sleeps the thread as the delation actually overlaps with the creation
 
     # query = "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)"
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
         "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)" % (domain))
-    
+    time.sleep(.5) #as stuff is executed asynchronously this pause is needed to make sure the sql statements are executed in correct order
     #endregion
 
     for originURL, hyperlinks  in dictOfUrl.items():
         for item in hyperlinks:
             if item != "" and item != "/":
-                if item[0] == "/" or "http" in item: #ignores all anchor links
+                if len(item) > 1 or "http" in item: #ignores all anchor links
 
-                    if "http" not in item:
-                        query = "INSERT INTO `%s`(OriginURL, Hyperlink) VALUES (`%s`, `%s`);"
-                        mycursor.execute(query, (domain, originURL, item.replace('//', '')))  # mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'https://www.sqa.org.uk/sqa/70972.html' in 'field list'
+                    if "http" in item:
+                        # query = "INSERT INTO `%s`(OriginURL, Hyperlink) VALUES (`%s`, `%s`);"
+                        # mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'https://www.sqa.org.uk/sqa/70972.html' in 'field list'
+                        print("well i made it") #test statement
+                        mycursor.execute("INSERT INTO `websites`.`%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`) ;" % (
+                            str(domain), str(originURL), str(item)))
                         
                     else:
-                        query = "INSERT INTO `%s`(OriginURL, Hyperlink) VALUES (`%s`, `%s`);"
-                        mycursor.execute(query, (domain, originURL, (domain+item)))  # appends the domain name to relative paths
+
+                        # query = "INSERT INTO `%s`(OriginURL, Hyperlink) VALUES (`%s`, `%s`);"
+                        print("well i made it")
+                        mycursor.execute("INSERT INTO `websites`.`%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`);" % (
+                            str(domain), str(originURL), str(domain+item)))  # appends the domain name to relative paths
         
     mycursor.close()
     mydb.close()

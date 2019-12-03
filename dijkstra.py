@@ -8,6 +8,7 @@ import os
 import sys
 import importlib
 import scraper
+import time
 import mysql.connector
 importlib.reload(scraper)
 sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
@@ -69,8 +70,9 @@ class noodlemap():
                 auth_plugin='mysql_native_password'
             )
             mycursor = mydb.cursor()
-            query = "SELECT IF EXISTS OriginalURL, Hyperlink FROM `%s`"
-            mycursor.execute(query, tableName) #execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
+            time.sleep(2)
+            # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
+            mycursor.execute("SELECT OriginURL, Hyperlink FROM websites.`%s`" % tableName)
 
             #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
             cols_count = 2
@@ -270,8 +272,7 @@ class ui():
 
 #the procedures bellow simplify the processes
 #region simplification
-def scrape():
-    scraper.runScrape()
+
 def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
@@ -329,16 +330,19 @@ try: #this try catch statement tries to get arguments passed in command line. If
     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
         domain = sys.argv[3].replace(
             "https://", "").replace("http://", "").split("/", 1)[0]
-        noodles.loadDatabase(domain)
+        
         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
+            noodles.loadDatabase(domain)
             scraper.runScrape(sys.argv[3])
             
             print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
         else:
+            noodles.loadDatabase(domain)
             print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
     elif sys.argv[1].lower() == "returnmap":
         if sys.argv[2].lower() == "-r":
             scraper.runScrape(sys.argv[3])
+        noodlemap.loadDatabase(sys.argv[3])
         sort()
     else: 
         print("Command not recognised")
