@@ -80,13 +80,13 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     # drops the table if it already exists
     
     mycursor.execute("DROP TABLE IF EXISTS `%s`;" % domain)
-    time.sleep(.5) #sleeps the thread as the delation actually overlaps with the creation
+    time.sleep(.25) #sleeps the thread as the delation actually overlaps with the creation
 
     # query = "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)"
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
         "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL);" % (domain))
-    time.sleep(.5) #as stuff is executed asynchronously this pause is needed to make sure the sql statements are executed in correct order
+    time.sleep(.25) #as stuff is executed asynchronously this pause is needed to make sure the sql statements are executed in correct order
     mydb.commit()
     #endregion
 
@@ -96,10 +96,9 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                 if len(item) > 1 or "http" in item: #ignores all anchor links
 
                     if "http" in item:
-                        query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')"
+                        query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')" #backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
                         queryParameters = (
                             domain, originURL, item,)
-                        # mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'https://www.sqa.org.uk/sqa/70972.html' in 'field list'
                         mycursor.execute(query % queryParameters)
                         
                     else:
@@ -110,10 +109,10 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                     mydb.commit()
     mycursor.close()
     mydb.close()
-    return True
+    return True #this is done so that there can be confirmation that the program has stopped running
  
 
-
+    #region legacy
     #legacy code for when output was to a file
     # file = open('yeet.txt', 'w') 
     # for x, y in dictOfUrl.items():
@@ -127,4 +126,4 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     #                     file.write(item + ", ")
     #     file.write("}\n")
     # file.close()
-
+    #endregion
