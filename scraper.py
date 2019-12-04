@@ -89,27 +89,22 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     time.sleep(.5) #as stuff is executed asynchronously this pause is needed to make sure the sql statements are executed in correct order
     #endregion
 
-    for originURL, hyperlinks  in dictOfUrl.items():
+    for originURL, hyperlinks in dictOfUrl.items():
         for item in hyperlinks:
             if item != "" and item != "/":
                 if len(item) > 1 or "http" in item: #ignores all anchor links
 
                     if "http" in item:
-                        # query = "INSERT INTO `%s`(OriginURL, Hyperlink) VALUES (`%s`, `%s`);"
+                        query = "INSERT INTO `%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`) ;"
                         # mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'https://www.sqa.org.uk/sqa/70972.html' in 'field list'
-                        print("well i made it") #test statement
-                        mycursor.execute("INSERT INTO `websites`.`%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`) ;" % (
-                            str(domain), str(originURL), str(item)))
+                        mycursor.execute(query % (str(domain), str(originURL), str(item)))
                         
                     else:
-
-                        # query = "INSERT INTO `%s`(OriginURL, Hyperlink) VALUES (`%s`, `%s`);"
-                        print("well i made it")
-                        mycursor.execute("INSERT INTO `websites`.`%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`);" % (
-                            str(domain), str(originURL), str(domain+item)))  # appends the domain name to relative paths
-        
+                        query = "INSERT INTO %s (OriginURL, Hyperlink) VALUES (%s, %s);"
+                        mycursor.execute(query, (str(domain), str(originURL), str(domain+item)))  # appends the domain name to relative paths
     mycursor.close()
     mydb.close()
+    return True
  
 
 

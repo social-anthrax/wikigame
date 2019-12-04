@@ -106,7 +106,7 @@ class noodlemap():
             current_noodle = initial
             visited = set() #using a set to make sure node has not been visited already.
 
-            while  current_noodle != final_destination:
+            while current_noodle != final_destination:
                 visited.add(current_noodle) #adds the current node to make sure we do not go back to it by accident
                 destinations = noodles.__edges[current_noodle]
 
@@ -341,8 +341,12 @@ try: #this try catch statement tries to get arguments passed in command line. If
             print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
     elif sys.argv[1].lower() == "returnmap":
         if sys.argv[2].lower() == "-r":
-            scraper.runScrape(sys.argv[3])
-        noodlemap.loadDatabase(sys.argv[3])
+            executionCheck  = False
+            executionCheck = scraper.runScrape(sys.argv[3])
+            while executionCheck != True: # stops the program from continuing untill the previous code stops running
+                None
+        
+        noodles.loadDatabase(sys.argv[3])
         sort()
     else: 
         print("Command not recognised")
