@@ -59,7 +59,7 @@ class noodlemap():
             
             for index in range(0, rows_count):
 
-                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][1]) #adds to the dictionary of edges
+                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][index]) #adds to the dictionary of edges
     
         def loadDatabase(self, tableName):
             mydb = mysql.connector.connect( #connects to database
@@ -70,29 +70,35 @@ class noodlemap():
                 auth_plugin='mysql_native_password'
             )
             mycursor = mydb.cursor()
-            time.sleep(2)
-            # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
-            mycursor.execute("SELECT OriginURL, Hyperlink FROM websites.`%s`" % tableName)
+            time.sleep(.25)
+            domain = tableName.replace(
+                "https://", "").replace("http://", "").split("/", 1)[0]
 
+            # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
+            query = "SELECT OriginURL, Hyperlink FROM `%s`"
+            queryParameters = (domain,)
+            mycursor.execute(query % domain)
+
+            result = mycursor.fetchall()
             #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
             cols_count = 2
-            rows_count = len(mycursor.fetchall())
-            self.__Matrix = [
-                ["" for x in range(rows_count)] for y in range(cols_count)]
+            rows_count = len(result)
+
+            self.__Matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
 
             i_d1 = 0  # index of dimension 1
             i_d2 = 0  # index of dimension 2
-            for row in mycursor.fetchall():
+            for row in result:
                 i_d1 = 0
                 # splits up the two arguments and removes any new line characters.
                 for value in row:
-                    self.__Matrix[i_d1][i_d2] = value
+                    self.__Matrix[i_d2][i_d1] = value
                     i_d1 += 1
                 i_d2 += 1
 
             for index in range(0, rows_count):
                 # adds to the dictionary of edges
-                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][1])
+                self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #2d array called with (y, x)
 
             mycursor.close()
             mydb.close()
@@ -345,9 +351,11 @@ try: #this try catch statement tries to get arguments passed in command line. If
             executionCheck = scraper.runScrape(sys.argv[3])
             while executionCheck != True: # stops the program from continuing untill the previous code stops running
                 None
-        
+        cls()
         noodles.loadDatabase(sys.argv[3])
-        sort()
+
+        for key, array in noodles.returnMap().items():
+            print("%s: %s" % (key, array))
     else: 
         print("Command not recognised")
         sys.exit() #quits program
