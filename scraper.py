@@ -85,8 +85,9 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     # query = "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)"
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
-        "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)" % (domain))
+        "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL);" % (domain))
     time.sleep(.5) #as stuff is executed asynchronously this pause is needed to make sure the sql statements are executed in correct order
+    mydb.commit()
     #endregion
 
     for originURL, hyperlinks in dictOfUrl.items():
@@ -95,13 +96,18 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                 if len(item) > 1 or "http" in item: #ignores all anchor links
 
                     if "http" in item:
-                        query = "INSERT INTO `%s` (OriginURL, Hyperlink) VALUES (`%s`, `%s`) ;"
+                        query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')"
+                        queryParameters = (
+                            domain, originURL, item,)
                         # mysql.connector.errors.ProgrammingError: 1054 (42S22): Unknown column 'https://www.sqa.org.uk/sqa/70972.html' in 'field list'
-                        mycursor.execute(query % (str(domain), str(originURL), str(item)))
+                        mycursor.execute(query % queryParameters)
                         
                     else:
-                        query = "INSERT INTO %s (OriginURL, Hyperlink) VALUES (%s, %s);"
-                        mycursor.execute(query, (str(domain), str(originURL), str(domain+item)))  # appends the domain name to relative paths
+                        query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')"
+                        queryParameters = (domain, originURL, domain+item,)
+                        mycursor.execute(query % queryParameters)  # appends the domain name to relative paths
+                    
+                    mydb.commit()
     mycursor.close()
     mydb.close()
     return True
