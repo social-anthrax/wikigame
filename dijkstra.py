@@ -2,19 +2,23 @@
 
 #120942514
 
-
+#region imports and set up
 from collections import defaultdict
 import os
 import sys
 import importlib
 import scraper
+import time
+import mysql.connector
 importlib.reload(scraper)
 sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
 
+
+
+#endregion
+
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
     os.system('cls' if os.name == 'nt' else 'clear') #checks for OS type and then uses appropriate clear command for said OS
-
-
 # now, to clear the screen all you need to type is: cls()
 
 # import scraper.py
@@ -41,21 +45,63 @@ class noodlemap():
             
             cols_count = 2
             rows_count = len(lines)
-            self.__Matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
+            self.__Matrix = [["" for x in range(rows_count)] for y in range(cols_count)]
 
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
             for singleLine in lines:
                 singleLine = singleLine.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
-                i_d2 = 0
+                i_d1 = 0
                 for y in singleLine.strip().split(','): #splits up the two arguments and removes any new line characters.
                     self.__Matrix[i_d1][i_d2] = y
-                    i_d2 += 1
-                i_d1 += 1 
+                    i_d1 += 1
+                i_d2 += 1 
             
             for index in range(0, rows_count):
 
-                self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #adds to the dictionary of edges
+                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][index]) #adds to the dictionary of edges
+    
+        def loadDatabase(self, tableName):
+            mydb = mysql.connector.connect( #connects to database
+                host="localhost",
+                user="test",
+                password="test",
+                database='websites',
+                auth_plugin='mysql_native_password'
+            )
+            mycursor = mydb.cursor()
+            time.sleep(.25)
+            domain = tableName.replace(
+                "https://", "").replace("http://", "").split("/", 1)[0]
+
+            # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
+            query = "SELECT OriginURL, Hyperlink FROM `%s`"
+            queryParameters = (domain,)
+            mycursor.execute(query % domain)
+
+            result = mycursor.fetchall()
+            #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+            cols_count = 2
+            rows_count = len(result)
+
+            self.__Matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
+
+            i_d1 = 0  # index of dimension 1
+            i_d2 = 0  # index of dimension 2
+            for row in result:
+                i_d1 = 0
+                # splits up the two arguments and removes any new line characters.
+                for value in row:
+                    self.__Matrix[i_d2][i_d1] = value
+                    i_d1 += 1
+                i_d2 += 1
+
+            for index in range(0, rows_count):
+                # adds to the dictionary of edges
+                self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #2d array called with (y, x)
+
+            mycursor.close()
+            mydb.close()
     #endregion
 
     #region getters
@@ -66,7 +112,7 @@ class noodlemap():
             current_noodle = initial
             visited = set() #using a set to make sure node has not been visited already.
 
-            while  current_noodle != final_destination:
+            while current_noodle != final_destination:
                 visited.add(current_noodle) #adds the current node to make sure we do not go back to it by accident
                 destinations = noodles.__edges[current_noodle]
 
@@ -148,8 +194,6 @@ class noodlemap():
             #now recursively sort both sub lists
             left = self.MergeSort(left)
             right = self.MergeSort(right)
-
-            sorted_list = defaultdict(list)
 
             #now merge both sorted sub lists
             return self.merge(left,right)
@@ -233,23 +277,31 @@ class ui():
 
 
 #the procedures bellow simplify the processes
-def scrape():
-    scraper.runScrape()
+#region simplification
+
 def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
         scraper.runScrape(start)
-    noodles.loadCSV('map.csv')
+    domain = start.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0]
+    
+    noodles.loadDatabase(domain)
     print(noodles.dijkstra(start,end)) 
+
 def sort():
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
         start = input("Please enter the start page to begin scraping. \n")
         scraper.runScrape(start)
-    noodles.loadCSV('map.csv') #loads csv file into the noodle object using the loadCSV method
-    write_to_file = input("Do you wish to write output to file? (y/n) \n")
 
+    domain = start.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0]
+    noodles.loadDatabase(domain) #loads database contents into the noodle object using the loadDatabase method
+
+    write_to_file = input("Do you wish to write output to file? (y/n) \n")
+    cls() #clears screen
     if write_to_file.lower() == "y":
         writeFileName = input("Please input the name of the file you wish to write output to \n")
         openedFile = open(writeFileName, "w")
@@ -269,33 +321,45 @@ def sort():
         for key, array in noodles.returnMap().items():
             print("%s: %s" % (key, array))
     
-    
 def quit():
     print("Exiting")
     input()
     sys.exit()  # quits program      
+
 def help():
     #TODO please for the love of god do this
     print("no")
-
+#endregion
 
 noodles = noodlemap()
 try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
     if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
-        noodles.loadCSV("map.csv")
+        domain = sys.argv[3].replace(
+            "https://", "").replace("http://", "").split("/", 1)[0]
+        
         if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
+            noodles.loadDatabase(domain)
             scraper.runScrape(sys.argv[3])
             
             print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
         else:
+            noodles.loadDatabase(domain)
             print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
     elif sys.argv[1].lower() == "returnmap":
         if sys.argv[2].lower() == "-r":
-            scraper.runScrape(sys.argv[3])
-        sort()
+            executionCheck  = False
+            executionCheck = scraper.runScrape(sys.argv[3])
+            while executionCheck != True: # stops the program from continuing untill the previous code stops running
+                None
+        cls()
+        noodles.loadDatabase(sys.argv[3])
+
+        for key, array in noodles.returnMap().items():
+            print("%s: %s" % (key, array))
     else: 
         print("Command not recognised")
         sys.exit() #quits program
+    
 except IndexError: #catches index error caused by non existent sys.argv
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instantiates UI object
