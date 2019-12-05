@@ -7,14 +7,12 @@ from collections import defaultdict
 import os
 import sys
 import importlib
+import argparse
 import scraper
 import time
 import mysql.connector
 importlib.reload(scraper)
 sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
-
-
-
 #endregion
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
@@ -77,7 +75,7 @@ class noodlemap():
             # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
             query = "SELECT OriginURL, Hyperlink FROM `%s`"
             queryParameters = (domain,)
-            mycursor.execute(query % domain)
+            mycursor.execute(query % queryParameters)
 
             result = mycursor.fetchall()
             #as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
@@ -332,27 +330,39 @@ def help():
 #endregion
 
 noodles = noodlemap()
-try: #this try catch statement tries to get arguments passed in command line. If there are none then this will cause an error and UI mode is enabled.
-    if sys.argv[1].lower() == "pathfinder": #sys.argv[0] is the name of the file being run
-        domain = sys.argv[3].replace(
+if len(sys.argv) > 1: #if there ate more than two command line arguments including the name of the program then start in command line mode
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--mode', help = 'The mode that the program will be run in. Can either be returnmap or pathfinder')
+    parser.add_argument(
+        '--reindex', help='Reindex domain', type=bool, default=False)
+    parser.add_argument('--start', help = 'Page to start the scraper/pathfinder at.')
+    parser.add_argument('--end', help = 'End page of the pathfinder', default='')
+    parser.add_argument('--jumps', help = 'Number of jumps for the scraper to make.', default = 0, type = int)
+    args = parser.parse_args()
+
+    modeArg = args.mode  
+    reindexArg = args.reindex
+    startPageArg = args.start
+    endPageArg = args.end
+    jumpsArg = args.jumps
+    
+    if modeArg == "pathfinder": #sys.argv[0] is the name of the file being run
+        domain = startPageArg(
             "https://", "").replace("http://", "").split("/", 1)[0]
         
-        if sys.argv[2].lower() == "-r": #for when scaper is fully implemented
-            noodles.loadDatabase(domain)
-            scraper.runScrape(sys.argv[3])
-            
-            print(noodles.dijkstra(sys.argv[3], sys.argv[4]))
-        else:
-            noodles.loadDatabase(domain)
-            print(noodles.dijkstra(sys.argv[2], sys.argv[3]))
-    elif sys.argv[1].lower() == "returnmap":
-        if sys.argv[2].lower() == "-r":
+        if reindexArg: #runs the scraper and then loads the scraper
+            scraper.runScrape(sys.argv[3], jumpsArg)
+        noodles.loadDatabase(domain)
+        print(noodles.dijkstra(startPageArg, endPageArg))
+    elif modeArg == "returnmap":
+        if reindexArg:
             executionCheck  = False
-            executionCheck = scraper.runScrape(sys.argv[3])
+            executionCheck = scraper.runScrape(sys.argv[3], jumpsArg)
+            
             while executionCheck != True: # stops the program from continuing untill the previous code stops running
                 None
         cls()
-        noodles.loadDatabase(sys.argv[3])
+        noodles.loadDatabase(startPageArg)
 
         for key, array in noodles.returnMap().items():
             print("%s: %s" % (key, array))
@@ -360,7 +370,8 @@ try: #this try catch statement tries to get arguments passed in command line. If
         print("Command not recognised")
         sys.exit() #quits program
     
-except IndexError: #catches index error caused by non existent sys.argv
+else:
+
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instantiates UI object
     mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
