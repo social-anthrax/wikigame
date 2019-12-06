@@ -283,8 +283,7 @@ def pathfinder():
     end = input("Please input the webpage you wish the path to terminate at. \n")
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
         scraper.runScrape(start)
-    domain = start.replace(
-        "https://", "").replace("http://", "").split("/", 1)[0]
+    domain = trimUrl(start)
     
     noodles.loadDatabase(domain)
     print(noodles.dijkstra(start,end)) 
@@ -294,8 +293,7 @@ def sort():
         start = input("Please enter the start page to begin scraping. \n")
         scraper.runScrape(start)
 
-    domain = start.replace(
-        "https://", "").replace("http://", "").split("/", 1)[0]
+    domain = trimUrl(start)
     noodles.loadDatabase(domain) #loads database contents into the noodle object using the loadDatabase method
 
     write_to_file = input("Do you wish to write output to file? (y/n) \n")
@@ -324,14 +322,19 @@ def quit():
     input()
     sys.exit()  # quits program      
 
+def trimUrl(url):
+    domain = url.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0] #this firstly removes and instances of https:// or http://. Then it splits the string into an 2 array where the first element is the domain and the second is anythin after the first /. then the first element is taken
+    return(domain)
+
 def help():
     #TODO please for the love of god do this
     print("no")
 #endregion
 
 noodles = noodlemap()
-if len(sys.argv) > 1: #if there ate more than two command line arguments including the name of the program then start in command line mode
-    parser = argparse.ArgumentParser()
+if len(sys.argv) > 1: #if there are more than two command line arguments including the name of the program then start in command line mode
+    parser = argparse.ArgumentParser() #using --help automatically shows the usage of these commands making it more user friendly and accessible
     parser.add_argument('--mode', help = 'The mode that the program will be run in. Can either be returnmap or pathfinder')
     parser.add_argument(
         '--reindex', help='Reindex domain', type=bool, default=False)
@@ -359,7 +362,7 @@ if len(sys.argv) > 1: #if there ate more than two command line arguments includi
             executionCheck  = False
             executionCheck = scraper.runScrape(sys.argv[3], jumpsArg)
             
-            while executionCheck != True: # stops the program from continuing untill the previous code stops running
+            while executionCheck != True: # stops the program from continuing until the previous code stops running
                 None
         cls()
         noodles.loadDatabase(startPageArg)
