@@ -48,6 +48,10 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     
     if jumps == 0: #checks if the max number of jumps has been modified.
         jumps = input("Please input the max number of jumps to be performed by the scraper \n")
+        # while type(jumps) != int:
+        #     print("Please input a valid integer")
+        #     jumps = input(
+        #         "Please input the max number of jumps to be performed by the scraper \n")
     else:
         jumps = 5
 
@@ -56,9 +60,11 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     else:
         website = page
 
-    domain = website.replace("https://", "").replace("http://", "").split("/", 1)[0]
+    # trims away anything that trails the first /, making it into a domain
+    domain = website.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0]
 
-    ScraperWithLimit.allowed_domains = [domain] #trims away anything making it a url, making it into a domain
+    ScraperWithLimit.allowed_domains = [domain] 
     ScraperWithLimit.start_urls = [website]
     ScraperWithLimit.custom_settings = {
         'DEPTH_LIMIT': jumps,
