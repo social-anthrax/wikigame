@@ -350,7 +350,7 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
     jumpsArg = args.jumps
     
     if modeArg == "pathfinder": #sys.argv[0] is the name of the file being run
-        domain = startPageArg(
+        domain = startPageArg.replace(
             "https://", "").replace("http://", "").split("/", 1)[0]
         
         if reindexArg: #runs the scraper and then loads the scraper
@@ -359,8 +359,8 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
         print(noodles.dijkstra(startPageArg, endPageArg))
     elif modeArg == "returnmap":
         if reindexArg:
-            executionCheck  = False
-            executionCheck = scraper.runScrape(sys.argv[3], jumpsArg)
+            executionCheck = False
+            executionCheck = scraper.runScrape(startPageArg, jumpsArg)
             
             while executionCheck != True: # stops the program from continuing until the previous code stops running
                 None
