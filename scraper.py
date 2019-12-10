@@ -17,7 +17,7 @@ if __name__ == "__main__": #checks if its being run as a module or as a standalo
     print("Script must be run as module")
     exit()
 
-class ScraperWithLimit(scrapy.Spider):
+class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
     name = "ScraperWithLimit"
     start_urls = [
         #these are all test case websites with known outputs
@@ -35,35 +35,43 @@ class ScraperWithLimit(scrapy.Spider):
 
     def parse(self, response):
         for next_page in response.css('a::attr(href)'):
-            # 56 is the first character at which the actual url starts and the -3 cuts off the last 3 characters of the string: eg <Selector xpath='descendant-or-self::a/@href' data='http://www.mysqa.org.uk/'> becomes http://www.mysqa.org.uk/
-            dictOfUrl[response.url].append(str(next_page.root))
-            # file.write(str(next_page)[55:-1] + '\n')
+            
+            dictOfUrl[response.url].append(str(next_page.root)) #appends the found url to the jey which is the webpage it was found on
             yield response.follow(next_page, self.parse)
 
-        # file.write(response.url + "\n")
+        
 
 
 def runScrape(page="", jumps = 0):  # like runescape but not
 
     
-    if jumps == 0: #checks if the max number of jumps has been modified.
-        jumps = input("Please input the max number of jumps to be performed by the scraper \n")
-        # while type(jumps) != int:
-        #     print("Please input a valid integer")
-        #     jumps = input(
-        #         "Please input the max number of jumps to be performed by the scraper \n")
+    if jumps == 0: #checks if the max number of jumps has been modified from the default value
+        validInput = False
+        while validInput == False:
+            jumps = input("Please input the max number of jumps to be performed by the scraper \n")
+            try:
+                int(jumps) #tries to convert the user input to an integer. If a type error occurs then the input was not an integer and need to be recieved from user again
+                validInput = True
+            except ValueError:
+                validInput = False
+                print("Please input a valid positive integer.")
+                
     else:
-        jumps = 5
+        jumps = 5 #changes it to what is seen as a reasonable default value
 
     if page == "": #checks if the page has been passed as a parameter and if it hasnt then 
         website = input("Please input the website you wish to scrape: ")
     else:
         website = page
 
-    # trims away anything that trails the first /, making it into a domain
+    # trims away anything that trails the first / and all references to http or https making it into a domain
     domain = website.replace(
         "https://", "").replace("http://", "").split("/", 1)[0]
 
+
+
+    #this paret starts up the scraper with all the required parameters
+    #region scraper  
     ScraperWithLimit.allowed_domains = [domain] 
     ScraperWithLimit.start_urls = [website]
     ScraperWithLimit.custom_settings = {
@@ -74,17 +82,18 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     process.crawl(ScraperWithLimit)
     process.start()
     process.stop()
+    #endregion
     #region database setup
-    mydb = mysql.connector.connect(
+    mydb = mysql.connector.connect( #connect to database as user test.
         host="localhost",
         user="test",
         password="test",
         database='websites',
         auth_plugin='mysql_native_password'
     )
-    mycursor = mydb.cursor()
+    mycursor = mydb.cursor() #initiallises cursor so that commands can be sent
+
     # drops the table if it already exists
-    
     mycursor.execute("DROP TABLE IF EXISTS `%s`;" % domain)
     time.sleep(.25) #sleeps the thread as the delation actually overlaps with the creation
 
@@ -100,22 +109,21 @@ def runScrape(page="", jumps = 0):  # like runescape but not
         for item in hyperlinks:
             if item != "" and item != "/":
                 if len(item) > 1 or "http" in item: #ignores all anchor links
-
                     if "http" in item:
                         query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')" #backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
                         queryParameters = (
                             domain, originURL, item,)
                         mycursor.execute(query % queryParameters)
                         
-                    else:
+                    else: #if http is not in the item we can assume that it is a relative link
                         query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')"
-                        queryParameters = (domain, originURL, domain+item,)
-                        mycursor.execute(query % queryParameters)  # appends the domain name to relative paths
+                        queryParameters = (domain, originURL, domain+item,) #appends the domain name to relative paths 
+                        mycursor.execute(query % queryParameters)  
                     
-                    mydb.commit()
+                    mydb.commit() #commits the changes to the database
     mycursor.close()
     mydb.close()
-    return True #this is done so that there can be confirmation that the program has stopped running
+    return True #this is done so that there can be confirmation that the program has stopped running as problems arose due to seeming asynchronous execution of select statements while values were being inserted
  
 
     #region legacy
