@@ -24,16 +24,15 @@ class noodlemap():
     #region declaration
         def __init__(self):
             self.__edges = defaultdict(list)
-            self.__Matrix = [["" for y in range(0,1)]
-                           for x in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable.
+            self.__matrix = [["" for x in range(0,1)]
+                           for y in range(0,1)] #this initialises the 2d array as private, as python naming convention states the a double underscore is a private variable.
             
             #this is a dictionary of all possible NEXT noodles.
     #endregion
     #region setters
         def __addEdge(self, origin_noodle, destination_noodle):
 
-            #adds new nodes with the nodes they lead to. The path is assumed to be in one direction.           
-
+            #adds new nodes with the nodes they lead to. The path is assumed to be in one direction.
             self.__edges[origin_noodle].append(destination_noodle)
         
         def loadCSV(self,filename):    #currently used for loading a .csv instead of a database for testing purposes.
@@ -43,7 +42,7 @@ class noodlemap():
             
             cols_count = 2
             rows_count = len(lines)
-            self.__Matrix = [["" for x in range(rows_count)] for y in range(cols_count)]
+            self.__matrix = [["" for x in range(rows_count)] for y in range(cols_count)]
 
             i_d1= 0 #index of dimension 1
             i_d2 = 0 # index of dimension 2
@@ -51,15 +50,15 @@ class noodlemap():
                 singleLine = singleLine.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
                 i_d1 = 0
                 for y in singleLine.strip().split(','): #splits up the two arguments and removes any new line characters.
-                    self.__Matrix[i_d1][i_d2] = y
+                    self.__matrix[i_d1][i_d2] = y
                     i_d1 += 1
                 i_d2 += 1 
             
             for index in range(0, rows_count):
 
-                self.__addEdge(self.__Matrix[0][index], self.__Matrix[1][index]) #adds to the dictionary of edges
+                self.__addEdge(self.__matrix[0][index], self.__matrix[1][index]) #adds to the dictionary of edges
     
-        def loadDatabase(self, tableName):
+        def loadDatabase(self, tableName): #loads a database table into the edges dictionary
             mydb = mysql.connector.connect( #connects to database
                 host="localhost",
                 user="test",
@@ -82,21 +81,21 @@ class noodlemap():
             cols_count = 2
             rows_count = len(result)
 
-            self.__Matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
+            self.__matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
 
-            i_d1 = 0  # index of dimension 1
-            i_d2 = 0  # index of dimension 2
+            innerloop = 0  # index of dimension 1
+            outerloop = 0  # index of dimension 2
             for row in result:
-                i_d1 = 0
+                innerloop = 0
                 # splits up the two arguments and removes any new line characters.
                 for value in row:
-                    self.__Matrix[i_d2][i_d1] = value
-                    i_d1 += 1
-                i_d2 += 1
+                    self.__matrix[outerloop][innerloop] = value
+                    innerloop += 1
+                outerloop += 1
 
             for index in range(0, rows_count):
                 # adds to the dictionary of edges
-                self.__addEdge(self.__Matrix[index][0], self.__Matrix[index][1]) #2d array called with (y, x)
+                self.__addEdge(self.__matrix[index][0], self.__matrix[index][1]) #2d array called with (y, x)
 
             mycursor.close()
             mydb.close()
@@ -289,8 +288,8 @@ def pathfinder():
     print(noodles.dijkstra(start,end)) 
 
 def sort():
+    start = input("Please enter the start page. \n")
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
-        start = input("Please enter the start page to begin scraping. \n")
         scraper.runScrape(start)
 
     domain = trimUrl(start)
