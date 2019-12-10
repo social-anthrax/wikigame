@@ -3,7 +3,7 @@ https://www.sqa.org.uk/sqa/files_ccc/Reference-language-for-Computing-Science-Se
 CLASS noodlemap()
     PUBLIC METHOD noodlemap() #constructor method
         INITIALISE PRIVATE DICTIONARY edges 
-        INITIALISE PRIVATE ARRAY OF ARRAY OF STRING matrix INITIALLY []
+        INITIALISE PRIVATE ARRAY OF ARRAY OF STRING matrix INITIALLY [[""]]
     END METHOD
 
     PRIVATE METHOD addEdge(origin_noodle, destination_noodle)
@@ -11,10 +11,39 @@ CLASS noodlemap()
         
     END METHOD
 
-    PRIVATE METHOD loadCSV(filename)
-    INITIALISE PRIVATE ARRAY OF STRING 
+    PRIVATE METHOD loadDatabase(tableName as string)
+        
+        INITIALISE domain AS STRING 
+        connect to database "websites"
+        
+        domain = format tablename to domain form
+        exectute "SELECT OriginURL, Hyperlink FROM parameter" where parameter = domain and store result in 2d array called result
+        
 
-    //todo: this
+        INITIALISE cols_count AS INTEGER = 2
+        INITIALISE rows_count AS INTEGER = len(result)
+        
+        
+        ME.matrix = [["" for x = 0 to cols+count-1] for y = 0 to rows_count -1]
+
+        INITIALISE innerLoop AS INTEGER = 0
+        INITIALISE outerLoop as INTEGER = 0
+        
+
+        FOR EACH row IN result  
+            SET innerLoop = 0
+            FOR each value in row
+                SET ME.Matrix[outerloop][innerloop] = value  #as y value is before the x value
+                SET innerLoop = innerLoop + 1
+            END FOR
+            SET outerLoop = outerLoop + 1
+
+        END FOR
+
+        FOR index = 0 to rows_count - 1
+            Me.addEdge(ME.matrix[index][0], ME.addEdge[index][1])
+        END FOR 
+    
     END METHOD
 END CLASS
 
