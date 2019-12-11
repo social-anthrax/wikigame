@@ -110,15 +110,16 @@ def runScrape(page="", jumps = 0):  # like runescape but not
             if item != "" and item != "/":
                 if len(item) > 1 or "http" in item: #ignores all anchor links
                     if "http" in item:
-                        query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')" #backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
+                        # backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
+                        query = "INSERT INTO `"+domain + "` VALUES (NULL, %s, %s);"
                         queryParameters = (
-                            domain, originURL, item,)
-                        mycursor.execute(query % queryParameters)
+                            originURL, item,)
+                        mycursor.execute(query, queryParameters)
                         
                     elif item[0] != '#': #if http is not in the item and # is not the first char we can assume that it is a relative link
-                        query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')"
-                        queryParameters = (domain, originURL, domain+item,) #appends the domain name to relative paths 
-                        mycursor.execute(query % queryParameters)  
+                        query = "INSERT INTO `"+domain+"` VALUES (NULL, %s, %s);"
+                        queryParameters = (originURL, domain+item,) #appends the domain name to relative paths 
+                        mycursor.execute(query, queryParameters)  
                     
                     mydb.commit() #commits the changes to the database
     mycursor.close()
