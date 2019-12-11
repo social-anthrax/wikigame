@@ -115,7 +115,7 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                             domain, originURL, item,)
                         mycursor.execute(query % queryParameters)
                         
-                    else: #if http is not in the item we can assume that it is a relative link
+                    elif item[0] != '#': #if http is not in the item and # is not the first char we can assume that it is a relative link
                         query = "INSERT INTO `%s` VALUES (NULL, '`%s`', '`%s`')"
                         queryParameters = (domain, originURL, domain+item,) #appends the domain name to relative paths 
                         mycursor.execute(query % queryParameters)  

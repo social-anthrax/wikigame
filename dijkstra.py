@@ -212,15 +212,16 @@ class noodlemap():
                     elif ord(left[0][letter].lower()) > ord(right[0][letter].lower()):
                         result.append(right.pop(0))
                         break
-
-                    #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
-                    elif len(left[0]) < len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
-                        result.append(left.pop(0))
-                        break
                     
-                    elif len(left[0]) > len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
-                        result.append(right.pop(0))
-                        break
+                    #TODO:test if this is needed
+                    #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
+                    # elif len(left[0]) < len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
+                    #     result.append(left.pop(0))
+                    #     break
+                    
+                    # elif len(left[0]) > len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()):
+                    #     result.append(right.pop(0))
+                    #     break
                     
 
                         
