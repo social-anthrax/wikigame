@@ -342,7 +342,8 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
     parser.add_argument('--end', help = 'End page of the pathfinder', default='')
     parser.add_argument('--jumps', help = 'Number of jumps for the scraper to make.', default = 0, type = int)
     args = parser.parse_args()
-
+    
+    #sets the values of the variavles to the arguments passed from command line
     modeArg = args.mode  
     reindexArg = args.reindex
     startPageArg = args.start
