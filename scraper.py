@@ -43,8 +43,6 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
 
 
 def runScrape(page="", jumps = 0):  # like runescape but not
-
-    
     if jumps == 0: #checks if the max number of jumps has been modified from the default value
         validInput = False
         while validInput == False:
@@ -55,9 +53,9 @@ def runScrape(page="", jumps = 0):  # like runescape but not
             except ValueError:
                 validInput = False
                 print("Please input a valid positive integer.")
-                
     else:
         jumps = 5 #changes it to what is seen as a reasonable default value
+
 
     if page == "": #checks if the page has been passed as a parameter and if it hasnt then 
         website = input("Please input the website you wish to scrape: ")
@@ -106,9 +104,10 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     #endregion
 
 
-    testFile = open("all links found", "w")
+    # testFile = open("all links found", "w")
     # backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
     query = "INSERT INTO `"+ domain + "` VALUES (NULL, %s, %s);"
+    print("Writing to database")
     for originURL, hyperlinks in dictOfUrl.items():
         for item in hyperlinks:
             if item != "" and item != "/":
@@ -118,11 +117,14 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                             originURL, item,)
                         mycursor.execute(query, queryParameters)
                         
-                    elif item[0] != '#': #if http is not in the item and # is not the first char we can assume that it is a relative link
+                    elif item[0] != '#' and item[0] == "/": #if http is not in the item and # is not the first char we can assume that it is a relative link
                         queryParameters = (originURL, domain+item,) #appends the domain name to relative paths
+                        mycursor.execute(query, queryParameters)  #actually executes the sql statement with the parameters place of %s. This method also removes any sal injection attempts
                         # testFile.write(originURL + ", " + domain + item + "\n") #test statement to see if any of this even works
+                    elif item != '#':
+                        queryParameters = (originURL, domain+'/'+item,) #appends the domain name and a slash to relative paths that are using interactive link. Seems to be rare but some websites do have it
                         mycursor.execute(query, queryParameters)  
-                    
+
                     mydb.commit() #commits the changes to the database
     mycursor.close()
     mydb.close()
