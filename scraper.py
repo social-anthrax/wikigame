@@ -23,7 +23,6 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
         #these are all test case websites with known outputs
         # 'https://en.wikipedia.org/wiki/Web_scraping',
         # 'https://en.wikipedia.org/wiki/Pok%C3%A9mon',
-        # 'https://www.sqa.org.uk/sqa/70972.html',
     ]
 
     allowed_domains = [domain]
@@ -43,8 +42,6 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
 
 
 def runScrape(page="", jumps = 0):  # like runescape but not
-
-    
     if jumps == 0: #checks if the max number of jumps has been modified from the default value
         validInput = False
         while validInput == False:
@@ -105,10 +102,16 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     mydb.commit()
     #endregion
 
-
-    testFile = open("all links found", "w")
     # backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
     query = "INSERT INTO `"+ domain + "` VALUES (NULL, %s, %s);"
+
+    #this is so that any values that have the domain appended later will also contain the domains transfer protocol
+    if "https://" in website:
+        domain = "https://" + domain
+    elif "http://" in website:
+        domain = "http://" + domain
+        
+
     for originURL, hyperlinks in dictOfUrl.items():
         for item in hyperlinks:
             if item != "" and item != "/":
@@ -121,7 +124,7 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                     elif item[0] != '#': #if http is not in the item and # is not the first char we can assume that it is a relative link
                         queryParameters = (originURL, domain+item,) #appends the domain name to relative paths
                         # testFile.write(originURL + ", " + domain + item + "\n") #test statement to see if any of this even works
-                        mycursor.execute(query, queryParameters)  
+                        mycursor.execute(query, queryParameters)
                     
                     mydb.commit() #commits the changes to the database
     mycursor.close()
