@@ -310,7 +310,7 @@ def sort():
             for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
                 openedFile.write(key)
                 for value in array:
-                    openedFile.write(", " + value)
+                    openedFile.write(", " + value) #puts a comma in to make it a csv
                 openedFile.write("\n")
                 print("%s: %s" % (key, array))
         else:
@@ -350,7 +350,7 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
     parser.add_argument('--jumps', help = 'Number of jumps for the scraper to make.', default = 0, type = int)
     args = parser.parse_args()
     
-    #sets the values of the variavles to the arguments passed from command line
+    #sets the values of the variables to the arguments passed from command line
     modeArg = args.mode  
     reindexArg = args.reindex
     startPageArg = args.start
