@@ -138,7 +138,7 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     #region legacy
     #legacy code for when output was to a file
     # file = open('yeet.txt', 'w') 
-    # for x, y in dictOfUrl.items():
+    # for x, y in dictOfUrl.items():    
     #     file.write(x+", {")
     #     for item in y:
     #         if item != "" and item != "/":
