@@ -361,7 +361,7 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
     elif modeArg == "returnmap":
         if reindexArg:
             executionCheck = False
-            executionCheck = scraper.runScrape(startPageArg, jumpsArg)
+            executionCheck = scraper.runScrape(startPageArg, jumpsArg) #returns true when finished
             
             while executionCheck != True: # stops the program from continuing until the previous code stops running
                 None
