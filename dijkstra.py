@@ -12,7 +12,7 @@ import scraper
 import time
 import mysql.connector
 importlib.reload(scraper)
-sys.setrecursionlimit(15000) #changes the recursion limit as there are a lot of values being modified in the merge sort
+sys.setrecursionlimit(150000) #changes the recursion limit as there are a lot of values being modified in the merge sort
 #endregion
 
 def cls(): #allows the clearing of the terminal so that things can be displayed cleanly
@@ -56,7 +56,9 @@ class noodlemap():
             
             for index in range(0, rows_count):
 
-                self.__addEdge(self.__matrix[0][index], self.__matrix[1][index]) #adds to the dictionary of edges
+                # adds to the dictionary of edges
+                self.__addEdge(self.__matrix[index]
+                               [0], self.__matrix[index][1])
     
         def loadDatabase(self, tableName): #loads a database table into the edges dictionary
             mydb = mysql.connector.connect( #connects to database
@@ -69,7 +71,7 @@ class noodlemap():
             mycursor = mydb.cursor()
             time.sleep(.25)
             domain = tableName.replace(
-                "https://", "").replace("http://", "").split("/", 1)[0]
+                "https://", "").replace("http://", "").replace("www.", "").split("/", 1)[0]
 
             # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
             query = "SELECT OriginURL, Hyperlink FROM `%s`"
@@ -213,13 +215,13 @@ class noodlemap():
                         result.append(right.pop(0))
                         break
                     
-                    #TODO:test if this is needed
+                    
                     # if the values are equal, the length is different and the it is the last letter in the shorter it sorts them into the correct order of shortest first for readability
-                    elif len(left[0]) < len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()) and letter == min(len(left[0]), len(right[0])):
+                    elif len(left[0]) < len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()) and letter == min(len(left[0]), len(right[0])) - 1:
                         result.append(left.pop(0))
                         break
                     
-                    elif len(left[0]) > len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()) and letter == min(len(left[0]), len(right[0])):
+                    elif len(left[0]) > len(right[0]) and ord((left)[0][letter].lower()) == ord((right)[0][letter].lower()) and letter == min(len(left[0]), len(right[0])) - 1:
                         result.append(right.pop(0))
                         break
                     
@@ -294,13 +296,15 @@ def sort():
         scraper.runScrape(start)
 
     domain = trimUrl(start)
+    print("Loading database...")
     noodles.loadDatabase(domain) #loads database contents into the noodle object using the loadDatabase method
-
+    print("Database loaded.")
     write_to_file = input("Do you wish to write output to file? (y/n) \n")
     cls() #clears screen
     if write_to_file.lower() == "y":
         writeFileName = input("Please input the name of the file you wish to write output to \n")
         openedFile = open(writeFileName, "w")
+        print("Sorting and writing to file.")
         if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
             #loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
             for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
@@ -310,12 +314,15 @@ def sort():
                 openedFile.write("\n")
                 print("%s: %s" % (key, array))
         else:
+            
             for key, array in noodles.returnMap().items():
                 openedFile.write("%s: %s \n" % (key, array))
                 print("%s: %s" % (key, array))
     else:
+        print("Sorting and printing to terminal.")
         for key, array in noodles.returnMap().items():
             print("%s: %s" % (key, array))
+    print("\n Complete")
     
 def quit():
     print("Exiting")
