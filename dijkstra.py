@@ -113,7 +113,7 @@ class noodlemap():
 
             while current_noodle != final_destination:
                 visited.add(current_noodle) #adds the current node to make sure we do not go back to it by accident
-                destinations = noodles.__edges[current_noodle]
+                destinations = self.__edges[current_noodle]
 
                 for next_noodles in destinations:
                     if next_noodles not in shortest_paths: #checks if node has been passed yet
@@ -123,7 +123,6 @@ class noodlemap():
                         if current_shortest_weight > 1:
                             shortest_paths[next_noodles] = (current_noodle,1)
 
-                
                 possible_noodle = defaultdict(list) #initialises an empty dictionary
                 for noodle in shortest_paths:
                     if noodle not in visited:

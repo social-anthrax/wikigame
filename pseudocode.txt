@@ -17,7 +17,7 @@ CLASS noodlemap()
         connect to database "websites"
         
         domain = format tablename to domain form
-        exectute "SELECT OriginURL, Hyperlink FROM parameter" where parameter = domain and store result in 2d array called result
+        execute "SELECT OriginURL, Hyperlink FROM parameter" where parameter = domain and store result in 2d array called result
         
 
         INITIALISE cols_count AS INTEGER = 2
@@ -30,9 +30,9 @@ CLASS noodlemap()
         INITIALISE outerLoop as INTEGER = 0
         
 
-        FOR EACH row IN result  
+        FOR EACH row IN result DO
             SET innerLoop = 0
-            FOR each value in row
+            FOR each value in row DO
                 SET ME.Matrix[outerloop][innerloop] = value  #as y value is before the x value
                 SET innerLoop = innerLoop + 1
             END FOR
@@ -40,10 +40,48 @@ CLASS noodlemap()
 
         END FOR
 
-        FOR index = 0 to rows_count - 1
+        FOR index = 0 to rows_count - 1 DO
             Me.addEdge(ME.matrix[index][0], ME.addEdge[index][1])
         END FOR 
-    
+
+        CLOSE CONNECTION
+    END METHOD
+
+    PUBLIC METHOD dijkstra(initial, final_destination)
+        INITIALISE shortest_paths AS DICTIONARY 
+        INITIALISE current_noodle AS STRING = initial
+        INITIALISE visited AS DEFAULT SET #this is being done as it has a method to check if it contains things
+        
+
+        WHILE current_noodle NOT = final_destination DO
+            ADD current_noodle TO visited SET
+            INITIALISE destinations AS ARRAY INITIALLY ME.edges[current_noodle]
+
+            FOR EACH next_noodle IN destinations DO
+                IF next_noodle is not in shortest_paths
+                    SET shortest_paths[next_noodle] = (current_noodle, 1) 
+                ELSE
+                    INITIALISE current_shortest_weight AS STRING
+                    SET current_shortest_weight = shortest_paths[next_noodle][1]
+                    IF current_shortest_weight > 1:
+                        SET shortest_paths[next_noodle] = (current_noodle,1)
+                    END IF
+                END IF
+            END FOR
+
+            INITIALISE possible_noodle AS DEFAULT DICTIONARY
+            FOR EACH noodle in shortest_paths
+                IF noodle not in visited
+                    SET possible_noodle[noodle] = shortest_paths[noodle]
+                END IF
+            END FOR
+
+            IF possible_noodle is empty
+                SEND message that there is no path TO DISPLAY
+            END IF
+            SET current_noodle = smallest value between possible_noodle and  
+        END WHILE
+
     END METHOD
 END CLASS
 
