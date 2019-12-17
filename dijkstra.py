@@ -131,7 +131,9 @@ class noodlemap():
                 
                 if not possible_noodle: #if the next possible nodes is empty
                     return "No route can be found from %s to %s" % (initial, final_destination)
-                current_noodle = min(possible_noodle, key=lambda k: possible_noodle[k][1])        #this part goes back through the destinations on shortest_paths 
+                # this part goes back through the destinations on shortest_paths  
+                current_noodle = min(
+                    possible_noodle, key=lambda k: possible_noodle[k][1]) #https://realpython.com/python-lambda/
 
             path = [] #initialises an list/array
             while current_noodle is not None:
