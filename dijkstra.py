@@ -136,7 +136,7 @@ class noodlemap():
             path = [] #initialises an list/array
             while current_noodle is not None:
                 path.append(current_noodle)
-                next_noodles =  shortest_paths[current_noodle][0]
+                next_noodles = shortest_paths[current_noodle][0]
                 current_noodle = next_noodles
             #iterates through the path list with a step of -1, aka backwards
             path = path[::-1]
