@@ -149,6 +149,8 @@ class noodlemap():
                 for key in self.MergeSort(unsorted_list): #populates dictionary with values using now sorted keys
                     sorted_list[key] = self.__edges[key]
                 return sorted_list
+            else:
+                return unsorted_list
             #region insertSort
                 # this is a insertion sort as proof of understanding of advanced higher concepts
             #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
