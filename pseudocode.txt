@@ -79,7 +79,7 @@ CLASS noodlemap()
             IF possible_noodle is empty
                 SEND message that there is no path TO DISPLAY
             END IF
-            SET current_noodle = smallest value between possible_noodle and  
+            SET current_noodle = smallest value between possible_noodle and all the values of 
         END WHILE
 
     END METHOD
