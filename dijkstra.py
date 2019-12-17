@@ -1,5 +1,5 @@
 #Maksim Livingstone
-
+#AH project
 #120942514
 
 #region imports and set up
@@ -131,7 +131,7 @@ class noodlemap():
                 
                 if not possible_noodle: #if the next possible nodes is empty
                     return "No route can be found from %s to %s" % (initial, final_destination)
-                current_noodle = min(possible_noodle, key=lambda k: possible_noodle[k][1])        #this part goes back through the destinations on shortest_paths 
+                current_noodle = min(possible_noodle, key=lambda k: possible_noodle[k][1])     #finds all of the values looping through k as index and finding what is stored at index 1  
 
             path = [] #initialises an list/array
             while current_noodle is not None:
