@@ -1,5 +1,5 @@
 #Maksim Livingstone
-
+#AH project
 #120942514
 
 #region imports and set up
@@ -131,14 +131,12 @@ class noodlemap():
                 
                 if not possible_noodle: #if the next possible nodes is empty
                     return "No route can be found from %s to %s" % (initial, final_destination)
-                # this part goes back through the destinations on shortest_paths  
-                current_noodle = min(
-                    possible_noodle, key=lambda k: possible_noodle[k][1]) #https://realpython.com/python-lambda/
+                current_noodle = min(possible_noodle, key=lambda k: possible_noodle[k][1])     #finds all of the values looping through k as index and finding what is stored at index 1  
 
             path = [] #initialises an list/array
             while current_noodle is not None:
                 path.append(current_noodle)
-                next_noodles =  shortest_paths[current_noodle][0]
+                next_noodles = shortest_paths[current_noodle][0]
                 current_noodle = next_noodles
             #iterates through the path list with a step of -1, aka backwards
             path = path[::-1]
@@ -151,6 +149,8 @@ class noodlemap():
                 for key in self.MergeSort(unsorted_list): #populates dictionary with values using now sorted keys
                     sorted_list[key] = self.__edges[key]
                 return sorted_list
+            else:
+                return unsorted_list
             #region insertSort
                 # this is a insertion sort as proof of understanding of advanced higher concepts
             #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
