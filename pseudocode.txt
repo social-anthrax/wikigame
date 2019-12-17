@@ -57,14 +57,14 @@ CLASS noodlemap()
             ADD current_noodle TO visited SET
             INITIALISE destinations AS ARRAY INITIALLY ME.edges[current_noodle]
 
-            FOR EACH next_noodle IN destinations DO
-                IF next_noodle is not in shortest_paths
-                    SET shortest_paths[next_noodle] = (current_noodle, 1) 
+            FOR EACH next_noodles IN destinations DO
+                IF next_noodles is not in shortest_paths
+                    SET shortest_paths[next_noodles] = (current_noodle, 1) 
                 ELSE
                     INITIALISE current_shortest_weight AS STRING
-                    SET current_shortest_weight = shortest_paths[next_noodle][1]
+                    SET current_shortest_weight = shortest_paths[next_noodles][1]
                     IF current_shortest_weight > 1:
-                        SET shortest_paths[next_noodle] = (current_noodle,1)
+                        SET shortest_paths[next_noodles] = (current_noodle,1)
                     END IF
                 END IF
             END FOR
@@ -79,8 +79,18 @@ CLASS noodlemap()
             IF possible_noodle is empty
                 SEND message that there is no path TO DISPLAY
             END IF
-            SET current_noodle = smallest value between possible_noodle and all the values of 
+            SET current_noodle = smallest value between possible_noodle and all the values at index one of all keys in the 
         END WHILE
+
+        INITIALISE path AS ARRAY OF DICTIONARY
+        WHILE current_noodle has values in it
+            APPEND current_noodle TO path
+            next_noodles = shortest_paths[current_noodle][0]
+            current_noodle = next_noodles
+        END WHILE
+        
+        SET path = reverse path
+        return path
 
     END METHOD
 END CLASS
