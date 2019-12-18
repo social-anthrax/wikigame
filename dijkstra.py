@@ -201,8 +201,7 @@ class noodlemap():
             
         def __Merge(self, left,right):
             result = []
-            # result.append("test")
-
+            
             while len(left) != 0 and len(right) != 0:
                 # finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
                 for letter in range(0, min(len(left[0]), len(right[0]))):
