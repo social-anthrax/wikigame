@@ -146,11 +146,11 @@ class noodlemap():
             unsorted_list = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
             if sort == True:
                 sorted_list = defaultdict(list)
-                for key in self.MergeSort(unsorted_list): #populates dictionary with values using now sorted keys
+                for key in self.__MergeSort(unsorted_list): #populates dictionary with values using now sorted keys
                     sorted_list[key] = self.__edges[key]
                 return sorted_list
             else:
-                return unsorted_list
+                return self.__edges
             #region insertSort
                 # this is a insertion sort as proof of understanding of advanced higher concepts
             #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
@@ -175,7 +175,7 @@ class noodlemap():
             #endregion
 
         #region mergeSort
-        def MergeSort(self, array):  # this is the python implementation of the pseudocode for the top down implementation of a merge sort on https://en.wikipedia.org/wiki/Merge_sort
+        def __MergeSort(self, array):  # this is the python implementation of the pseudocode for the top down implementation of a __Merge sort on https://en.wikipedia.org/wiki/Merge_sort
             if len(array) <= 1:
                 return array
             
@@ -192,14 +192,14 @@ class noodlemap():
                     right.append(value)
                 counter += 1
             #now recursively sort both sub lists
-            left = self.MergeSort(left)
-            right = self.MergeSort(right)
+            left = self.__MergeSort(left)
+            right = self.__MergeSort(right)
 
             #now merge both sorted sub lists
-            return self.merge(left,right)
+            return self.__Merge(left,right)
             
             
-        def merge(self, left,right):
+        def __Merge(self, left,right):
             result = []
             # result.append("test")
 
