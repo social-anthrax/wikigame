@@ -85,14 +85,75 @@ CLASS noodlemap()
         INITIALISE path AS ARRAY OF DICTIONARY
         WHILE current_noodle has values in it
             APPEND current_noodle TO path
-            next_noodles = shortest_paths[current_noodle][0]
-            current_noodle = next_noodles
+            SET next_noodles = shortest_paths[current_noodle][0]
+            SET current_noodle = next_noodles
         END WHILE
-        
+
         SET path = reverse path
-        return path
+        RETURN path
 
     END METHOD
+
+    PUBLIC METHOD returnMap(sort INITIALLY TRUE)
+        INITIALISE unsorted_list[] AS ARRAY
+        SET unsorted_list = ARRAY of keys of ME.edges
+        
+        IF sort = TRUE
+            INITIALISE sorted_list AS DEFAULT DICTIONARY
+            FOR EACH key IN ME.MergeSort(unsorted_list):
+                SET sorted_list[key] = ME.edges[key]
+            END FOR
+            RETURN sorted_list
+        ELSE:
+            RETURN ME.edges
+        END IF
+
+    END METHOD
+
+    PRIVATE METHOD MERGESORT(array) 
+        IF length of array <= 1
+            RETURN array
+        END IF
+
+        INITIALISE left AS ARRAY OF STRING
+        INITIALISE right AS ARRAY OF STRING
+        INITIALISE counter AS INTEGER INITIALLY 0
+
+        FOR EACH value IN array
+            IF counter < (length of array) / 2 rounded down
+                APPEND value TO left
+            ELSE:
+                APPEND value TO right
+            END IF
+            SET counter = counter + 1
+        END FOR
+
+        SET left = ME.MergeSort(left)
+        SET right = ME.MergeSort(right)
+
+        return self.Merge(left,right)
+    END METHOD
+
+    PRIVATE METHOD Merge(left, right)
+        INITIALISE result AS ARRAY
+
+        WHILE length of left NOT = 0 AND length of right NOT = 0
+            FOR letter = (0 to smallest between length of left[0] and length of right[0])
+                IF left[0][letter] comes before right[0][letter]
+                    pop left[0] and append it to result
+                
+                ELSE IF right[0][letter] comes before left[0][letter]
+                    pop right[0] and append it to result
+                
+                ELSE IF length of left[0] < length of right[0] and 
+
+                END IF    
+
+            END FOR
+
+        END WHILE
+    END METHOD
+
 END CLASS
 
 
