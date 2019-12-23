@@ -42,17 +42,17 @@ class noodlemap():
             
             cols_count = 2
             rows_count = len(lines)
-            self.__matrix = [["" for x in range(rows_count)] for y in range(cols_count)]
+            self.__matrix = [["" for x in range(cols_count)] for y in range(rows_count)]
 
-            i_d1= 0 #index of dimension 1
-            i_d2 = 0 # index of dimension 2
+            innerloop= 0 #index of dimension 1
+            outerloop = 0 # index of dimension 2
             for singleLine in lines:
                 singleLine = singleLine.replace(" ","") #makes sure that there is no unnecessary spaces in the csv
-                i_d1 = 0
+                innerloop = 0
                 for y in singleLine.strip().split(','): #splits up the two arguments and removes any new line characters.
-                    self.__matrix[i_d1][i_d2] = y
-                    i_d1 += 1
-                i_d2 += 1 
+                    self.__matrix[outerloop][innerloop] = y
+                    innerloop += 1
+                outerloop += 1 
             
             for index in range(0, rows_count):
 
@@ -146,36 +146,15 @@ class noodlemap():
             unsorted_list = list(self.__edges) #creates an "array" of the keys of the __edges dictionary.
             if sort == True:
                 sorted_list = defaultdict(list)
-                for key in self.__MergeSort(unsorted_list): #populates dictionary with values using now sorted keys
+                for key in self.__mergeSort(unsorted_list): #populates dictionary with values using now sorted keys
                     sorted_list[key] = self.__edges[key]
                 return sorted_list
             else:
                 return self.__edges
-            #region insertSort
-                # this is a insertion sort as proof of understanding of advanced higher concepts
-            #     for start_value in range(1, len(unsorted_list)): #a standard insertion sort
-                    
-            #         for current_value in range(start_value, 0, -1):
-            #             for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
-            #                 if ord(((unsorted_list[current_value])[letter]).lower()) < ord(((unsorted_list[current_value-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
-            #                     temp_lower = unsorted_list[current_value]
-            #                     unsorted_list[current_value]= unsorted_list[current_value-1]
-            #                     unsorted_list[current_value - 1]=temp_lower
-            #                     break
 
-            #                 elif len(unsorted_list[current_value]) < len(unsorted_list[current_value - 1]) and ord(((unsorted_list[current_value])[letter]).lower()) == ord(((unsorted_list[current_value-1])[letter]).lower()): #if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
-            #                     temp_lower = unsorted_list[current_value]
-            #                     unsorted_list[current_value] = unsorted_list[current_value-1]
-            #                     unsorted_list[current_value - 1] = temp_lower
-                
-            #     sorted_list = defaultdict(list)
-            #     for key in unsorted_list:
-            #         sorted_list[key] = self.__edges[key]
-            # return sorted_list
-            #endregion
 
         #region mergeSort
-        def __MergeSort(self, array):  # this is the python implementation of the pseudocode for the top down implementation of a __Merge sort on https://en.wikipedia.org/wiki/Merge_sort
+        def __mergeSort(self, array):  # this is the python implementation of the pseudocode for the top down implementation of a __Merge sort on https://en.wikipedia.org/wiki/Merge_sort
             if len(array) <= 1:
                 return array
             
@@ -192,15 +171,15 @@ class noodlemap():
                     right.append(value)
                 counter += 1
             #now recursively sort both sub lists
-            left = self.__MergeSort(left)
-            right = self.__MergeSort(right)
+            left = self.__mergeSort(left)
+            right = self.__mergeSort(right)
 
             #now merge both sorted sub lists
-            return self.__Merge(left,right)
+            return self.__merge(left,right)
             
             
-        def __Merge(self, left,right):
-            result = []
+        def __merge(self, left,right):
+            result = [] #initallises empty array
             
             while len(left) != 0 and len(right) != 0:
                 # finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
@@ -224,10 +203,10 @@ class noodlemap():
                     elif len(left[0]) > len(right[0]) and letter == min(len(left[0]), len(right[0])) - 1:
                         result.append(right.pop(0))
                         break
-                    
 
-                        
-            #Either left or right may have elements left; consume them.
+                    #there is no possibility of both being completely equal as then it would not be a unique key
+                           
+            #Either left or right may have elements left: consume them.
             #(Only one of the following loops will actually be entered.)
             while len(left) != 0:
                 result.append(left.pop(0)) #append the first value in the left array and remove the value at index 0
@@ -239,6 +218,25 @@ class noodlemap():
             return result
         #endregion
         
+        #region insertSort
+        # this is a insertion sort as proof of understanding of advanced higher concepts
+        def __insertSort(self, unsorted_list):
+            for start_value in range(1, len(unsorted_list)): #a standard insertion sort
+                for current_value in range(start_value, 0, -1): #moves down from current value bringing it to where it is meant to be
+                    for letter in range(0 ,min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1]))): #finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
+                        if ord(((unsorted_list[current_value])[letter]).lower()) < ord(((unsorted_list[current_value-1])[letter]).lower()): #if the letters are the same then the next letter is selected so that they are still alphabetical.
+                            temp_lower = unsorted_list[current_value]
+                            unsorted_list[current_value]= unsorted_list[current_value-1]
+                            unsorted_list[current_value - 1]=temp_lower
+                            break #breaks out of the letter loop
+
+                        elif len(unsorted_list[current_value]) < len(unsorted_list[current_value - 1]) and ord(((unsorted_list[current_value])[letter]).lower()) == ord(((unsorted_list[current_value-1])[letter]).lower()) and letter == min(len(unsorted_list[current_value]), len(unsorted_list[current_value - 1])) - 1:  # if the values are equal and the length is different it sorts them into the correct order of shortest first for readability
+                            temp_lower = unsorted_list[current_value]
+                            unsorted_list[current_value] = unsorted_list[current_value-1]
+                            unsorted_list[current_value - 1] = temp_lower
+            sorted_list = unsorted_list #just for readabilities sake
+            return sorted_list
+        #endregion
         #endregion
 
 class ui():
@@ -362,15 +360,17 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
             "https://", "").replace("http://", "").split("/", 1)[0]
         
         if reindexArg: #runs the scraper and then loads the scraper
-            scraper.runScrape(sys.argv[3], jumpsArg)
+            executionCheck = False
+            executionCheck = scraper.runScrape(startPageArg, jumpsArg)
+            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous funtion seemed to run asynchronously
+                None
         noodles.loadDatabase(domain)
         print(noodles.dijkstra(startPageArg, endPageArg))
     elif modeArg == "returnmap":
         if reindexArg:
             executionCheck = False
             executionCheck = scraper.runScrape(startPageArg, jumpsArg) #returns true when finished
-            
-            while executionCheck != True: # stops the program from continuing until the previous code stops running
+            while executionCheck != True: # stops the program from continuing until the previous code stops running as previous funtion seemed to run asynchronously
                 None
         cls()
         noodles.loadDatabase(startPageArg)
