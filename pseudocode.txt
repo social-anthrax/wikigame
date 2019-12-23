@@ -100,7 +100,7 @@ CLASS noodlemap()
         
         IF sort = TRUE
             INITIALISE sorted_list AS DEFAULT DICTIONARY
-            FOR EACH key IN ME.MergeSort(unsorted_list):
+            FOR EACH key IN ME.mergeSort(unsorted_list):
                 SET sorted_list[key] = ME.edges[key]
             END FOR
             RETURN sorted_list
@@ -110,7 +110,7 @@ CLASS noodlemap()
 
     END METHOD
 
-    PRIVATE METHOD MERGESORT(array) 
+    PRIVATE METHOD mergeSort(array) 
         IF length of array <= 1
             RETURN array
         END IF
@@ -128,8 +128,8 @@ CLASS noodlemap()
             SET counter = counter + 1
         END FOR
 
-        SET left = ME.MergeSort(left)
-        SET right = ME.MergeSort(right)
+        SET left = ME.mergeSort(left)
+        SET right = ME.mergeSort(right)
 
         return self.Merge(left,right)
     END METHOD
@@ -138,22 +138,47 @@ CLASS noodlemap()
         INITIALISE result AS ARRAY
 
         WHILE length of left NOT = 0 AND length of right NOT = 0
-            FOR letter = (0 to smallest between length of left[0] and length of right[0])
+            FOR letter = 0 to (smallest between length of left[0] and length of right[0])
                 IF left[0][letter] comes before right[0][letter]
                     pop left[0] and append it to result
                 
                 ELSE IF right[0][letter] comes before left[0][letter]
                     pop right[0] and append it to result
                 
-                ELSE IF length of left[0] < length of right[0] and 
+                ELSE IF length of left[0] < length of right[0] and (smallest between length of left[0] and length of right[0]) - 1
+                    pop left[0] and append it to result
+                
+                ELSE IF length of left[0] > length of right[0] and (smallest between length of left[0] and length of right[0]) - 1
+                    pop right[0] and append it to result
 
                 END IF    
-
             END FOR
+        END WHILE
 
+        WHILE length of left NOT = 0
+            pop left[0] and append it to result
+        END WHILE
+
+        WHILE length of right NOT = 0
+            pop right[0] and append it to result
         END WHILE
     END METHOD
 
+    PRIVATE METHOD insertSort(unsorted_list):
+        FOR start_value = 1 to lenght of unsorted_list
+            FOR current_value = start_value to 0 STEP -1
+                FOR letter = 0 to smallest between length of unsorted_list[current_value] and length of unsorted_list[current_value-1]
+                    IF unsorted_list[current_value][letter] comes before unsorted_list[current_noodle][letter]
+                        SWAP unsorted_list[current_value] and unsorted_list[current_value-1]
+                        BREAK FOR LOOP
+                    ELSE IF length of unsorted_list[current_value] < length of unsorted_list[current_value - 1] and unsorted_list[current_value][letter] = unsorted_list[current_value][letter] AND letter = smallest value between length of unsorted_list[current_value] and length of unsorted_list[current_value]
+                        SWAP unsorted_list[current_value] and unsorted_list[current_value-1]
+                    END IF
+                END FOR
+            END FOR
+        END FOR
+        RETURN unsorted_list
+    END METHOD
 END CLASS
 
 
@@ -167,7 +192,7 @@ CLASS ui()
         SET ME.sectionName = section
     END METHOD
 
-    REGION getters
+    REGION setters
         METHOD setContents(contentsText)
             SET ME.contents = contentsText
         END METHOD
@@ -180,7 +205,7 @@ CLASS ui()
         END METHOD
     END REGION
 
-    REGION setters
+    REGION getters
         METHOD showUi(acceptCommands AS BOOLEAN DEFAULT TRUE)
             CLEARSCREEN()
             INITIALISE userInput AS STRING
@@ -196,5 +221,31 @@ CLASS ui()
                 END IF
             END IF
         END METHOD 
+
+
     END REGION
 END CLASS
+
+
+#on program start 
+INSTANCIATE noodles as new noodlemap object
+INSTANCIATE mainMenu as new ui("mainMenu") object
+mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
+mainMenu.setCommands(Pick option', pathfinder() procedure, returnMap() procedure, help() procedure, quit() procedure)
+mainMenu.showUI()
+
+
+
+checking if program is running from command line arguments or not:
+
+IF length of arguments passed in command line > 1 
+    IF mode argument is passed as "pathfinder"
+        INITIALISE domain AS STRING
+        SET domain = format startPage argument to domain form
+
+        IF reindex argument = TRUE
+            run the web scraper with parameters 
+            TODO: this
+        END IF
+    END IF
+END IF
