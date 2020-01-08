@@ -355,7 +355,7 @@ if len(sys.argv) > 1: #if there are more than two command line arguments includi
     endPageArg = args.end
     jumpsArg = args.jumps
     
-    if modeArg == "pathfinder": #sys.argv[0] is the name of the file being run
+    if modeArg == "pathfinder":
         domain = startPageArg.replace(
             "https://", "").replace("http://", "").split("/", 1)[0]
         
