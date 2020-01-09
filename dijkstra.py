@@ -71,7 +71,7 @@ class noodlemap():
             mycursor = mydb.cursor()
             time.sleep(.25)
             domain = tableName.replace(
-                "https://", "").replace("http://", "").replace("www.", "").split("/", 1)[0]
+                "https://", "").replace("http://", "").split("/", 1)[0]
 
             # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
             query = "SELECT OriginURL, Hyperlink FROM `%s`"
@@ -288,6 +288,33 @@ def pathfinder():
     noodles.loadDatabase(domain)
     print(noodles.dijkstra(start,end)) 
 
+def clearDatabases():
+    mydb = mysql.connector.connect( #connects to database
+        host="localhost",
+        user="test",
+        password="test",
+        database='websites',
+        auth_plugin='mysql_native_password'
+    )
+    mycursor = mydb.cursor()
+    
+    userCheck = input("Are you sure you want to delete all archived websites (y/n)?    ")
+    if userCheck.lower() == "y": 
+        query = "SHOW TABLES"
+        mycursor.execute(query)
+        result = mycursor.fetchall()
+        query = "DROP TABLE %s"
+        for table in result:
+            print("Deleting %s..." % (table))
+            mycursor.execute("DROP TABLE IF EXISTS `%s`;" % table)
+            print("%s deleted." % (table))
+        print("All cached databases deleted.")
+    else:
+        mainMenu.showUi()
+    mycursor.close()
+
+
+
 def sort():
     start = input("Please enter the start page. \n")
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
@@ -385,7 +412,7 @@ else:
 
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instantiates UI object
-    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
-    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables')
+    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, deleteTables=clearDatabases, help=help, quit=quit)
     mainMenu.showUi()
 
