@@ -94,7 +94,6 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     mycursor.execute("DROP TABLE IF EXISTS `%s`;" % domain)
     time.sleep(.25) #sleeps the thread as the delation actually overlaps with the creation
 
-    # query = "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL)"
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
         "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL);" % (domain))
