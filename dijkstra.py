@@ -304,7 +304,7 @@ def clearDatabases():
     for table in result:
         print(table)
      
-    userCheck = input("\n Are you sure you want to delete all archived websites (y/n)?    ")
+    userCheck = input("\n qAre you sure you want to delete all archived websites (y/n)?    ")
     if userCheck.lower() == "y": 
         query = "DROP TABLE %s"
         for table in result:
