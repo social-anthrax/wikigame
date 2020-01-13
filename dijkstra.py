@@ -8,7 +8,7 @@ import os
 import sys
 import importlib
 import argparse
-import scraper
+import scraper #
 import time
 import mysql.connector
 importlib.reload(scraper)
@@ -194,7 +194,6 @@ class noodlemap():
                         result.append(right.pop(0))
                         break
                     
-                    
                     # if the values are equal, the length is different and the it is the last letter in the shorter it sorts them into the correct order of shortest first for readability
                     elif len(left[0]) < len(right[0]) and letter == min(len(left[0]), len(right[0])) - 1:
                         result.append(left.pop(0))
@@ -234,8 +233,8 @@ class noodlemap():
                             temp_lower = unsorted_list[current_value]
                             unsorted_list[current_value] = unsorted_list[current_value-1]
                             unsorted_list[current_value - 1] = temp_lower
-            sorted_list = unsorted_list #just for readabilities sake
-            return sorted_list
+            
+            return unsorted_list #would rename this but it would inflate memory usage.
         #endregion
         #endregion
 
