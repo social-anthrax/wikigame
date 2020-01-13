@@ -297,11 +297,15 @@ def clearDatabases():
     )
     mycursor = mydb.cursor()
     
-    userCheck = input("Are you sure you want to delete all archived websites (y/n)?    ")
+    query = "SHOW TABLES"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    print("Found webpages:")
+    for table in result:
+        print(table)
+     
+    userCheck = input("\n Are you sure you want to delete all archived websites (y/n)?    ")
     if userCheck.lower() == "y": 
-        query = "SHOW TABLES"
-        mycursor.execute(query)
-        result = mycursor.fetchall()
         query = "DROP TABLE %s"
         for table in result:
             print("Deleting %s..." % (table))
@@ -323,29 +327,35 @@ def sort():
     print("Loading database...")
     noodles.loadDatabase(domain) #loads database contents into the noodle object using the loadDatabase method
     print("Database loaded.")
-    write_to_file = input("Do you wish to write output to file? (y/n) \n")
-    cls() #clears screen
-    if write_to_file.lower() == "y":
-        writeFileName = input("Please input the name of the file you wish to write output to \n")
-        openedFile = open(writeFileName, "w")
-        print("Sorting and writing to file.")
-        if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
-            #loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
-            for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
-                openedFile.write(key)
-                for value in array:
-                    openedFile.write(", " + value) #puts a comma in to make it a csv
-                openedFile.write("\n")
+    validInput = False
+    while validInput == False:
+        write_to_file = input("Do you wish to write output to file? (y/n) \n")
+        cls() #clears screen
+        if write_to_file.lower() == "y":
+            validInput = True
+            writeFileName = input("Please input the name of the file you wish to write output to \n")
+            openedFile = open(writeFileName, "w")
+            print("Sorting and writing to file.")
+            if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
+                #loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
+                for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
+                    openedFile.write(key)
+                    for value in array:
+                        openedFile.write(", " + value) #puts a comma in to make it a csv
+                    openedFile.write("\n")
+                    print("%s: %s" % (key, array))
+            else:
+                
+                for key, array in noodles.returnMap().items():
+                    openedFile.write("%s: %s \n" % (key, array))
+                    print("%s: %s" % (key, array))
+        elif write_to_file == "n":
+            validInput = True
+            print("Sorting and printing to terminal.")
+            for key, array in noodles.returnMap().items():
                 print("%s: %s" % (key, array))
         else:
-            
-            for key, array in noodles.returnMap().items():
-                openedFile.write("%s: %s \n" % (key, array))
-                print("%s: %s" % (key, array))
-    else:
-        print("Sorting and printing to terminal.")
-        for key, array in noodles.returnMap().items():
-            print("%s: %s" % (key, array))
+            print("Please enter valid input.")
     print("\n Complete")
     
 def quit():
@@ -411,7 +421,7 @@ else:
 
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instantiates UI object
-    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables')
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
     mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, deleteTables=clearDatabases, help=help, quit=quit)
     mainMenu.showUi()
 
