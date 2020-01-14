@@ -25,7 +25,7 @@ def cls():  # allows the clearing of the terminal so that things can be displaye
 # import scraper.py
 
 
-class noodlemap():
+class Noodlemap():
     # region declaration
     def __init__(self):
         self.__edges = defaultdict(list)
@@ -262,7 +262,7 @@ class noodlemap():
     # endregion
 
 
-class ui():
+class UI():
     # region setters
     def __init__(self, section):
         self.sectionName = section
@@ -405,7 +405,7 @@ def help():
 # endregion
 
 
-noodles = noodlemap()
+noodles = Noodlemap()
 if len(sys.argv) > 1:  # if there are more than two command line arguments including the name of the program then start in command line mode
     # using --help automatically shows the usage of these commands making it more user friendly and accessible
     parser = argparse.ArgumentParser()
@@ -456,8 +456,8 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
 
 else:
 
-    noodles = noodlemap()
-    mainMenu = ui("MainMenu")  # instantiates UI object
+    noodles = Noodlemap()
+    mainMenu = UI("MainMenu")  # instantiates UI object
     mainMenu.setContents(
         'Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
     mainMenu.setCommands('Pick option', pathfinder=pathfinder,
