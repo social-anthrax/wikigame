@@ -33,30 +33,44 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="5" name="analysis" color="#8cb6ce" meeting="false" start="2019-10-08" duration="11" complete="0" thirdDate="2019-09-23" thirdDate-constraint="0" priority="2" expand="true">
+        <task id="5" name="Analysis" color="#8cb6ce" meeting="false" start="2019-10-08" duration="10" complete="0" thirdDate="2019-09-23" thirdDate-constraint="0" priority="2" expand="true">
             <depend id="1" type="2" difference="0" hardness="Strong"/>
             <depend id="28" type="2" difference="0" hardness="Strong"/>
-            <task id="8" name="Create end user questionare" color="#8cb6ce" meeting="false" start="2019-10-09" duration="4" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true">
+            <task id="41" name="create scope boundaries and constraints" color="#8cb6ce" meeting="false" start="2019-10-08" duration="1" complete="0" thirdDate="2019-10-08" thirdDate-constraint="0" expand="true"/>
+            <task id="14" name="Functional requirements" color="#8cb6ce" meeting="false" start="2019-10-08" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true"/>
+            <task id="109" name="Scope and Boundaries" meeting="false" start="2019-10-08" duration="2" complete="0" expand="true"/>
+            <task id="8" name="Create end user questionare" color="#8cb6ce" meeting="false" start="2019-10-08" duration="4" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true">
                 <depend id="10" type="2" difference="0" hardness="Strong"/>
-                <depend id="14" type="2" difference="0" hardness="Strong"/>
                 <depend id="32" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="10" name="create end user requirements" color="#8cb6ce" meeting="false" start="2019-10-15" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true"/>
-            <task id="14" name="Functional requirements" color="#8cb6ce" meeting="false" start="2019-10-15" duration="2" complete="0" thirdDate="2019-09-16" thirdDate-constraint="0" expand="true"/>
-            <task id="32" name="UML" color="#8cb6ce" meeting="false" start="2019-10-15" duration="6" complete="0" thirdDate="2019-10-15" thirdDate-constraint="0" expand="true"/>
-            <task id="41" name="create scope boundaries and constraints" color="#8cb6ce" meeting="false" start="2019-10-08" duration="1" complete="0" thirdDate="2019-10-08" thirdDate-constraint="0" expand="true"/>
+            <task id="10" name="create end user requirements" color="#8cb6ce" meeting="false" start="2019-10-14" duration="2" complete="0" thirdDate="2019-10-01" thirdDate-constraint="1" expand="true"/>
+            <task id="32" name="UML" color="#8cb6ce" meeting="false" start="2019-10-14" duration="6" complete="0" thirdDate="2019-10-15" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="28" name="Design" color="#8cb6ce" meeting="false" start="2019-10-23" duration="65" complete="0" thirdDate="2019-10-21" thirdDate-constraint="0" priority="2" expand="true"/>
-        <task id="1" name="Impementation" color="#8cb6ce" meeting="false" start="2019-10-23" duration="39" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="2" expand="true">
-            <task id="0" name="Create dikijstras algorithm" color="#8cb6ce" meeting="false" start="2019-10-23" duration="4" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" expand="true">
+        <task id="28" name="Design" color="#8cb6ce" meeting="false" start="2019-10-22" duration="4" complete="0" thirdDate="2019-10-21" thirdDate-constraint="0" priority="2" expand="true">
+            <depend id="0" type="2" difference="0" hardness="Strong"/>
+            <depend id="1" type="2" difference="0" hardness="Strong"/>
+            <task id="104" name="create top level flow chart" meeting="false" start="2019-10-22" duration="1" complete="0" expand="true"/>
+            <task id="86" name="Design and adapt dijkstras algorithm" meeting="false" start="2019-10-22" duration="1" complete="0" expand="true"/>
+            <task id="83" name="Design UI" color="#8cb6ce" meeting="false" start="2019-10-22" duration="3" complete="0" thirdDate="2019-10-22" thirdDate-constraint="0" expand="true">
+                <depend id="93" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="93" name="Design UI method" meeting="false" start="2019-10-25" duration="1" complete="0" expand="true"/>
+        </task>
+        <task id="1" name="Implementation" color="#8cb6ce" meeting="false" start="2019-10-28" duration="48" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="2" expand="true">
+            <task id="0" name="Create dikijstras algorithm" color="#8cb6ce" meeting="false" start="2019-10-28" duration="4" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" expand="true">
                 <depend id="21" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="21" name="create crawler" color="#8cb6ce" meeting="false" start="2019-10-29" duration="20" complete="0" thirdDate="2019-11-04" thirdDate-constraint="0" priority="2" expand="true">
+            <task id="21" name="Create crawler" color="#8cb6ce" meeting="false" start="2019-11-01" duration="10" complete="0" thirdDate="2019-11-04" thirdDate-constraint="0" priority="2" expand="true">
                 <depend id="27" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="27" name="SQL reader amd writer" color="#8cb6ce" meeting="false" start="2019-11-26" duration="15" complete="0" thirdDate="2019-12-23" thirdDate-constraint="0" expand="true">
+            <task id="27" name="SQL reader and writer" color="#8cb6ce" meeting="false" start="2019-11-15" duration="15" complete="0" thirdDate="2019-12-23" thirdDate-constraint="0" expand="true">
                 <notes><![CDATA[Create the sql to save data into the database.]]></notes>
+                <depend id="43" type="2" difference="0" hardness="Strong"/>
             </task>
+            <task id="43" name="Create ui" color="#8cb6ce" meeting="false" start="2019-12-06" duration="5" complete="0" thirdDate="2019-12-17" thirdDate-constraint="0" expand="true">
+                <depend id="47" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="47" name="Integrate parts" color="#8cb6ce" meeting="false" start="2019-12-13" duration="14" complete="0" thirdDate="2019-12-24" thirdDate-constraint="0" expand="true"/>
         </task>
     </tasks>
     <resources/>

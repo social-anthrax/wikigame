@@ -8,7 +8,7 @@ import os
 import sys
 import importlib
 import argparse
-import scraper
+import scraper #imports the module called scraper.py that can be found in print out
 import time
 import mysql.connector
 importlib.reload(scraper)
@@ -71,7 +71,7 @@ class noodlemap():
             mycursor = mydb.cursor()
             time.sleep(.25)
             domain = tableName.replace(
-                "https://", "").replace("http://", "").replace("www.", "").split("/", 1)[0]
+                "https://", "").replace("http://", "").split("/", 1)[0]
 
             # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
             query = "SELECT OriginURL, Hyperlink FROM `%s`"
@@ -194,7 +194,6 @@ class noodlemap():
                         result.append(right.pop(0))
                         break
                     
-                    
                     # if the values are equal, the length is different and the it is the last letter in the shorter it sorts them into the correct order of shortest first for readability
                     elif len(left[0]) < len(right[0]) and letter == min(len(left[0]), len(right[0])) - 1:
                         result.append(left.pop(0))
@@ -234,8 +233,8 @@ class noodlemap():
                             temp_lower = unsorted_list[current_value]
                             unsorted_list[current_value] = unsorted_list[current_value-1]
                             unsorted_list[current_value - 1] = temp_lower
-            sorted_list = unsorted_list #just for readabilities sake
-            return sorted_list
+            
+            return unsorted_list #would rename this but it would inflate memory usage.
         #endregion
         #endregion
 
@@ -288,6 +287,37 @@ def pathfinder():
     noodles.loadDatabase(domain)
     print(noodles.dijkstra(start,end)) 
 
+def clearDatabases():
+    mydb = mysql.connector.connect( #connects to database
+        host="localhost",
+        user="test",
+        password="test",
+        database='websites',
+        auth_plugin='mysql_native_password'
+    )
+    mycursor = mydb.cursor()
+    
+    query = "SHOW TABLES"
+    mycursor.execute(query)
+    result = mycursor.fetchall()
+    print("Found webpages:")
+    for table in result:
+        print(table)
+     
+    userCheck = input("\n Are you sure you want to delete all archived websites (y/n)?    ")
+    if userCheck.lower() == "y": 
+        query = "DROP TABLE %s"
+        for table in result:
+            print("Deleting %s..." % (table))
+            mycursor.execute("DROP TABLE IF EXISTS `%s`;" % table)
+            print("%s deleted." % (table))
+        print("All cached databases deleted.")
+    else:
+        mainMenu.showUi()
+    mycursor.close()
+
+
+
 def sort():
     start = input("Please enter the start page. \n")
     if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
@@ -297,29 +327,35 @@ def sort():
     print("Loading database...")
     noodles.loadDatabase(domain) #loads database contents into the noodle object using the loadDatabase method
     print("Database loaded.")
-    write_to_file = input("Do you wish to write output to file? (y/n) \n")
-    cls() #clears screen
-    if write_to_file.lower() == "y":
-        writeFileName = input("Please input the name of the file you wish to write output to \n")
-        openedFile = open(writeFileName, "w")
-        print("Sorting and writing to file.")
-        if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
-            #loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
-            for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
-                openedFile.write(key)
-                for value in array:
-                    openedFile.write(", " + value) #puts a comma in to make it a csv
-                openedFile.write("\n")
+    validInput = False
+    while validInput == False:
+        write_to_file = input("Do you wish to write output to file? (y/n) \n")
+        cls() #clears screen
+        if write_to_file.lower() == "y":
+            validInput = True
+            writeFileName = input("Please input the name of the file you wish to write output to \n")
+            openedFile = open(writeFileName, "w")
+            print("Sorting and writing to file.")
+            if writeFileName[-4:] == ".csv": #if the file is a csv then it will write as if it is a csv
+                #loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
+                for key, array in noodles.returnMap().items(): #gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
+                    openedFile.write(key)
+                    for value in array:
+                        openedFile.write(", " + value) #puts a comma in to make it a csv
+                    openedFile.write("\n")
+                    print("%s: %s" % (key, array))
+            else:
+                
+                for key, array in noodles.returnMap().items():
+                    openedFile.write("%s: %s \n" % (key, array))
+                    print("%s: %s" % (key, array))
+        elif write_to_file == "n":
+            validInput = True
+            print("Sorting and printing to terminal.")
+            for key, array in noodles.returnMap().items():
                 print("%s: %s" % (key, array))
         else:
-            
-            for key, array in noodles.returnMap().items():
-                openedFile.write("%s: %s \n" % (key, array))
-                print("%s: %s" % (key, array))
-    else:
-        print("Sorting and printing to terminal.")
-        for key, array in noodles.returnMap().items():
-            print("%s: %s" % (key, array))
+            print("Please enter valid input.")
     print("\n Complete")
     
 def quit():
@@ -385,7 +421,7 @@ else:
 
     noodles = noodlemap()
     mainMenu = ui("MainMenu")  # instantiates UI object
-    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
-    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, help=help, quit=quit)
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
+    mainMenu.setCommands('Pick option', pathfinder=pathfinder,  returnMap=sort, deleteTables=clearDatabases, help=help, quit=quit)
     mainMenu.showUi()
 
