@@ -2,7 +2,7 @@
 settings.json
 yeet.txt
 **/__pycache__
-test*.*
+test*
 *.log
 *session.sql
 wikigame Session.sql
