@@ -1,7 +1,7 @@
 https://www.sqa.org.uk/sqa/files_ccc/Reference-language-for-Computing-Science-Sep2016.pdf
 
-CLASS noodlemap()
-    PUBLIC METHOD noodlemap() #constructor method
+CLASS Noodlemap()
+    PUBLIC METHOD Noodlemap() #constructor method
         INITIALISE PRIVATE DICTIONARY edges 
         INITIALISE PRIVATE ARRAY OF ARRAY OF STRING matrix INITIALLY [[""]]
     END METHOD
@@ -182,13 +182,13 @@ CLASS noodlemap()
 END CLASS
 
 
-CLASS ui()
+CLASS UI()
     INITIALISE PUBLIC STRING sectionName
     INITIALISE PRIVATE STRING contents
     INITIALISE PRIVATE STRING prompt
     INITIALISE PRIVATE DICTIONARY commands
 
-    METHOD ui(section) #this is the constructor
+    METHOD UI(section) #this is the constructor
         SET ME.sectionName = section
     END METHOD
 
@@ -197,7 +197,7 @@ CLASS ui()
             SET ME.contents = contentsText
         END METHOD
 
-        METHOD setCommands(prompt, kwargs AS DICTIONARY) #kwargs is a dictionary of all parameters passed after the first
+        METHOD setCommands(prompt, kwargs AS DICTIONARY)
             ME.prompt = prompt
             FOR EACH key, value IN kwargs
                 SET ME.commands[key.PREDEFINEDFUNCTION.lower()] = value
@@ -228,14 +228,6 @@ END CLASS
 
 
 #on program start 
-INSTANCIATE noodles as new noodlemap object
-INSTANCIATE mainMenu as new ui("mainMenu") object
-mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
-mainMenu.setCommands(Pick option', pathfinder() procedure, returnMap() procedure, help() procedure, quit() procedure)
-mainMenu.showUI()
-
-
-
 checking if program is running from command line arguments or not:
 
 IF length of arguments passed in command line > 1 
@@ -243,9 +235,37 @@ IF length of arguments passed in command line > 1
         INITIALISE domain AS STRING
         SET domain = format startPage argument to domain form
 
-        IF reindex argument = TRUE
-            run the web scraper with parameters 
-            TODO: this
+        IF reindex argument = TRUE 
+            run the web scraper with parameters
+            noodles.loadDatabase(domain)
+            
+            
         END IF
+        
+        SEND noodles.dijkstra(startPage argument, endPage argument) TO DISPLAY
+
+    ELSE IF mode argument = "returnmap"
+        IF reindex argument = TRUE 
+            run the web scraper with parameters
+            noodles.loadDatabase(domain)
+
+        END IF
+
+        noodles.loadDatabase(startPage argument)
+        FOR EACH key and value IN noodles.returnMap()
+            SEND key + ": " + value TO DISPLAY
+        END FOR
+    ELSE
+        SEND "Command not recognised" TO DISPLAY
+        QUIT PROGRAM
+        TODO: this
     END IF
+
+ELSE
+    INSTANCIATE noodles as new Noodlemap object
+    INSTANCIATE mainMenu as new UI("mainMenu") object
+    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
+    mainMenu.setCommands(Pick option', pathfinder() procedure, returnMap() procedure, help() procedure, quit() procedure)
+    mainMenu.showUI()
+
 END IF
