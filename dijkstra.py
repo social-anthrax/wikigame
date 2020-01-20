@@ -427,7 +427,7 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
     endPageArg = args.end
     jumpsArg = args.jumps
 
-    if modeArg == "pathfinder":
+    if modeArg.lower() == "pathfinder":
         domain = startPageArg.replace(
             "https://", "").replace("http://", "").split("/", 1)[0]
 
@@ -436,9 +436,10 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
             executionCheck = scraper.runScrape(startPageArg, jumpsArg)
             while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous funtion seemed to run asynchronously
                 None
+        
         noodles.loadDatabase(domain)
         print(noodles.dijkstra(startPageArg, endPageArg))
-    elif modeArg == "returnmap":
+    elif modeArg.lower() == "returnmap":
         if reindexArg:
             executionCheck = False
             executionCheck = scraper.runScrape(
