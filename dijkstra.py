@@ -8,7 +8,7 @@ import os
 import sys
 import importlib
 import argparse
-import scraper
+import scraper #imports the module called scraper.py that can be found in print out
 import time
 import mysql.connector
 importlib.reload(scraper)
