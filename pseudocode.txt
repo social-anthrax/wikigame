@@ -226,9 +226,94 @@ CLASS UI()
     END REGION
 END CLASS
 
-FUNCTION pathfinder()
-    INITIALISE start as string 
+PROCEDURE pathfinder()
+    INITIALISE start AS STRING
+    INITIALISE end AS STRING
+    INITIALISE domain AS STRING
+
+    RECIEVE start FROM KEYBOARD
+    RECIEVE end FROM KEYBOARD
+
+    IF first character of RECIEVE userInput FROM KEYBOARD = "y"
+        CALL scraper.runScrape(start)
+    END IF
+
+    domain =  format start into domain form
+    CALL noodles.loadDatabase(domain)
+    SEND noodles.dijkstra(start, end) TO DISPLAY
+END PROCEDURE
+
+PROCEDURE clearDatabases()
+    mydb = connect to database
+    execute "SHOW TABLES" and store results in array called result
+    FOR EACH table IN result
+        SEND table TO DISPLAY
+    END FOR
+    GET userCheck FROM KEYBOARD
+    IF first character of userCheck = "y"
+        FOR EACH table IN result
+            SEND "Deleting " + table + "..." TO DISPLAY
+            exectute "Drop table if exists parameter" where parameter is table 
+            SEND table + " deleted"
+        END FOR
+        SEND "All cached Databases deleted." TO DISPLAY
+    ELSE
+        mainMenu.showUI()
+
+    END IF
+    CLOSE CONNECTION
+END PROCEDURE
+
+PROCEDURE sort()
+    SEND "please enter the start page" TO DISPLAY
+    RECIEVE start FROM KEYBOARD 
+    SEND "Would you like to reindex the database? (y/n)" TO DISPLAY
+    if RECIEVE userInput from user = "y":
+        CALL scraper.runScrape(start)
+
+    SET domain = format start into domain form
+    SEND "Loading database..." TO DISPLAY
+    
+    CALL noodles.loadDatabase(domain)
+    SEND "Database loaded." TO DISPLAY
+    SET validInput = False
+    WHILE validInput = False
+        SEND ""Do you wish to write output to file? (y/n)" TO DISPLAY
+        GET write_to_file FROM KEYBOARD
+        IF write_to_file = "y":
+            SET validInput = True
+            SEND "Please input the name of the file you wish to write output to" TO DISPLAY
+            GET writeFileName FROM KEYBOARD
+            SET openedFile = open writeFileName in write mode
+            SEND "Sorting and writing to file." TO DISPLAY
+            IF last 4 characters of writeFileName = ".csv"
+                FOR EACH key AND array in noodles.returnMap()  
+                    CALL openedFile.write(key)
+                    FOR value IN array
+                        write to openedFile ", " + value
+                    END FOR
+                    write to openedFile("\n")
+                    SEND key + ": " array TO DISPLAY
+            ELSE:
+                FOR EACH key AND array IN noodles.returnMap()
+                    write to openedFile key + ": " + array" + newline 
+                    SEND key + ": " + array" TO DISPLAY
+                END FOR
+            END IF
+        ELSE IF write_to_file = "n"
+            SET validInput = True
+            SEND "Sorting and printing to terminal." TO DISPLAY
+            FOR EACH key AND array in noodles.returnMap()
+            SEND key + ": " + array"
+        ELSE:
+            SEND "Please enter valid input." TO DISPLAY
+        END IF
+    SEND "Complete" TO DISPLAY 
+END PROCEDURE
+    
     TODO: THIS
+
+
 
 
 #on program start 
