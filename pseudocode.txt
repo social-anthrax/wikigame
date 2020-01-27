@@ -213,11 +213,11 @@ CLASS UI()
             IF acceptCommands = TRUE
                 RECIEVE userInput FROM KEYBOARD
                 IF userInput IS IN ME.commands
-                    ME.commands[userInput.lower()]() #calls the function with the name at the key of the command dictionary
+                    CALL ME.commands[userInput.lower()]() #calls the function with the name at the key of the command dictionary
                 ELSE 
                     SEND "Please select a valid option." TO DISPLAY
                     WAIT FOR KEY 
-                    ME.showUI()
+                    CALL ME.showUI()
                 END IF
             END IF
         END METHOD 
@@ -225,6 +225,10 @@ CLASS UI()
 
     END REGION
 END CLASS
+
+FUNCTION pathfinder()
+    INITIALISE start as string 
+    TODO: THIS
 
 
 #on program start 
@@ -237,7 +241,7 @@ IF length of arguments passed in command line > 1
 
         IF reindex argument = TRUE 
             run the web scraper with parameters
-            noodles.loadDatabase(domain)
+            CALL noodles.loadDatabase(domain)
             
             
         END IF
@@ -247,25 +251,24 @@ IF length of arguments passed in command line > 1
     ELSE IF mode argument = "returnmap"
         IF reindex argument = TRUE 
             run the web scraper with parameters
-            noodles.loadDatabase(domain)
+            CALL noodles.loadDatabase(domain)
 
         END IF
 
-        noodles.loadDatabase(startPage argument)
+        CALL noodles.loadDatabase(startPage argument)
         FOR EACH key and value IN noodles.returnMap()
             SEND key + ": " + value TO DISPLAY
         END FOR
     ELSE
         SEND "Command not recognised" TO DISPLAY
         QUIT PROGRAM
-        TODO: this
     END IF
 
 ELSE
     INSTANCIATE noodles as new Noodlemap object
     INSTANCIATE mainMenu as new UI("mainMenu") object
-    mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
-    mainMenu.setCommands(Pick option', pathfinder() procedure, returnMap() procedure, help() procedure, quit() procedure)
-    mainMenu.showUI()
+    CALL mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
+    CALL mainMenu.setCommands(Pick option', pathfinder() procedure, returnMap() procedure, help() procedure, quit() procedure)
+    CALL mainMenu.showUI()
 
 END IF
