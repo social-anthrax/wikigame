@@ -27,8 +27,7 @@ CLASS Noodlemap()
         ME.matrix = [["" for x = 0 to cols+count-1] for y = 0 to rows_count -1]
 
         INITIALISE innerLoop AS INTEGER = 0
-        INITIALISE outerLoop as INTEGER = 0
-        
+        INITIALISE outerLoop as INTEGER = 0 
 
         FOR EACH row IN result DO
             SET innerLoop = 0
@@ -37,7 +36,6 @@ CLASS Noodlemap()
                 SET innerLoop = innerLoop + 1
             END FOR
             SET outerLoop = outerLoop + 1
-
         END FOR
 
         FOR index = 0 to rows_count - 1 DO
@@ -51,8 +49,7 @@ CLASS Noodlemap()
         INITIALISE shortest_paths AS DICTIONARY 
         INITIALISE current_noodle AS STRING = initial
         INITIALISE visited AS DEFAULT SET #this is being done as it has a method to check if it contains things
-        
-
+    
         WHILE current_noodle NOT = final_destination DO
             ADD current_noodle TO visited SET
             INITIALISE destinations AS ARRAY INITIALLY ME.edges[current_noodle]
@@ -244,7 +241,7 @@ PROCEDURE pathfinder()
 END PROCEDURE
 
 PROCEDURE clearDatabases()
-    mydb = connect to database
+    mydb = connection to database
     execute "SHOW TABLES" and store results in array called result
     FOR EACH table IN result
         SEND table TO DISPLAY
@@ -311,6 +308,13 @@ PROCEDURE sort()
     SEND "Complete" TO DISPLAY 
 END PROCEDURE
     
+PROCEDURE quit()
+    quit program  
+END PROCEDURE
+
+PROCEDURE help()
+    print help information
+END PROCEDURE
     TODO: THIS
 
 
