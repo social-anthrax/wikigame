@@ -128,7 +128,7 @@ CLASS Noodlemap()
         SET left = ME.mergeSort(left)
         SET right = ME.mergeSort(right)
 
-        return self.Merge(left,right)
+        return ME.Merge(left,right)
     END METHOD
 
     PRIVATE METHOD Merge(left, right)
@@ -161,6 +161,38 @@ CLASS Noodlemap()
         END WHILE
     END METHOD
 
+    METHOD loadCSV(self, filename)
+        SET lines = OPEN filename IN READ MODE
+        SET lines = lines.split(new line)
+
+
+        # as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
+        SET cols_count = 2
+        SET rows_count = len(lines)
+        SET ME.matrix = [["" FOR x = 0 to cols_count - 1]
+                         FOR y = 0 to rows_count - 1]
+
+        SET innerloop = 0  # index of dimension 1
+        SET outerloop = 0  # index of dimension 2
+        FOR EACH singleLine IN lines
+            # makes sure that there is no unnecessary spaces in the csv
+            SET singleLine = singleLine.replace(" ", "")
+            SET innerloop = 0
+            # splits up the two arguments and removes any new line characters.
+            FOR y IN singleLine.split(','):
+                SET ME.matrix[outerloop][innerloop] = y
+                SET innerloop = innerLoop + 1
+            END FOR
+            SET outerloop += 1
+        END FOR
+        FOR index = 0 TO rows_count:
+
+            # adds to the dictionary of edges
+            CALL ME.addEdge(self.__matrix[index][0], self.__matrix[index][1])
+        END FOR
+    END METHOD
+
+
     PRIVATE METHOD insertSort(unsorted_list):
         FOR start_value = 1 to lenght of unsorted_list
             FOR current_value = start_value to 0 STEP -1
@@ -168,7 +200,7 @@ CLASS Noodlemap()
                     IF unsorted_list[current_value][letter] comes before unsorted_list[current_noodle][letter]
                         SWAP unsorted_list[current_value] and unsorted_list[current_value-1]
                         BREAK FOR LOOP
-                    ELSE IF length of unsorted_list[current_value] < length of unsorted_list[current_value - 1] and unsorted_list[current_value][letter] = unsorted_list[current_value][letter] AND letter = smallest value between length of unsorted_list[current_value] and length of unsorted_list[current_value]
+                    ELSE IF length of unsorted_list[current_value] < length of unsorted_list[current_value - 1] and unsorted_list[current_value][letter] = unsorted_list[current_value - 1][letter] AND letter = smallest value between length of unsorted_list[current_value] and length of unsorted_list[current_value]
                         SWAP unsorted_list[current_value] and unsorted_list[current_value-1]
                     END IF
                 END FOR
@@ -180,12 +212,11 @@ END CLASS
 
 
 CLASS UI()
-    INITIALISE PUBLIC STRING sectionName
-    INITIALISE PRIVATE STRING contents
-    INITIALISE PRIVATE STRING prompt
-    INITIALISE PRIVATE DICTIONARY commands
-
     METHOD UI(section) #this is the constructor
+        INITIALISE PUBLIC STRING sectionName
+        INITIALISE PRIVATE STRING contents
+        INITIALISE PRIVATE STRING prompt
+        INITIALISE PRIVATE DICTIONARY commands
         SET ME.sectionName = section
     END METHOD
 
