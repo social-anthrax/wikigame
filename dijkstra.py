@@ -13,7 +13,7 @@ import time
 import mysql.connector
 importlib.reload(scraper)
 # changes the recursion limit as there are a lot of values being modified in the merge sort
-sys.setrecursionlimit(150000)
+sys.setrecursionlimit(500000)
 # endregion
 
 
@@ -236,7 +236,7 @@ class Noodlemap():
     # endregion
 
     # region insertSort
-    # this is a insertion sort as proof of understanding of advanced higher concepts
+    # this is a insertion sort as proof of understanding of advanced higher concepts. This was originally used, but run time was excessive, and i therefore implemented a merge sort (see above). The merge sort was an order of magnitude faster.
     def __insertSort(self, unsorted_list):
         for start_value in range(1, len(unsorted_list)):  # a standard insertion sort
             # moves down from current value bringing it to where it is meant to be
