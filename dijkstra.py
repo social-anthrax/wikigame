@@ -45,7 +45,6 @@ class Noodlemap():
         lines = open(filename, 'r').readlines()
 
         # as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
-
         cols_count = 2
         rows_count = len(lines)
         self.__matrix = [["" for x in range(cols_count)]
