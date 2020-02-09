@@ -348,9 +348,6 @@ PROCEDURE help()
 END PROCEDURE
     TODO: THIS
 
-
-
-
 #on program start 
 checking if program is running from command line arguments or not:
 
