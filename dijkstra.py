@@ -199,7 +199,6 @@ class Noodlemap():
         while len(left) != 0 and len(right) != 0:
             # finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
             for letter in range(0, min(len(left[0]), len(right[0]))):
-
                     # if the letters are the same then the next letter is selected so that they are still alphabetical.
                 # ord gets the ascii value of the letter.
                 if ord(left[0][letter].lower()) < ord(right[0][letter].lower()):
