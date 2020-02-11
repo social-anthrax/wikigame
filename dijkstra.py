@@ -327,7 +327,7 @@ def clearDatabases():
         print(table)
 
     userCheck = input(
-        "\n qAre you sure you want to delete all archived websites (y/n)?    ")
+        "\n Are you sure you want to delete all archived websites (y/n)?    ")
     if userCheck[0].lower() == "y":
         query = "DROP TABLE %s"
         for table in result:
@@ -336,6 +336,7 @@ def clearDatabases():
             print("%s deleted." % (table))
         print("All cached databases deleted.")
     else:
+        mycursor.close()
         mainMenu.showUi()
     mycursor.close()
 
@@ -363,15 +364,15 @@ def sort():
             # if the file is a csv then it will write as if it is a csv
             if writeFileName[-4:] == ".csv":
                 # loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
-                for key, array in noodles.returnMap().items():  # gets the resulting dictionary of the result of the merge sort and then puts the key and array of the key into their respective variable by using the item() predefined procedure
+                #gets the resulting dictionary of the merge sort and then stores the key and array of the key into their respective variable by using item()
+                for key, array in noodles.returnMap().items(): #this loops through the keys in the result of noodles.returnMap() and stores the key's respective array in the array variable.
                     openedFile.write(key)
-                    for value in array:
+                    for value in array: #this loops through the array associated with the key.
                         # puts a comma in to make it a csv
                         openedFile.write(", " + value)
                     openedFile.write("\n")
                     print("%s: %s" % (key, array))
             else:
-
                 for key, array in noodles.returnMap().items():
                     openedFile.write("%s: %s \n" % (key, array))
                     print("%s: %s" % (key, array))
