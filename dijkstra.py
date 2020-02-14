@@ -427,8 +427,7 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
     jumpsArg = args.jumps
 
     if modeArg.lower() == "pathfinder":
-        domain = startPageArg.replace(
-            "https://", "").replace("http://", "").split("/", 1)[0]
+        domain = trimUrl(startPageArg)
 
         if reindexArg:  # runs the scraper and then loads the scraper
             executionCheck = False
@@ -455,7 +454,6 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
         sys.exit()  # quits program
 
 else:
-
     noodles = Noodlemap()
     mainMenu = UI("MainMenu")  # instantiates UI object
     mainMenu.setContents(
