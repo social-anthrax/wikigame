@@ -277,7 +277,7 @@ PROCEDURE clearDatabases()
     FOR EACH table IN result
         SEND table TO DISPLAY
     END FOR
-    GET userCheck FROM KEYBOARD
+    RECIEVE userCheck FROM KEYBOARD
     IF first character of userCheck = "y"
         FOR EACH table IN result
             SEND "Deleting " + table + "..." TO DISPLAY
@@ -307,7 +307,7 @@ PROCEDURE sort()
     SET validInput = False
     WHILE validInput = False
         SEND ""Do you wish to write output to file? (y/n)" TO DISPLAY
-        GET write_to_file FROM KEYBOARD
+        RECIEVE write_to_file FROM KEYBOARD
         IF write_to_file = "y":
             SET validInput = True
             SEND "Please input the name of the file you wish to write output to" TO DISPLAY
@@ -387,5 +387,104 @@ ELSE
     CALL mainMenu.setContents('Welcome to PathFinder! To see help, type: help \n Options: \n pathfinder: Finds a path between two URLs \n ReturnMap: View all found links.')
     CALL mainMenu.setCommands(Pick option', pathfinder() procedure, returnMap() procedure, help() procedure, quit() procedure)
     CALL mainMenu.showUI()
-
 END IF
+______________________________________________________________________
+
+SCRAPER 
+
+PROCEDURE runScrape(page="", jumps = 0):  # like runescape but not
+    #checks if the max number of jumps has been modified from the default value
+    IF jumps = 0
+        SET validInput = False
+        WHILE validInput == False:
+            SEND "Please input the max number of jumps to be performed by the scraper" TO DISPLAY
+            RECIEVE jumps FROM KEYBOARD
+            TRY:
+                tries to convert the user input to an integer. If a type error occurs then the input was not an integer and need to be recieved from user again
+                convert jumps to int 
+                SET validInput = True
+            EXCEPT ValueError:
+                SET validInput = False
+                SEND "Please input a valid positive integer." TO DISPLAY
+            END TRY
+    ELSE
+        SET jumps = 5 #changes it to what is seen as a reasonable default value
+    END IF
+    #checks if the page has been passed as a parameter and if it hasnt then 
+    IF page = "": 
+        SET website = input("Please input the website you wish to scrape: ")
+    ELSE:
+        SET website = page
+    END IF
+
+    # trims away anything that trails the first / and all references to http or https making it into a domain
+    domain = website.replace(
+        "https://", "").replace("http://", "").split("/", 1)[0]
+
+
+
+    PASS ALL REQUIRED START UP INFORMATION TO SCRAPER.
+    CONNECT TO DATABASE
+
+    # drops the table if it already exists
+    EXECUTE "DROP TABLE IF EXISTS `parameter`;" where parameter = domain 
+
+    # creates a table with the name of the domain being scraped.
+    execute(
+        "CREATE TABLE `parameter`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL);" where parameter = domain
+    
+    
+    # backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
+    query = "INSERT INTO `"+ domain + "` VALUES (NULL, parameter, parameter);"
+
+    #this is so that any values that have the domain appended later will also contain the domains transfer protocol
+    IF "https://" in website:
+        domain = "https://" + domain
+    ELSE IF "http://" in website:
+        domain = "http://" + domain
+    END IF
+    SEND "Writing to database" TO DISPLAY
+
+    FOR EACH originURL, hyperlinks IN dictOfUrl
+        FOR EACH item IN hyperlinks 
+            IF item != "" AND item != "/"
+                IF len(item) > 1 OR "http" IN item: #ignores all anchor links
+                    IF "http" in item 
+                        SET queryParameters = (originURL, item,)
+                        EXECUTE query with parameter=queryParameters
+                    #if http is not in the item and # is not the first char we can assume that it is a relative link
+                    ELSE IF item[0] != '#' and item[0] == "/" 
+                        SET queryParameters = (originURL, domain+item,) #appends the domain name to relative paths
+                        #actually executes the sql statement with the parameters place of %s. This method also removes any sql injection attempts
+                        EXECUTE query with parameter=queryParameters  
+                    ELSE IF item != '#'
+                        SET queryParameters = (originURL, domain+'/'+item,) #appends the domain name and a slash to relative paths that are using interactive link. Seems to be rare but some websites do have it
+                        EXECUTE query with parameter=queryParameters 
+                    END IF
+                END IF
+            END IF
+        END FOR
+    END FOR
+
+    CLOSE DATABASE CONNECTION
+END PROCEDURE
+    
+ 
+legacy code for when output was to a file
+    SET file = open "test.txt" in write mode
+    FOR x, y in dictOfUrl:    
+        file.write(x+", {")
+        FOR item in y:
+            IF item != "" and item != "/":
+                IF item[0] == "/" or "http" in item:
+                    IF "http" not in item:
+                        file.write(item.replace('//', '') + ", ")
+                    ELSE:
+                        file.write(item + ", ")
+                    END IF
+                END IF
+            END IF
+        END FOR
+        file.write("}\n")
+    END FOR
+    file.close()
