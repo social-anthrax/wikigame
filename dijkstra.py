@@ -399,11 +399,12 @@ def trimUrl(url):
 
 
 def help():
+    cls()
     # TODO please for the love of god do this
-    print("""\nPathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
-ReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
-DeleteTables: This will delete all the cached URLs on this system.
-The reindex option is used to rescrape a webpage. It clears all previously scraped data off the domain.""")
+    print("""Pathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
+\nReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
+\nDeleteTables: This will delete all the cached URLs on this system.
+\nThe reindex option is used to rescrape a webpage. It clears all previously scraped data off the domain.""")
 # endregion
 
 
