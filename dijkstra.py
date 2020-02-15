@@ -3,14 +3,17 @@
 # 120942514
 
 # region imports and set up
-from collections import defaultdict
+import argparse
+import importlib
 import os
 import sys
-import importlib
-import argparse
-import scraper #imports the module called scraper.py that can be found in print out
 import time
+from collections import defaultdict
+
 import mysql.connector
+
+import scraper  # imports the module called scraper.py that can be found in print out
+
 importlib.reload(scraper)
 # changes the recursion limit as there are a lot of values being modified in the merge sort
 sys.setrecursionlimit(500000)
@@ -21,9 +24,6 @@ def cls():  # allows the clearing of the terminal so that things can be displaye
     # checks for OS type and then uses appropriate clear command for said OS
     os.system('cls' if os.name == 'nt' else 'clear')
 # now, to clear the screen all you need to type is: cls()
-
-# import scraper.py
-
 
 class Noodlemap():
     # region declaration
@@ -400,7 +400,10 @@ def trimUrl(url):
 
 def help():
     # TODO please for the love of god do this
-    print("no")
+    print("""\nPathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
+ReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
+DeleteTables: This will delete all the cached URLs on this system.
+The reindex option is used to rescrape a webpage. It clears all previously scraped data off the domain.""")
 # endregion
 
 
