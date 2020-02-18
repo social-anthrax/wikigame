@@ -9,16 +9,19 @@ import os
 import sys
 import time
 from collections import defaultdict
-
 import mysql.connector
-
 import scraper  # imports the module called scraper.py that can be found in print out
+
 
 importlib.reload(scraper)
 # changes the recursion limit as there are a lot of values being modified in the merge sort
 sys.setrecursionlimit(500000)
 # endregion
 
+#this loads in the credentials for the database.
+credentials = open("credentials.txt", "r").readlines()
+username = credentials[0].strip().split("=")[1].replace(" ", "")
+password = credentials[1].strip().split("=")[1].replace(" ", "")
 
 def cls():  # allows the clearing of the terminal so that things can be displayed cleanly
     # checks for OS type and then uses appropriate clear command for said OS
@@ -69,13 +72,20 @@ class Noodlemap():
                            [0], self.__matrix[index][1])
 
     def loadDatabase(self, tableName):  # loads a database table into the edges dictionary
-        mydb = mysql.connector.connect(  # connects to database
-            host="localhost",
-            user="test",
-            password="test",
-            database='websites',
-            auth_plugin='mysql_native_password'
-        )
+        try:
+            mydb = mysql.connector.connect(  # connects to database
+                host="localhost",
+                user= username,
+                password= password,
+                database='websites',
+                auth_plugin='mysql_native_password'
+            )
+        except mysql.connector.InterfaceError:
+            print("""The connection to the database has been unsuccesful.
+Please make sure the sql server is running, and the database has been initiallised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+            quit()
+        #TODO: put this everywhere
         mycursor = mydb.cursor()
         time.sleep(.25)
         domain = tableName.replace(
@@ -170,7 +180,8 @@ class Noodlemap():
 
     # region mergeSort
 
-    def __mergeSort(self, array):  # this is the python implementation of the pseudocode for the top down implementation of a __Merge sort on https://en.wikipedia.org/wiki/Merge_sort
+    def __mergeSort(self, array):
+        """this is the python implementation of the pseudocode for the top down implementation of a __Merge sort on https://en.wikipedia.org/wiki/Merge_sort"""
         if len(array) <= 1:
             return array
 
@@ -290,8 +301,8 @@ class UI():
                 self.__commands[userInput.lower()]()
             else:
                 print("Please select a valid option.")
-                input()  # waits for user to press enter to continue
-                self.showUi()
+                input()  # waits for user usernamess enter to continue
+                self.showUi() #calls itself to display 
 
 
 # the procedures bellow simplify the processes
@@ -310,13 +321,19 @@ def pathfinder():
 
 
 def clearDatabases():
-    mydb = mysql.connector.connect(  # connects to database
-        host="localhost",
-        user="test",
-        password="test",
-        database='websites',
-        auth_plugin='mysql_native_password'
-    )
+    try:
+        mydb = mysql.connector.connect(  # connects to database
+                    host="localhost",
+                    user=username,
+                    password=password,
+                    database='websites',
+                    auth_plugin='mysql_native_password'
+                )
+    except mysql.connector.InterfaceError:
+        print("""The connection to the database has been unsuccesful.
+Please make sure the sql server is running, and the database has been initiallised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+        quit()
     mycursor = mydb.cursor()
 
     query = "SHOW TABLES"
@@ -388,7 +405,6 @@ def sort():
 
 def quit():
     print("Exiting")
-    input()
     sys.exit()  # quits program
 
 

@@ -1,3 +1,9 @@
+#this loads in the credentials for the database.
+credentials = open("credentials.txt", "r").readlines()
+username = credentials[0].strip().split("=")[1].replace(" ", "")
+password = credentials[1].strip().split("=")[1].replace(" ", "")
+
+
 # from scrapy.spiders import CrawlSpider, Rule
 # from scrapy.linkextractors import LinkExtractor
 import mysql.connector
@@ -77,13 +83,19 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     process.stop()
     #endregion
     #region database setup
-    mydb = mysql.connector.connect( #connect to database as user test.
-        host="localhost",
-        user="test",
-        password="test",
-        database='websites',
-        auth_plugin='mysql_native_password'
-    )
+    try:
+        mydb = mysql.connector.connect(  # connects to database
+                host="localhost",
+                user=username,
+                password=password,
+                database='websites',
+                auth_plugin='mysql_native_password'
+            )
+    except mysql.connector.InterfaceError:
+        print("""The connection to the database has been unsuccesful.
+Please make sure the sql server is running, and the database has been initiallised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+        sys.exit()
     mycursor = mydb.cursor() #initiallises cursor so that commands can be sent
 
     # drops the table if it already exists
