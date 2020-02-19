@@ -392,7 +392,7 @@ def sort():
             else:
                 for key, array in noodles.returnMap().items():
                     openedFile.write("%s: %s \n" % (key, array))
-                    print("%s: %s" % (key, array))
+                    print("%s : %s" % (key, array))
         elif write_to_file == "n":
             validInput = True
             print("Sorting and printing to terminal.")
