@@ -1,16 +1,13 @@
-#this loads in the credentials for the database.
-credentials = open("credentials.txt", "r").readlines()
-username = credentials[0].strip().split("=")[1].replace(" ", "")
-password = credentials[1].strip().split("=")[1].replace(" ", "")
-
-
-# from scrapy.spiders import CrawlSpider, Rule
-# from scrapy.linkextractors import LinkExtractor
 import mysql.connector
 from collections import defaultdict
 import time
 import scrapy
 from scrapy.crawler import CrawlerProcess
+import sys
+#this loads in the credentials for the database.
+credentials = open("credentials.txt", "r").readlines()
+username = credentials[0].strip().split("=")[1].replace(" ", "")
+password = credentials[1].strip().split("=")[1].replace(" ", "")
 
 website = ""
 domain = ""
