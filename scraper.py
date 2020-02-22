@@ -41,7 +41,7 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
 
 
 def runScrape(page="", jumps = 0):  # like runescape but not
-    if jumps == 0: #checks if the max number of jumps has been modified from the default value
+    if jumps <= 0: #checks if the max number of jumps has been modified from the default value
         validInput = False
         while validInput == False:
             jumps = input("Please input the max number of jumps to be performed by the scraper \n")
@@ -51,8 +51,6 @@ def runScrape(page="", jumps = 0):  # like runescape but not
             except ValueError:
                 validInput = False
                 print("Please input a valid positive integer.")
-    else:
-        jumps = 5 #changes it to what is seen as a reasonable default value
 
 
     if page == "": #checks if the page has been passed as a parameter and if it hasnt then excecutes the following code
