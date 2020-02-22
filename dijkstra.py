@@ -85,11 +85,16 @@ class Noodlemap():
 Please make sure the sql server is running, and the database has been initiallised.
 To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
             quit()
-        #TODO: put this everywhere
         mycursor = mydb.cursor()
         time.sleep(.25)
-        domain = tableName.replace(
-            "https://", "").replace("http://", "").split("/", 1)[0]
+        domain = trimUrl(tableName)
+
+        #checks if the table exists
+        result = mycursor.execute("Show tables") #returns none if there are absolutley no tables in the database
+        if result == None or domain not in result: #during testing it was found that just domain not in result would not work if there were no tables in the database as result would simply be none, and not an array
+            print("The table you have entered does not exist. Please try again")
+            quit()
+            
 
         # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
         query = "SELECT OriginURL, Hyperlink FROM `%s`"
@@ -172,7 +177,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         if sort == True:
             sorted_list = defaultdict(list)
             # populates dictionary with values using now sorted keys
-            for key in self.__mergeSort(unsorted_list):
+            for key in self.__mergeSort(unsorted_list): #__insertSort(unsorted_list): #to use insert sort uncomment this and remove __mergesort(unsorted_list)
                 sorted_list[key] = self.__edges[key]
             return sorted_list
         else:
@@ -339,6 +344,11 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     query = "SHOW TABLES"
     mycursor.execute(query)
     result = mycursor.fetchall()
+    if len(result) == 0:
+        print("There are no websites cached on this system")
+        mycursor.close()
+        quit()
+        
     print("Found webpages:")
     for table in result:
         print(table)
@@ -357,6 +367,44 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         mainMenu.showUi()
     mycursor.close()
 
+
+def testingSort():
+    noodles.loadCSV("unitMap.csv")
+    validInput = False
+    while validInput == False:
+        write_to_file = input("Do you wish to write output to file? (y/n) \n")
+        cls()  # clears screen
+        if write_to_file.lower() == "y":
+            validInput = True
+            writeFileName = input(
+                "Please input the name of the file you wish to write output to \n")
+            openedFile = open(writeFileName, "w")
+            print("Sorting and writing to file.")
+            # if the file is a csv then it will write as if it is a csv
+            if writeFileName[-4:] == ".csv":
+                # loops through the dictionary printing the key followed by a comma and then appends the values stored at that key
+                #gets the resulting dictionary of the merge sort and then stores the key and array of the key into their respective variable by using item()
+                # this loops through the keys in the result of noodles.returnMap() and stores the key's respective array in the array variable.
+                for key, array in noodles.returnMap().items():
+                    openedFile.write(key)
+                    for value in array:  # this loops through the array associated with the key.
+                        # puts a comma in to make it a csv
+                        openedFile.write(", " + value)
+                    openedFile.write("\n")
+                    print("%s: %s" % (key, array))
+            else:
+                for key, array in noodles.returnMap().items():
+                    openedFile.write("%s: %s \n" % (key, array))
+                    print("%s : %s" % (key, array))
+        elif write_to_file == "n":
+            validInput = True
+            print("Sorting and printing to terminal.")
+            sortedDict = noodles.returnMap()
+            for key, array in sortedDict.items():
+                print("%s: %s" % (key, array))
+        else:
+            print("Please enter valid input.")
+    print("\n Complete")
 
 def sort():
     start = input("Please enter the start page. \n")
