@@ -46,7 +46,6 @@ class Noodlemap():
     # currently used for loading a .csv instead of a database for testing purposes.
     def loadCSV(self, filename):
         lines = open(filename, 'r').readlines()
-
         # as python variables are hard typed, this is declaring a 2d array populated entirely by zeros
         cols_count = 2
         rows_count = len(lines)
@@ -90,8 +89,9 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         domain = trimUrl(tableName)
 
         #checks if the table exists
-        result = mycursor.execute("Show tables") #returns none if there are absolutley no tables in the database
-        if result == None or domain not in result: #during testing it was found that just domain not in result would not work if there were no tables in the database as result would simply be none, and not an array
+        mycursor.execute("Show tables") #returns none if there are absolutley no tables in the database
+        result = mycursor.fetchall()
+        if result == None or (domain,) not in result: #during testing it was found that just domain not in result would not work if there were no tables in the database as result would simply be none, and not an array
             print("The table you have entered does not exist. Please try again")
             quit()
             
@@ -303,7 +303,7 @@ class UI():
         if acceptCommands == True:
             userInput = input(self.__prompt + "   ")
             if userInput.lower() in self.__commands:
-                self.__commands[userInput.lower()]()
+                self.__commands[userInput.lower()]() #the value stored at this key is a reference to a procedure, so if wee simply add () after it, the procedure is called.
             else:
                 print("Please select a valid option.")
                 input()  # waits for user usernamess enter to continue
@@ -478,7 +478,7 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
     parser.add_argument(
         '--mode', help='The mode that the program will be run in. Can either be returnmap or pathfinder')
     parser.add_argument(
-        '--reindex', help='Reindex domain', type=bool, default=False)
+        '--reindex', help='Reindex domain', action="store_true")
     parser.add_argument(
         '--start', help='Page to start the scraper/pathfinder at.')
     parser.add_argument('--end', help='End page of the pathfinder', default='')
