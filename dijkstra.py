@@ -309,7 +309,7 @@ class UI():
                 input()  # waits for user usernamess enter to continue
                 self.showUi() #calls itself to display 
 
-
+    #endregion
 # the procedures bellow simplify the processes
 # region simplification
 
