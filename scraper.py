@@ -45,9 +45,11 @@ def runScrape(page="", jumps = 0):  # like runescape but not
         validInput = False
         while validInput == False:
             jumps = input("Please input the max number of jumps to be performed by the scraper \n")
-            try:
+            try: #we only check if the user is inputting text here as the terminal only system checks automatically
                 int(jumps) #tries to convert the user input to an integer. If a type error occurs then the input was not an integer and need to be recieved from user again
-                validInput = True
+                if int(jumps) > 0 and int(jumps)%1 == 0:
+                    validInput = True
+                    print("Please input a valid positive integer.")
             except ValueError:
                 validInput = False
                 print("Please input a valid positive integer.")
