@@ -80,8 +80,8 @@ class Noodlemap():
                 auth_plugin='mysql_native_password'
             )
         except mysql.connector.InterfaceError:
-            print("""The connection to the database has been unsuccesful.
-Please make sure the sql server is running, and the database has been initiallised.
+            print("""The connection to the database has been unsuccessful.
+Please make sure the sql server is running, and the database has been initialised.
 To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
             quit()
         mycursor = mydb.cursor()
@@ -89,7 +89,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         domain = trimUrl(tableName)
 
         #checks if the table exists
-        mycursor.execute("Show tables") #returns none if there are absolutley no tables in the database
+        mycursor.execute("Show tables") #returns none if there are absolutely no tables in the database
         result = mycursor.fetchall()
         if result == None or (domain,) not in result: #during testing it was found that just domain not in result would not work if there were no tables in the database as result would simply be none, and not an array
             print("The table you have entered does not exist. Please try again")
@@ -159,8 +159,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
             if not possible_noodle:  # if the next possible nodes is empty
                 return "No route can be found from %s to %s" % (initial, final_destination)
             # finds all of the values looping through k as index and finding what is stored at index 1
-            current_noodle = min(
-                possible_noodle, key=lambda k: possible_noodle[k][1])
+            current_noodle = min(possible_noodle, key=lambda k: possible_noodle[k][1])
 
         path = []  # initialises an list/array
         while current_noodle is not None:
@@ -210,7 +209,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         return self.__merge(left, right)
 
     def __merge(self, left, right):
-        result = []  # initallises empty array
+        result = []  # initialises empty array
 
         while len(left) != 0 and len(right) != 0:
             # finds the lowest length of the two URLs and loops for that amount so to not go over the limit.
@@ -250,7 +249,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     # endregion
 
     # region insertSort
-    # this is a insertion sort as proof of understanding of advanced higher concepts. This was originally used, but run time was excessive, and i therefore implemented a merge sort (see above). The merge sort was an order of magnitude faster.
+    # this is a insertion sort as proof of understanding of advanced higher concepts. This was originally used, but run time was excessive, and I therefore implemented a merge sort (see above). The merge sort was an order of magnitude faster.
     def __insertSort(self, unsorted_list):
         for start_value in range(1, len(unsorted_list)):  # a standard insertion sort
             # moves down from current value bringing it to where it is meant to be
@@ -306,7 +305,7 @@ class UI():
                 self.__commands[userInput.lower()]() #the value stored at this key is a reference to a procedure, so if wee simply add () after it, the procedure is called.
             else:
                 print("Please select a valid option.")
-                input()  # waits for user usernamess enter to continue
+                input()  # waits for user usernames enter to continue
                 self.showUi() #calls itself to display 
 
     #endregion
@@ -317,8 +316,16 @@ def pathfinder():
     start = input(
         "Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
-    if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
-        scraper.runScrape(start)
+    valid = False
+    while not valid:
+        userInput = input("Would you like to reindex the database? (y/n) \n")[0].lower() 
+        if userInput == "y":
+            scraper.runScrape(start)
+            valid = True
+        elif userInput == "n":
+            valid = True
+        else:
+            print("Please input a valid option")
     domain = trimUrl(start)
 
     noodles.loadDatabase(domain)
@@ -335,8 +342,8 @@ def clearDatabases():
                     auth_plugin='mysql_native_password'
                 )
     except mysql.connector.InterfaceError:
-        print("""The connection to the database has been unsuccesful.
-Please make sure the sql server is running, and the database has been initiallised.
+        print("""The connection to the database has been unsuccessful.
+Please make sure the sql server is running, and the database has been initialised.
 To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
         quit()
     mycursor = mydb.cursor()
@@ -457,8 +464,9 @@ def quit():
 
 
 def trimUrl(url):
+    '''This code snippet formats a URL to be in domain form'''
     domain = url.replace(
-        "https://", "").replace("http://", "").split("/", 1)[0]  # this firstly removes and instances of https:// or http://. Then it splits the string into an 2 array where the first element is the domain and the second is anythin after the first /. then the first element is taken
+        "https://", "").replace("http://", "").split("/", 1)[0]  # this firstly removes and instances of https:// or http://. Then it splits the string into an 2 array where the first element is the domain and the second is anything after the first /. then the first element is taken
     return(domain)
 
 
@@ -467,7 +475,7 @@ def help():
     print("""Pathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
 \nReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
 \nDeleteTables: This will delete all the cached URLs on this system.
-\nThe reindex option is used to rescrape a webpage. It clears all previously scraped data off the domain.""")
+\nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.""")
 # endregion
 
 
@@ -499,7 +507,7 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
         if reindexArg:  # runs the scraper and then loads the scraper
             executionCheck = False
             executionCheck = scraper.runScrape(startPageArg, jumpsArg)
-            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous funtion seemed to run asynchronously
+            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous function seemed to run asynchronously
                 None
         
         noodles.loadDatabase(domain)
@@ -509,7 +517,7 @@ if len(sys.argv) > 1:  # if there are more than two command line arguments inclu
             executionCheck = False
             executionCheck = scraper.runScrape(
                 startPageArg, jumpsArg)  # returns true when finished
-            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous funtion seemed to run asynchronously
+            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous function seemed to run asynchronously
                 None
         cls()
         noodles.loadDatabase(startPageArg)
