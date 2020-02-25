@@ -415,8 +415,17 @@ def testingSort():
 
 def sort():
     start = input("Please enter the start page. \n")
-    if input("Would you like to reindex the database? (y/n) \n")[0].lower() == "y":
-        scraper.runScrape(start)
+    valid = False
+    while not valid:
+        userInput = input("Would you like to reindex the database? (y/n) \n")[0].lower() 
+        if userInput == "y":
+            scraper.runScrape(start)
+            valid = True
+        elif userInput == "n":
+            valid = True
+        else:
+            print("Please input a valid option")
+    
 
     domain = trimUrl(start)
     print("Loading database...")
