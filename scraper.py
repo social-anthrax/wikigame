@@ -33,11 +33,17 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
 
     def parse(self, response):
         for next_page in response.css('a::attr(href)'):
-            
-            dictOfUrl[response.url].append(str(next_page.root)) #appends the found URL to the key which is the webpage it was found on
+            #this allows for the scraper to create absolute links from relative links
+            slashCounter = str(next_page.root).count("../") #this is checking how many directories up the link goes
+            if slashCounter > 0: #if it is relative.
+                #splits the pages url by "/" from the right. The slashcounter + 1 is due to the first slash on the right just being the current directory and we want to move up one. 
+                #the first item will be the trimmed URL to append to the relative link.
+                #we multiply the slash counter by 3 as there are 3 characters in "../" we take away one as we want to keep the last "/" so we dont have to insert one ourselves
+                #appends the found URL to the key which is the webpage it was found on
+                dictOfUrl[response.url].append(response.url.rsplit("/", slashCounter + 1)[0] + str(next_page.root)[(3*slashCounter) - 1:])
+            else:
+                dictOfUrl[response.url].append(str(next_page.root))
             yield response.follow(next_page, self.parse)
-
-        
 
 
 def runScrape(page="", jumps = 0):  # like runescape but not
