@@ -34,7 +34,7 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
     def parse(self, response):
         for next_page in response.css('a::attr(href)'):
             
-            dictOfUrl[response.url].append(str(next_page.root)) #appends the found url to the jey which is the webpage it was found on
+            dictOfUrl[response.url].append(str(next_page.root)) #appends the found URL to the key which is the webpage it was found on
             yield response.follow(next_page, self.parse)
 
         
@@ -46,7 +46,7 @@ def runScrape(page="", jumps = 0):  # like runescape but not
         while validInput == False:
             jumps = input("Please input the max number of jumps to be performed by the scraper \n")
             try: #we only check if the user is inputting text here as the terminal only system checks automatically
-                int(jumps) #tries to convert the user input to an integer. If a type error occurs then the input was not an integer and need to be recieved from user again
+                int(jumps) #tries to convert the user input to an integer. If a type error occurs then the input was not an integer and need to be received from user again
                 if int(jumps) > 0 and int(jumps)%1 == 0:
                     validInput = True
                     print("Please input a valid positive integer.")
@@ -55,7 +55,7 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                 print("Please input a valid positive integer.")
 
 
-    if page == "": #checks if the page has been passed as a parameter and if it hasnt then excecutes the following code
+    if page == "": #checks if the page has been passed as a parameter and if it hasn't then executes the following code
         website = input("Please input the website you wish to scrape: ")
     else:
         website = page
@@ -89,15 +89,15 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                 auth_plugin='mysql_native_password'
             )
     except mysql.connector.InterfaceError:
-        print("""The connection to the database has been unsuccesful.
-Please make sure the sql server is running, and the database has been initiallised.
+        print("""The connection to the database has been unsuccessful.
+Please make sure the sql server is running, and the database has been initialised.
 To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
         sys.exit()
-    mycursor = mydb.cursor() #initiallises cursor so that commands can be sent
+    mycursor = mydb.cursor() #initialises cursor so that commands can be sent
 
     # drops the table if it already exists
     mycursor.execute("DROP TABLE IF EXISTS `%s`;" % domain)
-    time.sleep(.25) #sleeps the thread as the delation actually overlaps with the creation
+    time.sleep(.25) #sleeps the thread as the deletion actually overlaps with the creation
 
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
@@ -106,7 +106,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     mydb.commit()
     #endregion
 
-    # backticks are used so that any character can be accepted aka the . in the url. The surrounding '' are used so that mysql doesnt mistake them for table references
+    # backticks are used so that any character can be accepted aka the . in the URL. The surrounding '' are used so that mysql doesn't mistake them for table references
     query = "INSERT INTO `"+ domain + "` VALUES (NULL, %s, %s);"
 
     #this is so that any values that have the domain appended later will also contain the domains transfer protocol
