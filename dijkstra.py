@@ -313,8 +313,7 @@ class UI():
 # region simplification
 
 def pathfinder():
-    start = input(
-        "Please input The webpage you wish the path to begin with. \n")
+    start = input("Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
     valid = False
     while not valid:
