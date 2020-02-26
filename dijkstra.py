@@ -16,12 +16,12 @@ import scraper  # imports the module called scraper.py that can be found in prin
 importlib.reload(scraper)
 # changes the recursion limit as there are a lot of values being modified in the merge sort
 sys.setrecursionlimit(500000)
-# endregion
 
 #this loads in the credentials for the database.
 credentials = open("credentials.txt", "r").readlines()
 username = credentials[0].strip().split("=")[1].replace(" ", "")
 password = credentials[1].strip().split("=")[1].replace(" ", "")
+# endregion
 
 def cls():  # allows the clearing of the terminal so that things can be displayed cleanly
     # checks for OS type and then uses appropriate clear command for said OS
@@ -342,9 +342,7 @@ def clearDatabases():
                     auth_plugin='mysql_native_password'
                 )
     except mysql.connector.InterfaceError:
-        print("""The connection to the database has been unsuccessful.
-Please make sure the sql server is running, and the database has been initialised.
-To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+        print("""The connection to the database has been unsuccessful. \nPlease make sure the sql server is running, and the database has been initialised. \nTo initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
         quit()
     mycursor = mydb.cursor()
 
@@ -412,6 +410,7 @@ def testingSort():
         else:
             print("Please enter valid input.")
     print("\n Complete")
+
 
 def sort():
     start = input("Please enter the start page. \n")
