@@ -126,6 +126,9 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         for item in hyperlinks:
             if item != "" and item != "/":
                 if len(item) > 1 or "http" in item: #ignores all anchor links
+                    if item[-1] == "/": #removes any trailing slashes.
+                        item = item[:-1]
+
                     if "http" in item:
                         queryParameters = (
                             originURL, item,)
