@@ -304,7 +304,7 @@ class UI():
             if userInput.lower() in self.__commands:
                 self.__commands[userInput.lower()]() #the value stored at this key is a reference to a procedure, so if wee simply add () after it, the procedure is called.
             else:
-                print("Please select a valid option.")
+                print("Please select a valid option. Press enter to continue ")
                 input()  # waits for user usernames enter to continue
                 self.showUi() #calls itself to display 
 
@@ -315,6 +315,12 @@ class UI():
 def pathfinder():
     start = input("Please input The webpage you wish the path to begin with. \n")
     end = input("Please input the webpage you wish the path to terminate at. \n")
+    if start[-1] == "/":
+        start = start[:-1]
+    
+    if end[-1] == "/":
+        end = end[:-1]
+
     valid = False
     while not valid:
         userInput = input("Would you like to reindex the database? (y/n) \n")[0].lower() 
