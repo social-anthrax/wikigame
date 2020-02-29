@@ -115,6 +115,9 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     # backticks are used so that any character can be accepted aka the . in the URL. The surrounding '' are used so that mysql doesn't mistake them for table references
     query = "INSERT INTO `"+ domain + "` VALUES (NULL, %s, %s);"
 
+    if domain[-1] == "/": #this removes a trailing slash at the end of URLs
+        domain = domain[:-1]
+
     #this is so that any values that have the domain appended later will also contain the domains transfer protocol
     if "https://" in website:
         domain = "https://" + domain
@@ -123,6 +126,8 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     print("Writing to database")
 
     for originURL, hyperlinks in dictOfUrl.items():
+        if originURL[-1] == "/":
+            originURL = originURL[:-1]
         for item in hyperlinks:
             if item != "" and item != "/":
                 if len(item) > 1 or "http" in item: #ignores all anchor links
@@ -142,8 +147,12 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
                     elif item != '#':
                         queryParameters = (originURL, domain+'/'+item,) #appends the domain name and a slash to relative paths that are using interactive link. Seems to be rare but some websites do have it
                         mycursor.execute(query, queryParameters)  
-
                     mydb.commit() #commits the changes to the database
+                elif item == "/": #this is to make sure that a / redirects to the home page.
+                    queryParameters = (originURL, domain)
+                    mycursor.execute(query, queryParameters)
+                    mydb.commit()
+
     mycursor.close()
     mydb.close()
     return True #this is done so that there can be confirmation that the program has stopped running as problems arose due to seeming asynchronous execution of select statements while values were being inserted
