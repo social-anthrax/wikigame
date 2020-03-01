@@ -1,6 +1,6 @@
 # Maksim Livingstone
 # AH project
-# 120942514
+# SCN: 120942514
 
 # region imports and set up
 import argparse

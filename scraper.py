@@ -1,3 +1,7 @@
+# Maksim Livingstone
+# AH project
+# SCN: 120942514
+
 import mysql.connector
 from collections import defaultdict
 import time
