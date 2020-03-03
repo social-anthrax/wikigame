@@ -491,61 +491,61 @@ def help():
 \nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.""")
 # endregion
 
-
-noodles = Noodlemap()
-if len(sys.argv) > 1:  # if there are more than two command line arguments including the name of the program then start in command line mode
-    # using --help automatically shows the usage of these commands making it more user friendly and accessible
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--mode', help='The mode that the program will be run in. Can either be returnmap or pathfinder')
-    parser.add_argument(
-        '--reindex', help='Reindex domain', action="store_true")
-    parser.add_argument(
-        '--start', help='Page to start the scraper/pathfinder at.')
-    parser.add_argument('--end', help='End page of the pathfinder', default='')
-    parser.add_argument(
-        '--jumps', help='Number of jumps for the scraper to make.', default=0, type=int)
-    args = parser.parse_args()
-
-    # sets the values of the variables to the arguments passed from command line
-    modeArg = args.mode
-    reindexArg = args.reindex
-    startPageArg = args.start
-    endPageArg = args.end
-    jumpsArg = args.jumps
-
-    if modeArg.lower() == "pathfinder":
-        domain = trimUrl(startPageArg)
-
-        if reindexArg:  # runs the scraper and then loads the scraper
-            executionCheck = False
-            executionCheck = scraper.runScrape(startPageArg, jumpsArg)
-            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous function seemed to run asynchronously
-                None
-        
-        noodles.loadDatabase(domain)
-        print(noodles.dijkstra(startPageArg, endPageArg))
-    elif modeArg.lower() == "returnmap":
-        if reindexArg:
-            executionCheck = False
-            executionCheck = scraper.runScrape(
-                startPageArg, jumpsArg)  # returns true when finished
-            while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous function seemed to run asynchronously
-                None
-        cls()
-        noodles.loadDatabase(startPageArg)
-
-        for key, array in noodles.returnMap().items():
-            print("%s: %s" % (key, array))
-    else:
-        print("Command not recognised")
-        sys.exit()  # quits program
-
-else:
+if __name__ == "__main__":
     noodles = Noodlemap()
-    mainMenu = UI("MainMenu")  # instantiates UI object
-    mainMenu.setContents(
-        'Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
-    mainMenu.setCommands('Pick option', pathfinder=pathfinder,
-                         returnMap=sort, deleteTables=clearDatabases, help=help, quit=quit)
-    mainMenu.showUi()
+    if len(sys.argv) > 1:  # if there are more than two command line arguments including the name of the program then start in command line mode
+        # using --help automatically shows the usage of these commands making it more user friendly and accessible
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '--mode', help='The mode that the program will be run in. Can either be returnmap or pathfinder')
+        parser.add_argument(
+            '--reindex', help='Reindex domain', action="store_true")
+        parser.add_argument(
+            '--start', help='Page to start the scraper/pathfinder at.')
+        parser.add_argument('--end', help='End page of the pathfinder', default='')
+        parser.add_argument(
+            '--jumps', help='Number of jumps for the scraper to make.', default=0, type=int)
+        args = parser.parse_args()
+
+        # sets the values of the variables to the arguments passed from command line
+        modeArg = args.mode
+        reindexArg = args.reindex
+        startPageArg = args.start
+        endPageArg = args.end
+        jumpsArg = args.jumps
+
+        if modeArg.lower() == "pathfinder":
+            domain = trimUrl(startPageArg)
+
+            if reindexArg:  # runs the scraper and then loads the scraper
+                executionCheck = False
+                executionCheck = scraper.runScrape(startPageArg, jumpsArg)
+                while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous function seemed to run asynchronously
+                    None
+            
+            noodles.loadDatabase(domain)
+            print(noodles.dijkstra(startPageArg, endPageArg))
+        elif modeArg.lower() == "returnmap":
+            if reindexArg:
+                executionCheck = False
+                executionCheck = scraper.runScrape(
+                    startPageArg, jumpsArg)  # returns true when finished
+                while executionCheck != True:  # stops the program from continuing until the previous code stops running as previous function seemed to run asynchronously
+                    None
+            cls()
+            noodles.loadDatabase(startPageArg)
+
+            for key, array in noodles.returnMap().items():
+                print("%s: %s" % (key, array))
+        else:
+            print("Command not recognised")
+            sys.exit()  # quits program
+
+    else:
+        noodles = Noodlemap()
+        mainMenu = UI("MainMenu")  # instantiates UI object
+        mainMenu.setContents(
+            'Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
+        mainMenu.setCommands('Pick option', pathfinder=pathfinder,
+                            returnMap=sort, deleteTables=clearDatabases, help=help, quit=quit)
+        mainMenu.showUi()
