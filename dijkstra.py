@@ -14,8 +14,8 @@ import scraper  # imports the module called scraper.py that can be found in prin
 
 
 importlib.reload(scraper)
-# changes the recursion limit as there are a lot of values being modified in the merge sort
-sys.setrecursionlimit(500000)
+# changes the recursion limit as there are a lot of values being modified in the merge sort. this is probably larger than the max possible without an error.
+sys.setrecursionlimit(5000000)
 
 #this loads in the credentials for the database.
 credentials = open("credentials.txt", "r").readlines()
