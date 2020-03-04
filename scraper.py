@@ -64,7 +64,6 @@ def runScrape(page="", jumps = 0):  # like runescape but not
                 validInput = False
                 print("Please input a valid positive integer.")
 
-
     if page == "": #checks if the page has been passed as a parameter and if it hasn't then executes the following code
         website = input("Please input the website you wish to scrape: ")
     else:
@@ -73,8 +72,6 @@ def runScrape(page="", jumps = 0):  # like runescape but not
     # trims away anything that trails after the first / and all references to http or https making it into a domain
     domain = website.replace(
         "https://", "").replace("http://", "").split("/", 1)[0]
-
-
 
     #this part starts up the scraper with all the required parameters
     #region scraper start
