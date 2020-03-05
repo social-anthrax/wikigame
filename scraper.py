@@ -50,7 +50,7 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
             yield response.follow(next_page, self.parse)
 
 
-def runScrape(page="", jumps = 0):  # like runescape but not
+def runScrape(page="", jumps = 0):  #like runescape but not
     #tries and connect too database so the scraper doesn't run without the database being ready.
     try:
         mydb = mysql.connector.connect(  # connects to database
@@ -72,8 +72,9 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
             jumps = input("Please input the max number of jumps to be performed by the scraper \n")
             try: #we only check if the user is inputting text here as the terminal only system checks automatically
                 int(jumps) #tries to convert the user input to an integer. If a type error occurs then the input was not an integer and need to be received from user again
-                if int(jumps) > 0 and int(jumps)%1 == 0:
+                if int(jumps) > 0 and float(jumps)%1 == 0: #using modulus to check if whole number.
                     validInput = True
+                else:    
                     print("Please input a valid positive integer.")
             except ValueError:
                 validInput = False
