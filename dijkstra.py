@@ -492,7 +492,7 @@ def help():
 \nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.""")
 # endregion
 
-if __name__ == "__main__":
+if __name__ == "__main__": #this makes sure that the UI and terminal is only run when the program is started individually. This would allow for this program to be integrated as a module at a later date.
     noodles = Noodlemap()
     if len(sys.argv) > 1:  # if there are more than two command line arguments including the name of the program then start in command line mode
         # using --help automatically shows the usage of these commands making it more user friendly and accessible
