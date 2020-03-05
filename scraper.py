@@ -51,6 +51,21 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
 
 
 def runScrape(page="", jumps = 0):  # like runescape but not
+    #tries and connect too database so the scraper doesn't run without the database being ready.
+    try:
+        mydb = mysql.connector.connect(  # connects to database
+            host="localhost",
+            user=username,
+            password=password,
+            database='websites',
+            auth_plugin='mysql_native_password'
+        )
+    except mysql.connector.InterfaceError:
+        print("""The connection to the database has been unsuccessful.
+Please make sure the sql server is running, and the database has been initialised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+        sys.exit()
+    mydb.close()
     if jumps <= 0: #checks if the max number of jumps has been modified from the default value
         validInput = False
         while validInput == False:
