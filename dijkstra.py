@@ -376,6 +376,7 @@ def clearDatabases():
         mycursor.close()
         mainMenu.showUi()
     mycursor.close()
+    mydb.close()
 
 
 def testingSort():
