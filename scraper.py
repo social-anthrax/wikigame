@@ -143,6 +143,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     print("Writing to database")
 
     for originURL, hyperlinks in dictOfUrl.items():
+        #removes the trailing slash to make sure all links are identical. (http://blah.com/ is the same as http://blah.com for example, but when string comparisons are done, they are different.)
         if originURL[-1] == "/":
             originURL = originURL[:-1]
         for item in hyperlinks:
