@@ -296,7 +296,7 @@ class UI():
     # endregion
 
     # region getters
-    def showUi(self, acceptCommands=True):
+    def showUi(self, acceptCommands=False):
         cls()
         print(self.__contents)
         if acceptCommands == True:
@@ -305,7 +305,7 @@ class UI():
                 self.__commands[userInput.lower()]() #the value stored at this key is a reference to a procedure, so if wee simply add () after it, the procedure is called.
             else:
                 print("Please select a valid option. Press enter to continue ")
-                input()  # waits for user usernames enter to continue
+                input()  # waits for user to press enter to continue
                 self.showUi() #calls itself to display 
 
     #endregion
@@ -484,12 +484,6 @@ def trimUrl(url):
     return(domain)
 
 
-def help():
-    cls()
-    print("""Pathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
-\nReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
-\nDeleteTables: This will delete all the cached URLs on this system.
-\nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.""")
 # endregion
 
 if __name__ == "__main__": #this makes sure that the UI and terminal is only run when the program is started individually. This would allow for this program to be integrated as a module at a later date.
@@ -545,8 +539,16 @@ if __name__ == "__main__": #this makes sure that the UI and terminal is only run
     else:
         noodles = Noodlemap()
         mainMenu = UI("MainMenu")  # instantiates UI object
+        helpScreen = UI("help")
+       
         mainMenu.setContents(
             'Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
+        
+        helpScreen.setContents("""Pathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
+\nReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
+\nDeleteTables: This will delete all the cached URLs on this system.
+\nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.""")
+        
         mainMenu.setCommands('Pick option', pathfinder=pathfinder,
-                            returnMap=sort, deleteTables=clearDatabases, help=help, quit=quit)
-        mainMenu.showUi()
+                             returnMap=sort, deleteTables=clearDatabases, help=helpScreen.showUi, quit=quit)
+        mainMenu.showUi(True) #shows the UI and allows the user input.
