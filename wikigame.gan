@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="AH project" company="" webLink="https://github.com/social-anthrax/wikigame" view-date="2019-10-08" view-index="0" gantt-divider-location="681" resource-divider-location="300" version="2.8.10" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="AH project" company="" webLink="https://github.com/social-anthrax/wikigame" view-date="2019-10-07" view-index="0" gantt-divider-location="393" resource-divider-location="300" version="2.8.10" locale="en_GB">
     <description/>
-    <view zooming-state="default:0" id="gantt-chart">
-        <field id="tpd3" name="Name" width="309" order="0"/>
-        <field id="tpd4" name="Begin date" width="184" order="1"/>
-        <field id="tpd5" name="End date" width="184" order="2"/>
+    <view zooming-state="default:5" id="gantt-chart">
+        <field id="tpd3" name="Name" width="208" order="0"/>
+        <field id="tpd4" name="Begin date" width="83" order="1"/>
+        <field id="tpd5" name="End date" width="82" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="152" order="0"/>
-        <field id="1" name="Default role" width="144" order="1"/>
+        <field id="0" name="Name" width="211" order="0"/>
+        <field id="1" name="Default role" width="86" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -56,22 +56,53 @@
             </task>
             <task id="93" name="Design UI method" meeting="false" start="2019-10-25" duration="1" complete="0" expand="true"/>
         </task>
-        <task id="1" name="Implementation" color="#8cb6ce" meeting="false" start="2019-10-28" duration="48" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="2" expand="true">
+        <task id="1" name="Implementation" color="#8cb6ce" meeting="false" start="2019-10-28" duration="60" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" priority="2" expand="true">
             <task id="0" name="Create dikijstras algorithm" color="#8cb6ce" meeting="false" start="2019-10-28" duration="4" complete="0" thirdDate="2019-09-19" thirdDate-constraint="0" expand="true">
                 <depend id="21" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="21" name="Create crawler" color="#8cb6ce" meeting="false" start="2019-11-01" duration="10" complete="0" thirdDate="2019-11-04" thirdDate-constraint="0" priority="2" expand="true">
+            <task id="21" name="Create crawler" color="#8cb6ce" meeting="false" start="2019-11-01" duration="15" complete="0" thirdDate="2019-11-04" thirdDate-constraint="0" priority="2" expand="true">
                 <depend id="27" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="27" name="SQL reader and writer" color="#8cb6ce" meeting="false" start="2019-11-15" duration="15" complete="0" thirdDate="2019-12-23" thirdDate-constraint="0" expand="true">
+            <task id="27" name="SQL reader and writer" color="#8cb6ce" meeting="false" start="2019-11-22" duration="15" complete="0" thirdDate="2019-12-23" thirdDate-constraint="0" expand="true">
                 <notes><![CDATA[Create the sql to save data into the database.]]></notes>
                 <depend id="43" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="43" name="Create ui" color="#8cb6ce" meeting="false" start="2019-12-06" duration="5" complete="0" thirdDate="2019-12-17" thirdDate-constraint="0" expand="true">
+            <task id="43" name="Create ui" color="#8cb6ce" meeting="false" start="2019-12-13" duration="5" complete="0" thirdDate="2019-12-17" thirdDate-constraint="0" expand="true">
                 <depend id="47" type="2" difference="0" hardness="Strong"/>
             </task>
-            <task id="47" name="Integrate parts" color="#8cb6ce" meeting="false" start="2019-12-13" duration="14" complete="0" thirdDate="2019-12-24" thirdDate-constraint="0" expand="true"/>
+            <task id="47" name="Integrate parts" color="#8cb6ce" meeting="false" start="2019-12-20" duration="21" complete="0" thirdDate="2019-12-24" thirdDate-constraint="0" expand="true">
+                <depend id="110" type="2" difference="0" hardness="Strong"/>
+            </task>
         </task>
+        <task id="110" name="Testing" color="#8cb6ce" meeting="false" start="2020-01-20" duration="30" complete="0" thirdDate="2019-12-02" thirdDate-constraint="0" priority="2" expand="true">
+            <task id="117" name="Create test plan for Components" color="#8cb6ce" meeting="false" start="2020-01-20" duration="7" complete="0" thirdDate="2020-01-20" thirdDate-constraint="0" expand="true">
+                <depend id="116" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="116" name="Create test plan for integration testing" color="#8cb6ce" meeting="false" start="2020-01-29" duration="4" complete="0" thirdDate="2020-01-29" thirdDate-constraint="0" expand="true">
+                <depend id="120" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="120" name="Create test plan for test cases" color="#8cb6ce" meeting="false" start="2020-02-04" duration="2" complete="0" thirdDate="2020-02-04" thirdDate-constraint="0" expand="true">
+                <depend id="124" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="124" name="Complete test plan for end user testing" color="#8cb6ce" meeting="false" start="2020-02-06" duration="1" complete="0" thirdDate="2020-02-06" thirdDate-constraint="0" expand="true">
+                <depend id="127" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="127" name="Work through all testing, taking screenshots" color="#8cb6ce" meeting="false" start="2020-02-07" duration="14" complete="0" thirdDate="2020-02-07" thirdDate-constraint="0" expand="true">
+                <depend id="130" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="130" name="Go back through and fix any errors found" color="#8cb6ce" meeting="false" start="2020-02-27" duration="2" complete="0" thirdDate="2020-02-27" thirdDate-constraint="0" expand="true">
+                <depend id="134" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="134" name="Evaluation" meeting="false" start="2020-03-02" duration="2" complete="0" expand="true">
+            <task id="137" name="Evaluate requirement spec" color="#8cb6ce" meeting="false" start="2020-03-02" duration="1" complete="0" thirdDate="2020-02-14" thirdDate-constraint="0" expand="true">
+                <depend id="140" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="140" name="Evaluate testing" meeting="false" start="2020-03-03" duration="1" complete="0" expand="true">
+                <depend id="143" type="2" difference="0" hardness="Strong"/>
+            </task>
+        </task>
+        <task id="143" name="Final polishing off" color="#8cb6ce" meeting="false" start="2020-03-04" duration="9" complete="0" thirdDate="2020-03-04" thirdDate-constraint="0" expand="true"/>
     </tasks>
     <resources/>
     <allocations/>
