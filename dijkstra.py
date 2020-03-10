@@ -374,7 +374,7 @@ def clearDatabases():
         print("All cached databases deleted.")
     else:
         mycursor.close()
-        mainMenu.showUi()
+        quit()
     mycursor.close()
     mydb.close()
 
