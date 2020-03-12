@@ -422,13 +422,15 @@ def sort():
     start = input("Please enter the start page. \n")
     valid = False
     while not valid:
-        userInput = input("Would you like to reindex the database? (y/n) \n")[0].lower() 
-        if userInput == "y":
-            scraper.runScrape(start)
-            valid = True
-        elif userInput == "n":
-            valid = True
-        else:
+        userInput = input("Would you like to reindex the database? (y/n) \n")
+        if len(userInput) > 0:
+            userInput = userInput[0].lower()
+            if userInput == "y":
+                scraper.runScrape(start)
+                valid = True
+            elif userInput == "n":
+                valid = True
+        if valid == False:
             print("Please input a valid option")
     
 
