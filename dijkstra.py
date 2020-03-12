@@ -542,12 +542,13 @@ if __name__ == "__main__": #this makes sure that the UI and terminal is only run
         helpScreen = UI("help")
        
         mainMenu.setContents(
-            'Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites.')
+            'Welcome to PathFinder! To see help, type: help \n Options: \n Pathfinder: Finds a path between two URLs. \n ReturnMap: View all found links. \n DeleteTables: Delete archived websites. \n Help: show the help screen.')
         
         helpScreen.setContents("""Pathfinder: This will find the path between two webpages on a domain if they exist. The scraping of websites will often take a long time.
 \nReturnMap: This will show all the pages that are linked to the given page. The number of jumps given will make this recursive, and will show all the pages that are linked to the linked pages and so on.
 \nDeleteTables: This will delete all the cached URLs on this system.
-\nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.""")
+\nThe reindex option is used to scrape a webpage. It clears all previously scraped data off the domain.
+\nJumps is the depth that the scraper will go, aka the number of links it will follow through each page.""")
         
         mainMenu.setCommands('Pick option', pathfinder=pathfinder,
                              returnMap=sort, deleteTables=clearDatabases, help=helpScreen.showUi, quit=quit)

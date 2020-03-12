@@ -140,7 +140,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         domain = "https://" + domain
     elif "http://" in website:
         domain = "http://" + domain
-    print("Writing to database")
+    print("Writing to database. This may take a while.")
 
     for originURL, hyperlinks in dictOfUrl.items():
         #removes the trailing slash to make sure all links are identical. (http://blah.com/ is the same as http://blah.com for example, but when string comparisons are done, they are different.)
