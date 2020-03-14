@@ -81,8 +81,8 @@ class Noodlemap():
             )
         except mysql.connector.InterfaceError:
             print("""The connection to the database has been unsuccessful.
-Please make sure the sql server is running, and the database has been initialised.
-To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+Please make sure the SQL server is running, and the database has been initialised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable SQL terminal and make sure the admin username and password have been entered into credentials.txt""")
             quit()
         mycursor = mydb.cursor()
         time.sleep(.25)
@@ -96,7 +96,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
             quit()
             
 
-        # execute automatically removes any sql injection attempts. the second parameter is the values to be inserted in the %s
+        # execute automatically removes any SQL injection attempts. the second parameter is the values to be inserted in the %s
         query = "SELECT OriginURL, Hyperlink FROM `%s`"
         queryParameters = (domain,)
         mycursor.execute(query % queryParameters)
@@ -176,7 +176,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
         if sort == True:
             sorted_list = defaultdict(list)
             # populates dictionary with values using now sorted keys
-            for key in self.__mergeSort(unsorted_list): #__insertSort(unsorted_list): #to use insert sort uncomment this and remove __mergesort(unsorted_list)
+            for key in self.__mergeSort(unsorted_list): #__insertSort(unsorted_list): #to use insert sort uncomment this and remove __mergeSort(unsorted_list)
                 sorted_list[key] = self.__edges[key]
             return sorted_list
         else:
@@ -347,7 +347,7 @@ def clearDatabases():
                     auth_plugin='mysql_native_password'
                 )
     except mysql.connector.InterfaceError:
-        print("""The connection to the database has been unsuccessful. \nPlease make sure the sql server is running, and the database has been initialised. \nTo initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+        print("""The connection to the database has been unsuccessful. \nPlease make sure the SQL server is running, and the database has been initialised. \nTo initialise database please type \"CREATE DATABASE websites;\" in a suitable SQL terminal and make sure the admin username and password have been entered into credentials.txt""")
         quit()
     mycursor = mydb.cursor()
 
@@ -379,6 +379,11 @@ def clearDatabases():
 
 
 def testingSort():
+    '''This procedure was used during the testing stage to show that the returnMap method works.
+    
+    It is identical to the Sort() function except it loads a known csv instead of a database.
+     It has been left here as proof of testing and iteration
+    '''
     noodles.loadCSV("unitMap.csv")
     validInput = False
     while validInput == False:
