@@ -382,7 +382,8 @@ def testingSort():
     '''This procedure was used during the testing stage to show that the returnMap method works.
     
     It is identical to the Sort() function except it loads a known csv instead of a database.
-     It has been left here as proof of testing and iteration
+     
+    It has been left here as proof of testing and iteration
     '''
     noodles.loadCSV("unitMap.csv")
     validInput = False
@@ -437,7 +438,6 @@ def sort():
         if valid == False:
             print("Please input a valid option")
     
-
     domain = trimUrl(start)
     print("Loading database...")
     # loads database contents into the noodle object using the loadDatabase method
