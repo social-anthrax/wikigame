@@ -50,7 +50,7 @@ class ScraperWithLimit(scrapy.Spider): #this is largely beyond ah level
             yield response.follow(next_page, self.parse)
 
 
-def runScrape(page="", jumps = 0):  #like runescape but not
+def runScrape(page="", jumps = 0): #this procedure is responsible for instantiating the scraper and scraping the required webpage
     #tries and connect too database so the scraper doesn't run without the database being ready.
     try:
         mydb = mysql.connector.connect(  # connects to database
@@ -62,8 +62,8 @@ def runScrape(page="", jumps = 0):  #like runescape but not
         )
     except mysql.connector.InterfaceError:
         print("""The connection to the database has been unsuccessful.
-Please make sure the sql server is running, and the database has been initialised.
-To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+Please make sure the SQL server is running, and the database has been initialised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable SQL terminal and make sure the admin username and password have been entered into credentials.txt""")
         sys.exit()
     mydb.close()
     if jumps <= 0: #checks if the max number of jumps has been modified from the default value
@@ -113,8 +113,8 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
             )
     except mysql.connector.InterfaceError:
         print("""The connection to the database has been unsuccessful.
-Please make sure the sql server is running, and the database has been initialised.
-To initialise database please type \"CREATE DATABASE websites;\" in a suitable sql terminal and make sure the admin username and password have been entered into credentials.txt""")
+Please make sure the SQL server is running, and the database has been initialised.
+To initialise database please type \"CREATE DATABASE websites;\" in a suitable SQL terminal and make sure the admin username and password have been entered into credentials.txt""")
         sys.exit()
     mycursor = mydb.cursor() #initialises cursor so that commands can be sent
 
@@ -125,11 +125,11 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
         "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL);" % (domain))
-    time.sleep(.25) #as stuff is executed asynchronously this pause is needed to make sure the sql statements are executed in correct order
+    time.sleep(.25) #as stuff is executed asynchronously this pause is needed to make sure the SQL statements are executed in correct order
     mydb.commit()
     #endregion
 
-    # backticks are used so that any character can be accepted aka the . in the URL. The surrounding '' are used so that mysql doesn't mistake them for table references
+    # backticks are used so that any character can be accepted aka the . in the URL. The surrounding '' are used so that MySQL doesn't mistake them for table references
     query = "INSERT INTO `"+ domain + "` VALUES (NULL, %s, %s);"
 
     if domain[-1] == "/": #this removes a trailing slash at the end of URLs
@@ -159,7 +159,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable s
                         
                     elif item[0] != '#' and item[0] == "/": #if http is not in the item and # is not the first char we can assume that it is a relative link
                         queryParameters = (originURL, domain+item,) #appends the domain name to relative paths
-                        # actually executes the sql statement with the parameters place of %s. This method also removes any sql injection attempts
+                        # actually executes the SQL statement with the parameters place of %s. This method also removes any SQL injection attempts
                         mycursor.execute(query, queryParameters)
                         # testFile.write(originURL + ", " + domain + item + "\n") #test statement to see if any of this even works
                     elif item != '#':
