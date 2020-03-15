@@ -1,4 +1,4 @@
-# proof of iteration
+# proof of iteration of Scraper.py
 
 # from scrapy.spiders import CrawlSpider, Rule
 # from scrapy.linkextractors import LinkExtractor

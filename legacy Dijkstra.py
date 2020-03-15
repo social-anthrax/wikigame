@@ -1,4 +1,4 @@
-# Proof of itteration
+# Proof of itteration of Dijkstra.py
 
 from collections import defaultdict
 # import scraper.py
