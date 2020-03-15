@@ -147,7 +147,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable S
         if originURL[-1] == "/":
             originURL = originURL[:-1]
         for item in hyperlinks:
-            if item != "" and item != "/":
+            if item != "":
                 if len(item) > 1 or "http" in item: #ignores all anchor links
                     if item[-1] == "/": #removes any trailing slashes.
                         item = item[:-1]
