@@ -1,3 +1,4 @@
+# Code for scraper.py
 # Maksim Livingstone
 # AH project
 # SCN: 120942514
@@ -124,7 +125,7 @@ To initialise database please type \"CREATE DATABASE websites;\" in a suitable S
 
     # creates a table with the name of the domain being scraped.
     mycursor.execute(
-        "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(300) NOT NULL, Hyperlink VARCHAR(300) NOT NULL);" % (domain))
+        "CREATE TABLE `%s`(AutoID INT NOT NULL AUTO_INCREMENT PRIMARY KEY, OriginURL VARCHAR(2000) NOT NULL, Hyperlink VARCHAR(2000) NOT NULL);" % (domain))
     time.sleep(.25) #as stuff is executed asynchronously this pause is needed to make sure the SQL statements are executed in correct order
     mydb.commit()
     #endregion
